@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,7 +25,8 @@ public class PlayerController : MonoBehaviour
     private bool _currentInput = false;
 
     [Header("Movement Settings")]
-    [SerializeField] private float movementSpeed = 3f;
+    [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float dashSpeed = 8f;
     [SerializeField] private float _force = 200f;
     [SerializeField] private float maximumVelocitySquared = 130f;
     [SerializeField] private float smoothingSpeed = 1f;
@@ -54,9 +56,34 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDash(InputAction.CallbackContext obj)
     {
-        playerRigidbody.AddForce(dashForce * transform.forward, ForceMode.Impulse);
+        //playerRigidbody.AddForce(dashForce * transform.forward, ForceMode.Impulse);
+        if (!_isDashingPossible) return;
+        StartCoroutine(DashCooldown());
     }
 
+    private bool _isDashing = false;
+    private bool _isDashingPossible = true;
+    [SerializeField] private float _dashDuration = 0.2f;
+    [SerializeField] private float _dashCooldown = 0.1f;
+    
+    private IEnumerator DashCooldown()
+    {
+        _isDashingPossible = false;
+        Debug.Log("Dash");
+        //playerRigidbody.AddForce(dashForce * transform.forward);
+        //playerRigidbody.velocity += dashSpeed * transform.forward;
+        playerRigidbody.AddRelativeForce(dashForce * Vector3.forward);
+        yield return new WaitForFixedUpdate();
+        _isDashing = true;
+        
+        yield return new WaitForSeconds(_dashDuration);
+        Debug.Log("Dash finished");
+        _isDashing = false;
+        yield return new WaitForSeconds(_dashCooldown);
+        Debug.Log("Dash Cooldown UP");
+        _isDashingPossible = true;
+    }
+    
     private void HandleMove(InputAction.CallbackContext context)
     {
         // TODO: Processors on input binding not working for analogical stick. Investigate it.
@@ -109,7 +136,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //CalculateDesiredDirectionRelativeToCamera();
+        CalculateInputDirection();
         //ConvertDirectionFromRawToSmooth();
         MoveThePlayer();
         //AnimatePlayerMovement();
@@ -140,27 +167,40 @@ public class PlayerController : MonoBehaviour
         _rawDirection = cameraForward * _inputDirection.z + cameraRight * _inputDirection.x;
     }
 
-    private void ConvertDirectionFromRawToSmooth()
-    {   
-        if (_currentInput == true)
-        {
-            //_smoothDirection = Vector3.Lerp(_smoothDirection, _rawDirection, Time.deltaTime * smoothingSpeed);
-        }
-        else if (_currentInput == false)
-        {
-            _smoothDirection = Vector3.zero;
-        }
-        
-    }
-
-    
     private void MoveThePlayer()
     {
-        if (playerRigidbody.velocity.sqrMagnitude > maximumVelocitySquared)
+        if (_isDashing)
         {
-            return;
+            // keep the current velocity, only redirecting
+            var currentVelocity = playerRigidbody.velocity.magnitude;
+            
+            // velocity could fall lower than movement speed, while dashing
+            //currentVelocity = Mathf.Max(currentVelocity, movementSpeed);
+            if (currentVelocity < movementSpeed)
+            {
+//                Debug.Log($"Dashing slower than walking {currentVelocity}");
+            }
+            else
+            {
+//                Debug.Log($"Dashing FASTER than walking {currentVelocity}");
+            }
+
+            var inputNormalized = _inputDirection.normalized;
+            if (inputNormalized == Vector3.zero)
+            {
+                //Debug.Log("Input Normalized is zero");
+                inputNormalized = transform.forward;
+            }
+            playerRigidbody.velocity = inputNormalized * currentVelocity;
         }
-        
+        else
+        {
+            playerRigidbody.velocity = _inputDirection.normalized * movementSpeed;
+        }
+    }
+
+    private void CalculateInputDirection()
+    {
         var inputMovement = _moveAction.ReadValue<Vector2>();
         if (inputMovement.x > 0.3f)
         {
@@ -189,38 +229,15 @@ public class PlayerController : MonoBehaviour
         }
 
         _inputDirection = new Vector3(inputMovement.x, 0f, inputMovement.y);
-        playerRigidbody.AddForce(_inputDirection * _force);
-        //Debug.Log(_inputDirection);
-        // if (_currentInput == true)
-        // {
-        //     
-        //     // _movement.Set(_smoothDirection.x, 0f, _smoothDirection.z);
-        //     // _movement = _movement.normalized * movementSpeed * Time.deltaTime;
-        //     // playerRigidbody.MovePosition(transform.position + _movement);
-        // }
     }
 
     private void TurnThePlayer()
     {
-        // TODO: tweak for Dash 
         if (playerRigidbody.velocity.magnitude > 0.1f && _inputDirection != Vector3.zero)
         {
             Quaternion newRotation = Quaternion.LookRotation(_inputDirection);
-            //transform.rotation.SetLookRotation(_inputDirection);
-            transform.rotation = Quaternion.Slerp (transform.rotation, newRotation, Time.deltaTime * 10f);
-            //transform.Rotate(Vector3.up * (angularVelocity * Time.deltaTime));
-//            transform.LookAt(_inputDirection, Vector3.up);
+            transform.rotation = Quaternion.Slerp (transform.rotation, newRotation, Time.deltaTime * 15f);
         }
-
-        
-        //playerRigidbody.MoveRotation(newRotation);
-
-
-        // if (_currentInput == true)
-        // {
-        //     Quaternion newRotation = Quaternion.LookRotation(_smoothDirection);
-        //     playerRigidbody.MoveRotation(newRotation);
-        // }
     }
 
     private void AnimatePlayerMovement()
@@ -244,9 +261,6 @@ public class PlayerController : MonoBehaviour
         //     GameManager.Instance.TogglePauseMenu(false);
         // }
     }
-
-
-    
 
     //Switching Action Maps ----
 
