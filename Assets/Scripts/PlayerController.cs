@@ -115,8 +115,7 @@ namespace Undercooked
             {
                 inputMovement.y = 0f;
             }
-
-            Debug.Log("[PlayerController] Move {inputMovement}");
+            
             _inputDirection = new Vector3(inputMovement.x, 0, inputMovement.y);
         }
 
