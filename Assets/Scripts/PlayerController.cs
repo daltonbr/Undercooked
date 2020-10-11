@@ -1,20 +1,22 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 namespace Undercooked
 {
     public class PlayerController : MonoBehaviour
     {
-        private Camera _mainCamera;
-
         [Header("Physics")]
         [SerializeField] private Rigidbody playerRigidbody;
 
+        private InteractableController _interactableController;
+        
         [Header("Animation")]
         [SerializeField] private Animator playerAnimator;
         private readonly int _playerMovementID = Animator.StringToHash("Movement");
-        private readonly int _playerAttackID = Animator.StringToHash("Attack");
+        private readonly int _playerGrabID = Animator.StringToHash("Grab");
 
         [Header("Input")]
         [SerializeField] private PlayerInput playerInput;
@@ -23,32 +25,30 @@ namespace Undercooked
         private const string ActionMapMenu = "MenuControls";
 
         private Vector3 _inputDirection;
-        private Vector2 _movementInput;
-        private bool _currentInput = false;
 
+        //  Dashing
+        [SerializeField] private float dashForce = 400f;
+        private bool _isDashing = false;
+        private bool _isDashingPossible = true;
+        private readonly WaitForSeconds _dashDuration = new WaitForSeconds(0.17f);
+        private readonly WaitForSeconds _dashCooldown = new WaitForSeconds(0.07f);
+        
         [Header("Movement Settings")]
         [SerializeField] private float movementSpeed = 5f;
-        [SerializeField] private float dashSpeed = 8f;
-        [SerializeField] private float _force = 200f;
-        [SerializeField] private float maximumVelocitySquared = 130f;
-        [SerializeField] private float smoothingSpeed = 1f;
-        [SerializeField] private float dashForce = 400f;
-        [SerializeField] private float angularVelocity = 10f;
-    
-        private Vector3 _currentDirection;
-        private Vector3 _rawDirection;
-        private Vector3 _smoothDirection;
-        private Vector3 _movement;
-
+  
         private InputAction _moveAction;
         private InputAction _dashAction;
+
+        private void Awake()
+        {
+            _interactableController = GetComponentInChildren<InteractableController>();
+        }
 
         private void Start()
         {
             _moveAction = playerInput.currentActionMap["Move"];
             _dashAction = playerInput.currentActionMap["Dash"];
-        
-            FindCamera();
+            
             EnableGameplayControls();
             playerInput.currentActionMap["Action"].performed += HandleAction;
             playerInput.currentActionMap["Move"].performed += HandleMove;
@@ -56,36 +56,27 @@ namespace Undercooked
             playerInput.currentActionMap.Enable();
         }
 
-        private void HandleDash(InputAction.CallbackContext obj)
+        private void HandleDash(InputAction.CallbackContext context)
         {
-            //playerRigidbody.AddForce(dashForce * transform.forward, ForceMode.Impulse);
             if (!_isDashingPossible) return;
-            StartCoroutine(DashCooldown());
+            StartCoroutine(Dash());
         }
 
-        private bool _isDashing = false;
-        private bool _isDashingPossible = true;
-        [SerializeField] private float _dashDuration = 0.2f;
-        [SerializeField] private float _dashCooldown = 0.1f;
-    
-        private IEnumerator DashCooldown()
+        private IEnumerator Dash()
         {
             _isDashingPossible = false;
-            Debug.Log("Dash");
-            //playerRigidbody.AddForce(dashForce * transform.forward);
-            //playerRigidbody.velocity += dashSpeed * transform.forward;
+            //Debug.Log("[PlayerController] Dash");
             playerRigidbody.AddRelativeForce(dashForce * Vector3.forward);
             yield return new WaitForFixedUpdate();
             _isDashing = true;
-        
-            yield return new WaitForSeconds(_dashDuration);
-            Debug.Log("Dash finished");
+            yield return _dashDuration;
+            // Debug.Log("[PlayerController] Dash finished");
             _isDashing = false;
-            yield return new WaitForSeconds(_dashCooldown);
-            Debug.Log("Dash Cooldown UP");
+            yield return _dashCooldown;
+            // Debug.Log("[PlayerController] Dash Cooldown is over");
             _isDashingPossible = true;
         }
-    
+        
         private void HandleMove(InputAction.CallbackContext context)
         {
             // TODO: Processors on input binding not working for analogical stick. Investigate it.
@@ -119,55 +110,26 @@ namespace Undercooked
             _inputDirection = new Vector3(inputMovement.x, 0, inputMovement.y);
         }
 
-        private static void HandleAction(InputAction.CallbackContext context)
+        private void HandleAction(InputAction.CallbackContext context)
         {
             Debug.Log("[PlayerController] Action");
-        }
-
-        private void FindCamera()
-        {
-            //_mainCamera = GameManager.Instance.mainCamera;
-            _mainCamera = Camera.main;
+            // currentInteractable could be null
+            _interactableController.CurrentInteractable?.Interact();
         }
 
         private void Update()
         {
-            //CalculateMovementInput();
+            CalculateInputDirection();
         }
 
         private void FixedUpdate()
         {
-            CalculateInputDirection();
-            //ConvertDirectionFromRawToSmooth();
+            
             MoveThePlayer();
             //AnimatePlayerMovement();
             TurnThePlayer();
         }
-
-        private void CalculateMovementInput()
-        {
-            if (_inputDirection == Vector3.zero)
-            {
-                _currentInput = false;
-            }
-            else if (_inputDirection != Vector3.zero)
-            {
-                _currentInput = true;
-            }
-        }
-    
-        private void CalculateDesiredDirectionRelativeToCamera()
-        {
-            //Camera Direction
-            var cameraForward = _mainCamera.transform.forward;
-            var cameraRight = _mainCamera.transform.right;
-
-            cameraForward.y = 0f;
-            cameraRight.y = 0f;
-
-            _rawDirection = cameraForward * _inputDirection.z + cameraRight * _inputDirection.x;
-        }
-
+        
         private void MoveThePlayer()
         {
             if (_isDashing)
@@ -177,19 +139,18 @@ namespace Undercooked
             
                 // velocity could fall lower than movement speed, while dashing
                 //currentVelocity = Mathf.Max(currentVelocity, movementSpeed);
-                if (currentVelocity < movementSpeed)
-                {
-//                Debug.Log($"Dashing slower than walking {currentVelocity}");
-                }
-                else
-                {
-//                Debug.Log($"Dashing FASTER than walking {currentVelocity}");
-                }
+                // if (currentVelocity < movementSpeed)
+                // {
+                //     Debug.Log($"Dashing slower than walking {currentVelocity}");
+                // }
+                // else
+                // {
+                //     Debug.Log($"Dashing FASTER than walking {currentVelocity}");
+                // }
 
                 var inputNormalized = _inputDirection.normalized;
                 if (inputNormalized == Vector3.zero)
                 {
-                    //Debug.Log("Input Normalized is zero");
                     inputNormalized = transform.forward;
                 }
                 playerRigidbody.velocity = inputNormalized * currentVelocity;
@@ -234,35 +195,17 @@ namespace Undercooked
 
         private void TurnThePlayer()
         {
-            if (playerRigidbody.velocity.magnitude > 0.1f && _inputDirection != Vector3.zero)
-            {
-                Quaternion newRotation = Quaternion.LookRotation(_inputDirection);
-                transform.rotation = Quaternion.Slerp (transform.rotation, newRotation, Time.deltaTime * 15f);
-            }
+            if (!(playerRigidbody.velocity.magnitude > 0.1f) || _inputDirection == Vector3.zero) return;
+            
+            Quaternion newRotation = Quaternion.LookRotation(_inputDirection);
+            transform.rotation = Quaternion.Slerp (transform.rotation, newRotation, Time.deltaTime * 15f);
         }
 
         private void AnimatePlayerMovement()
         {
             playerAnimator.SetFloat(_playerMovementID, _inputDirection.sqrMagnitude);
         }
-    
-
-        private void OnOpenPauseMenu(InputValue value)
-        {
-            // if(value.isPressed)
-            // {
-            //     GameManager.Instance.TogglePauseMenu(true);
-            // }
-        }
-
-        private void OnClosePauseMenu(InputValue value)
-        {
-            // if(value.isPressed)
-            // {
-            //     GameManager.Instance.TogglePauseMenu(false);
-            // }
-        }
-
+        
         //Switching Action Maps ----
 
         public void EnableGameplayControls()
@@ -274,8 +217,7 @@ namespace Undercooked
         {
             playerInput.SwitchCurrentActionMap(ActionMapMenu);
         }
-
-
+        
         public PlayerInput GetPlayerInput()
         {
             return playerInput;

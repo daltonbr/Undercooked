@@ -200,11 +200,33 @@
                 },
                 {
                     "name": "",
+                    "id": "e2d26e32-e943-4112-89f2-e1d40fa5fd10",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PickUp/Drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "431668ad-ce14-4378-bed4-6d23dd92721e",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6333bf62-10d4-4e49-9652-e6c24065614f",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -233,6 +255,17 @@
                 },
                 {
                     "name": "",
+                    "id": "444ed21e-c231-4437-a59a-e2f07ce886ea",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "6161f40b-acb9-4bdd-b94a-c39224fb6bb9",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
@@ -244,11 +277,33 @@
                 },
                 {
                     "name": "",
+                    "id": "08952bc6-648f-4cea-b618-774067963359",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Emote",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c6099733-a4e8-4776-a136-48188288141a",
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
+                    "action": "SwitchCharacter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "af86d100-9725-4281-9097-a6263f4711e7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "SwitchCharacter",
                     "isComposite": false,
                     "isPartOfComposite": false

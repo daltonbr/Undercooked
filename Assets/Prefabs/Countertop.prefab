@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!65 &2134644693953988660
+--- !u!65 &2582054280597411578
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11,22 +11,9 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 0.4, z: 1}
+  m_Size: {x: 1, y: 0.4, z: 1}
   m_Center: {x: 0, y: 0.2, z: 0}
---- !u!65 &2371804549339200019
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2134600706969156942}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.4, z: 3}
-  m_Center: {x: 0, y: 0.2, z: 0}
---- !u!114 &9033857375306830734
+--- !u!114 &9040406051198704984
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,7 +34,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c8f0397811c121f4081ded63ca1c9995, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c8f0397811c121f4081ded63ca1c9995, type: 3}
       propertyPath: m_LocalPosition.y
@@ -92,6 +79,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: c8f0397811c121f4081ded63ca1c9995, type: 3}
       propertyPath: m_Name
       value: Countertop
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c8f0397811c121f4081ded63ca1c9995, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8f0397811c121f4081ded63ca1c9995, type: 3}
