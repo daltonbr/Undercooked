@@ -47,7 +47,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -112,7 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8eb2e9134c4fbbbefe5ec784eecd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropSlot: {fileID: 0}
+  slot: {fileID: 9140689045319788788}
+  startingInteractable: {fileID: 0}
   data: {fileID: 11400000, guid: e84eb8bed56d5f5449fb9908fc208d92, type: 2}
 --- !u!135 &8998218670480970209
 SphereCollider:

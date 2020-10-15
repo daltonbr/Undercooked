@@ -14,10 +14,7 @@ namespace Undercooked
                     return TryDropIfNotOccupied(pickable);
                     break;
                 case Plate plate:
-                    // refuse plate on the Countertop, just a test for now
-                    //TODO: allow plates later
-                    Debug.Log("[Countertop] Refusing plate");
-                    return false;
+                    return TryDropIfNotOccupied(pickable);
                     break;
                 default:
                     Debug.LogWarning("[Countertop] IPickable not recognized. Refuse by default", this);

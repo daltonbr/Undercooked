@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1012887414, guid: 60396a634da82b3489d211aae96372fc, type: 3}
+      propertyPath: ingredientPrefab
+      value: 
+      objectReference: {fileID: 9140689045319788777, guid: cf5358ce85fe8104595f2bb6dd76de1f, type: 3}
     - target: {fileID: 8502566642932597859, guid: 60396a634da82b3489d211aae96372fc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3
@@ -53,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9130203805431176921, guid: 60396a634da82b3489d211aae96372fc, type: 3}
       propertyPath: m_Name
-      value: IngredientCrate
+      value: IngredientCrate_Tomato
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60396a634da82b3489d211aae96372fc, type: 3}

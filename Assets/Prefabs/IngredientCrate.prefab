@@ -123,8 +123,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4347a3b7ccc046f488024f1d0a94f883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropSlot: {fileID: 72301766}
-  ingredientPrefab: {fileID: 9140689045319788777, guid: cf5358ce85fe8104595f2bb6dd76de1f, type: 3}
+  slot: {fileID: 72301766}
+  startingInteractable: {fileID: 0}
+  ingredientPrefab: {fileID: 0}
 --- !u!1001 &8247663413986599816
 PrefabInstance:
   m_ObjectHideFlags: 0

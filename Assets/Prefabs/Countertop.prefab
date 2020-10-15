@@ -25,7 +25,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26decf0946ef7614bb083edfce93f4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropSlot: {fileID: 8953350696370460508}
+  slot: {fileID: 8953350696370460508}
+  startingInteractable: {fileID: 0}
 --- !u!1 &8929368723024603177
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,7 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8953350696370460508}
   m_Layer: 0
-  m_Name: PickableHolder
+  m_Name: Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

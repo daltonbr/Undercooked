@@ -17,8 +17,8 @@ namespace Undercooked
         [Tooltip("Pivot where IPickables could be dropped/pickedUp")]
         [SerializeField] protected Transform slot;
         // TODO: we may have a starting item.
-        [SerializeField] protected IPickable CurrentPickable; 
-        
+        protected IPickable CurrentPickable;
+
         private MaterialPropertyBlock _materialBlock;
         private static readonly int Highlight = Shader.PropertyToID("Highlight_");
         
@@ -27,6 +27,17 @@ namespace Undercooked
             _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
             _materialBlock = new MaterialPropertyBlock();
+            
+            CheckSlotOccupied();
+        }
+
+        private void CheckSlotOccupied()
+        {
+            if (slot == null) return;
+            foreach (Transform child in slot)
+            {
+                CurrentPickable = child.GetComponent<IPickable>();
+            }
         }
 
         private void ChangePropertyBlock(bool highlight)
