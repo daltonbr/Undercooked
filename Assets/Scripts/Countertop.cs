@@ -2,39 +2,56 @@ using UnityEngine;
 
 namespace Undercooked
 {
-    [RequireComponent(typeof(MeshRenderer))]
     public class Countertop : Interactable
     {
-        private MaterialPropertyBlock _materialBlock;
-        private MeshRenderer _meshRenderer;
-        private static readonly int Highlight = Shader.PropertyToID("Highlight_");
-        
-        private void Awake()
+
+        public override bool TryToDropIntoSlot(IPickable pickable)
         {
-            //TODO: reuse this materialPropertyBlock
-            _materialBlock = new MaterialPropertyBlock();
-            _meshRenderer = GetComponent<MeshRenderer>();
+            switch (pickable)
+            {
+                case Ingredient ingredient:
+                    // we can filter ingredients here, by type/status.  For now we accept all
+                    return TryDropIfNotOccupied(pickable);
+                    break;
+                case Plate plate:
+                    // refuse plate on the Countertop, just a test for now
+                    //TODO: allow plates later
+                    Debug.Log("[Countertop] Refusing plate");
+                    return false;
+                    break;
+                default:
+                    Debug.LogWarning("[Countertop] IPickable not recognized. Refuse by default", this);
+                    return false;
+            }
         }
 
-        private void ChangePropertyBlock(bool highlight)
+        public override IPickable TryToPickUpFromSlot()
         {
-            _materialBlock.SetInt(Highlight, highlight ? 1 : 0);
-            _meshRenderer.SetPropertyBlock(_materialBlock);
+            if (CurrentPickable == null)
+            {
+                return null;
+            }
+            else
+            {
+                var output = CurrentPickable;
+                var interactable = CurrentPickable as Interactable;
+                interactable?.ToggleHighlightOff();
+                CurrentPickable = null;
+                return output;
+            }
         }
 
-        public override void Interact()
+        private bool TryDropIfNotOccupied(IPickable pickable)
         {
-            Debug.Log($"[Countertop] Interact with Countertop {gameObject.name}");
-        }
-
-        public override void ToggleOn()
-        {
-            ChangePropertyBlock(true);
-        }
-
-        public override void ToggleOff()
-        {
-            ChangePropertyBlock(false);
+            if (CurrentPickable != null)
+            {
+                Debug.Log("[Countertop] Try to drop into Countertop, but it's already occupied");
+                return false;
+            }
+            CurrentPickable = pickable;
+            CurrentPickable.gameObject.transform.SetParent(slot);
+            CurrentPickable.gameObject.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
+            return true;
         }
     }
 }

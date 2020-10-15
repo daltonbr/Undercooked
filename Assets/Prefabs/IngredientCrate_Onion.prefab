@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1687888362506590548
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0015285371
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9999976
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0010455492
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.0012075045
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 179.862
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -0.175
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144871685411075380, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_Name
+      value: IngredientCrate_Onion
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130010277717869723, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: ingredientPrefab
+      value: 
+      objectReference: {fileID: 4033104065792337176, guid: 5ed8f58a4b8d86e4fa824338dbb8c379, type: 3}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}

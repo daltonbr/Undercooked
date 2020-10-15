@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cecc7525c904f8f8c225f0679b3d6c0, type: 3}
+  m_Name: IngredientData_Tomato
+  m_EditorClassIdentifier: 
+  type: 1
+  status: 0
+  timeToProcess: 4
+  rawMesh: {fileID: -290952911854113247, guid: 95e5955088f55744f87278a97d0c5507, type: 3}
+  processedMesh: {fileID: -2702014982666381604, guid: 058ed46e7d2f23e4cbe411aa6d129fa7, type: 3}
+  ingredientMaterial: {fileID: 2100000, guid: 018d5adf0e4406b4399bd910c95dc37b, type: 2}
+  baseColor: {r: 0.6627451, g: 0.22745098, b: 0.1254902, a: 1}

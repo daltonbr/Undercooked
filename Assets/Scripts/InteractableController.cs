@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Undercooked
@@ -19,6 +20,7 @@ namespace Undercooked
         /// <summary>
         /// Get the current highlighted interactable. Null if there is none in range.
         /// </summary>
+        [CanBeNull]
         public Interactable CurrentInteractable { get; private set; }
 
         private void OnTriggerEnter(Collider other)
@@ -42,6 +44,11 @@ namespace Undercooked
                 _interactables.Remove(interactable);
             }
         }
+        
+        public void Remove(Interactable interactable)
+        {
+            _interactables.Remove(interactable);
+        }
 
         private void FixedUpdate()
         {
@@ -51,11 +58,11 @@ namespace Undercooked
             if (closest == CurrentInteractable) { return; }
             
             // something has changed (maybe null)
-            CurrentInteractable?.ToggleOff();
+            CurrentInteractable?.ToggleHighlightOff();
             CurrentInteractable = closest;
 
             // togglesOn only when there is a interactable near
-            closest?.ToggleOn();
+            closest?.ToggleHighlightOn();
         }
         
         /// <summary>

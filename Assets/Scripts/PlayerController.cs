@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -8,18 +9,15 @@ namespace Undercooked
 {
     public class PlayerController : MonoBehaviour
     {
-        [Header("Physics")]
-        [SerializeField] private Rigidbody playerRigidbody;
+        [Header("Physics")] [SerializeField] private Rigidbody playerRigidbody;
 
         private InteractableController _interactableController;
-        
-        [Header("Animation")]
-        [SerializeField] private Animator playerAnimator;
-        private readonly int _playerMovementID = Animator.StringToHash("Movement");
-        private readonly int _playerGrabID = Animator.StringToHash("Grab");
 
-        [Header("Input")]
-        [SerializeField] private PlayerInput playerInput;
+        [Header("Animation")] [SerializeField] private Animator playerAnimator;
+        private readonly int _playerMovementID = Animator.StringToHash("Movement");
+        private readonly int _playerPickID = Animator.StringToHash("Pick");
+
+        [Header("Input")] [SerializeField] private PlayerInput playerInput;
 
         private const string ActionMapGameplay = "PlayerControls";
         private const string ActionMapMenu = "MenuControls";
@@ -32,12 +30,19 @@ namespace Undercooked
         private bool _isDashingPossible = true;
         private readonly WaitForSeconds _dashDuration = new WaitForSeconds(0.17f);
         private readonly WaitForSeconds _dashCooldown = new WaitForSeconds(0.07f);
+
+        [Header("Movement Settings")] [SerializeField]
+        private float movementSpeed = 5f;
+
+        //TODO: should this be handled by InteractableController?
+        private IPickable _currentPickable;
+        //TODO: how to populate this automatically and/or feed from InteractableController
+        [SerializeField] private Transform interactableHolder;
         
-        [Header("Movement Settings")]
-        [SerializeField] private float movementSpeed = 5f;
-  
         private InputAction _moveAction;
         private InputAction _dashAction;
+        private InputAction _pickUpAction;
+        private InputAction _interactAction;
 
         private void Awake()
         {
@@ -48,11 +53,14 @@ namespace Undercooked
         {
             _moveAction = playerInput.currentActionMap["Move"];
             _dashAction = playerInput.currentActionMap["Dash"];
-            
+            _pickUpAction = playerInput.currentActionMap["PickUp"];
+            _interactAction = playerInput.currentActionMap["Interact"];
+
             EnableGameplayControls();
-            playerInput.currentActionMap["Action"].performed += HandleAction;
-            playerInput.currentActionMap["Move"].performed += HandleMove;
-            _dashAction.performed += HandleDash;            
+            _moveAction.performed += HandleMove;
+            _dashAction.performed += HandleDash;
+            _pickUpAction.performed += HandlePickUp;
+            _interactAction.performed += HandleInteract;
             playerInput.currentActionMap.Enable();
         }
 
@@ -76,7 +84,69 @@ namespace Undercooked
             // Debug.Log("[PlayerController] Dash Cooldown is over");
             _isDashingPossible = true;
         }
-        
+
+        private void HandlePickUp(InputAction.CallbackContext context)
+        {
+            Debug.Log("[PlayerController] Try to PickUp");
+            var interactable = _interactableController.CurrentInteractable;
+            
+            // empty hands, try to pick
+            if (_currentPickable == null)
+            {
+                Debug.Log("[PlayerController] Player currentPickable is null - empty hands");
+
+                _currentPickable = interactable as IPickable;
+                if (_currentPickable != null)
+                {
+                    Debug.Log("[PlayerController] Trying to Pickup an IPickable");
+                    // e.g.ingredient on the floor (IPickable)
+                    // Interactable is pickable, so we are going to pick it =)
+                    _currentPickable.Pick(); // maybe we don't need this =)
+                    _interactableController.Remove(_currentPickable as Interactable);
+                    //_currentPickable = pickable;
+                    _currentPickable.gameObject.transform.SetPositionAndRotation(interactableHolder.transform.position, quaternion.identity);
+                    _currentPickable.gameObject.transform.SetParent(interactableHolder);
+                    return;
+                }
+                else
+                {
+                    // Interactable only (not a IPickable)
+                    _currentPickable = interactable.TryToPickUpFromSlot();
+                    //Debug.Log($"[PlayerController] Player pick {_currentPickable.gameObject.name}");
+                    _currentPickable?.gameObject.transform.SetPositionAndRotation(
+                        interactableHolder.position, Quaternion.identity);
+                    _currentPickable?.gameObject.transform.SetParent(interactableHolder);
+                    return;
+                }
+            }
+            
+            // we carry a pickable, let's try to drop it (we may fail)
+            
+            // no interactable in range or at most a Pickable in range (we ignore it)
+            if (interactable == null || interactable is IPickable)
+            {
+                _currentPickable.Drop();
+                _currentPickable = null;
+                return;
+            }
+            
+            // Try to drop on the interactable. It may refuse it, e.g. dropping a plate into the CuttingBoard,
+            // or simply it already have something on it
+            Debug.Log($"[PlayerController] {interactable.gameObject.name} Trying to drop into {_currentPickable.gameObject.name}");
+
+            bool dropSuccess = interactable.TryToDropIntoSlot(_currentPickable);
+            if (dropSuccess)
+            {
+                // clean pickable references
+                Debug.Log($"[PlayerController] Successfully dropped {_currentPickable.gameObject.name} into {interactable.gameObject.name}");
+                _currentPickable = null;
+            }
+            else
+            {
+                Debug.Log("[PlayerController] Interactable refuse dropped pickable");
+            }
+        }
+    
         private void HandleMove(InputAction.CallbackContext context)
         {
             // TODO: Processors on input binding not working for analogical stick. Investigate it.
@@ -110,9 +180,9 @@ namespace Undercooked
             _inputDirection = new Vector3(inputMovement.x, 0, inputMovement.y);
         }
 
-        private void HandleAction(InputAction.CallbackContext context)
+        private void HandleInteract(InputAction.CallbackContext context)
         {
-            Debug.Log("[PlayerController] Action");
+            Debug.Log("[PlayerController] Interact");
             // currentInteractable could be null
             _interactableController.CurrentInteractable?.Interact();
         }
