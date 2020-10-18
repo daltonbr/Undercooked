@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: IngredientData_Onion
   m_EditorClassIdentifier: 
   type: 0
-  status: 0
-  timeToProcess: 4
+  processTime: 3
   rawMesh: {fileID: 5813642336083907405, guid: 0b3e58eff12f9404a9a23ddbec8ab7ea, type: 3}
   processedMesh: {fileID: -5242955811910527544, guid: b0266c9f9dcff8347bb6801014da125d, type: 3}
   ingredientMaterial: {fileID: 2100000, guid: d3c37f18219743e43be9a1088cb6afd3, type: 2}

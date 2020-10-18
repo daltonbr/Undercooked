@@ -113,8 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: {fileID: 9140689045319788788}
-  startingInteractable: {fileID: 0}
   data: {fileID: 11400000, guid: e84eb8bed56d5f5449fb9908fc208d92, type: 2}
+  processTime: 7
 --- !u!135 &8998218670480970209
 SphereCollider:
   m_ObjectHideFlags: 0

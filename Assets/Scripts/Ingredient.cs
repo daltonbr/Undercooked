@@ -8,14 +8,15 @@ namespace Undercooked
     public class Ingredient : Interactable, IPickable
     {
         [SerializeField] private IngredientData data;
-        private float _timeRemainingToProcess;
         private Rigidbody _rigidbody;
         private Collider _collider;
         private MeshRenderer _meshRenderer;
         private MeshFilter _meshFilter;
 
-        public IngredientStatus Status => data.status;
+        public IngredientStatus Status { get; private set; }
         public IngredientType Type => data.type;
+
+        public float ProcessTime => data.processTime;
 
         protected override void Awake()
         {
@@ -25,9 +26,6 @@ namespace Undercooked
             _meshFilter = GetComponent<MeshFilter>();
             _rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
-            
-            _timeRemainingToProcess = data.timeToProcess;
-            
             Setup();
         }
 
@@ -38,7 +36,7 @@ namespace Undercooked
             _rigidbody.isKinematic = true;
             _collider.enabled = false;
             
-            data.status = IngredientStatus.Raw;
+            Status = IngredientStatus.Raw;
             _meshFilter.mesh = data.rawMesh;
             _meshRenderer.material = data.ingredientMaterial;
         }
@@ -55,20 +53,16 @@ namespace Undercooked
             _rigidbody.isKinematic = false;
             _collider.enabled = true;
         }
-
-        //TODO: how to handle the timer? Coroutine?
-        // we need to keep a reference to an amount of time passed,
-        // because the processing can be interrupted and restarted
+        
         public void ChangeToProcessed()
         {
-            data.status = IngredientStatus.Processed;
+            Status = IngredientStatus.Processed;
             _meshFilter.mesh = data.processedMesh;
         }
 
         public override bool TryToDropIntoSlot(IPickable pickable)
         {
             // Ingredients normally don't get any pickables dropped into it.
-            
             Debug.Log("[Ingredient] TryToDrop into an Ingredient isn't possible by design");
             return false;
         }

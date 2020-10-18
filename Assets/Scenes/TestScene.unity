@@ -10035,17 +10035,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1894100472}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.3420201, y: 0, z: 0, w: 0.9396927}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 804048510}
   m_Father: {fileID: 2013951796}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 1.4}
   m_SizeDelta: {x: 0.7, y: 0.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1894100474
@@ -11672,6 +11672,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 408209229}
     m_Modifications:
+    - target: {fileID: 607036882, guid: 625566f9546d8d14ba7783bb883f92fe, type: 3}
+      propertyPath: slider
+      value: 
+      objectReference: {fileID: 804048511}
     - target: {fileID: 1190990757401266827, guid: 625566f9546d8d14ba7783bb883f92fe, type: 3}
       propertyPath: m_Name
       value: ChoppingBoard_Countetop

@@ -1,6 +1,5 @@
-using System;
 using System.Collections;
-using Unity.Mathematics;
+//using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -104,7 +103,7 @@ namespace Undercooked
                     _currentPickable.Pick(); // maybe we don't need this =)
                     _interactableController.Remove(_currentPickable as Interactable);
                     //_currentPickable = pickable;
-                    _currentPickable.gameObject.transform.SetPositionAndRotation(interactableHolder.transform.position, quaternion.identity);
+                    _currentPickable.gameObject.transform.SetPositionAndRotation(interactableHolder.transform.position, Quaternion.identity);
                     _currentPickable.gameObject.transform.SetParent(interactableHolder);
                     return;
                 }

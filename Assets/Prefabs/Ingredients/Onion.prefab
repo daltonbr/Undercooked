@@ -112,8 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8eb2e9134c4fbbbefe5ec784eecd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropSlot: {fileID: 0}
+  slot: {fileID: 4033104065792337157}
   data: {fileID: 11400000, guid: e08b6a9503f12a0469880e51ecbaa65c, type: 2}
+  processTime: 3
 --- !u!135 &3873709974121421840
 SphereCollider:
   m_ObjectHideFlags: 0

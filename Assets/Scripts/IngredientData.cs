@@ -6,8 +6,7 @@ namespace Undercooked
     public class IngredientData : ScriptableObject
     {
         public IngredientType type;
-        public IngredientStatus status;
-        public float timeToProcess = 4f;
+        public float processTime = 4f;
         
         [Header("Visuals")]
         public Mesh rawMesh;
@@ -16,6 +15,5 @@ namespace Undercooked
         public Material ingredientMaterial;
         [Tooltip("Used to tint related objects, like the Plate")] // we may put this into the plate itself later
         public Color baseColor;
-
     }
 }
