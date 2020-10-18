@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UI;
+using Slider = UnityEngine.UI.Slider;
 
 namespace Undercooked
 {
@@ -68,24 +66,22 @@ namespace Undercooked
                     break;
             }
         }
-        
-        //TODO: stop chopping when break outside collider
-        public void PauseChop()
+
+        public override void ToggleHighlightOff()
         {
-            _isChopping = false;
-            StopCoroutine(_chopCoroutine);
+            base.ToggleHighlightOff();
+            PauseChop();
         }
         
-        private void SetSliderActive(bool active)
+        private void PauseChop()
         {
-            slider.gameObject.SetActive(active);
+            _isChopping = false;
+            if (_chopCoroutine != null) StopCoroutine(_chopCoroutine);
         }
 
         private IEnumerator Chop()
         {
             _isChopping = true;
-            Debug.Log($"[ChoppingBoard] current:{_currentProcessTime} final:{_finalProcessTime}");
-            //TODO: also check if player is still in range (or maybe at a minimum distance of chopping board)
             while (_currentProcessTime < _finalProcessTime)
             {
                 slider.value = _currentProcessTime / _finalProcessTime;
@@ -93,12 +89,12 @@ namespace Undercooked
                 yield return null;
             }
 
-            //we finish
-           _ingredient.ChangeToProcessed();
+            // finished
+            _ingredient.ChangeToProcessed();
             slider.gameObject.SetActive(false);
-            // TODO: what more?
             _isChopping = false;
             _chopCoroutine = null;
+            //TODO: add visual and sound FX
         }
         
         public override bool TryToDropIntoSlot(IPickable pickable)
@@ -123,6 +119,11 @@ namespace Undercooked
             }
             else
             {
+                if (_chopCoroutine != null)
+                {
+                    Debug.Log("[ChoppingBoard] We have a chop underway. Finish chop to pickup");
+                    return null;
+                }
                 var output = CurrentPickable;
                 _ingredient = null;
                 var interactable = CurrentPickable as Interactable;

@@ -8,26 +8,20 @@ namespace Undercooked
     /// Could allow certain items to be dropped/pickedup <see cref="IPickable"/>s into it.
     /// </summary>
     [RequireComponent(typeof(Collider))]
-    //[RequireComponent(typeof(MeshFilter))]
-    //[RequireComponent(typeof(MeshRenderer))]
     public abstract class Interactable : MonoBehaviour
     {
-        //protected MeshFilter _meshFilter;
-        //protected MeshRenderer _meshRenderer;
-        private readonly List<MeshRenderer> _meshes = new List<MeshRenderer>();
-        
         [Tooltip("Pivot where IPickables could be dropped/pickedUp")]
         [SerializeField] protected Transform slot;
         // TODO: we may have a starting item.
         protected IPickable CurrentPickable;
 
+        private readonly List<MeshRenderer> _meshes = new List<MeshRenderer>();
         private MaterialPropertyBlock _materialBlock;
         private static readonly int Highlight = Shader.PropertyToID("Highlight_");
         
+        
         protected virtual void Awake()
         {
-            //_meshFilter = GetComponent<MeshFilter>();
-            //_meshRenderer = GetComponent<MeshRenderer>();
             _materialBlock = new MaterialPropertyBlock();
 
             CacheMeshRenderers();
@@ -69,14 +63,14 @@ namespace Undercooked
             //Debug.Log($"[Interactable] Interact with {gameObject.name}");
         }
         
-        public void ToggleHighlightOn()
+        public virtual void ToggleHighlightOn()
         {
             ChangePropertyBlock(true);
             var interactable = CurrentPickable as Interactable;
             interactable?.ToggleHighlightOn();
         }
 
-        public void ToggleHighlightOff()
+        public virtual void ToggleHighlightOff()
         {
             ChangePropertyBlock(false);
             var interactable = CurrentPickable as Interactable;
