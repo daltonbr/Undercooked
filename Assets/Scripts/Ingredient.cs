@@ -11,6 +11,8 @@ namespace Undercooked
         private float _timeRemainingToProcess;
         private Rigidbody _rigidbody;
         private Collider _collider;
+        private MeshRenderer _meshRenderer;
+        private MeshFilter _meshFilter;
 
         public IngredientStatus Status => data.status;
         public IngredientType Type => data.type;
@@ -19,8 +21,11 @@ namespace Undercooked
         {
             base.Awake();
             
+            _meshRenderer = GetComponent<MeshRenderer>();
+            _meshFilter = GetComponent<MeshFilter>();
             _rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
+            
             _timeRemainingToProcess = data.timeToProcess;
             
             Setup();

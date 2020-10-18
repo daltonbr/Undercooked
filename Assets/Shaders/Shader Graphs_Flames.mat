@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Highlight
-  m_Shader: {fileID: -6465566751694194690, guid: f01cef80b77b786478f79af365d17917, type: 3}
+  m_Name: Shader Graphs_Flames
+  m_Shader: {fileID: -6465566751694194690, guid: c1c84e947193ce04ea5b161e00a41794, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -23,10 +23,21 @@ Material:
         m_Texture: {fileID: 2800000, guid: a45561062b77b77418a8d9c6e4e7d1bb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - AlbedoTexture2D_a:
+        m_Texture: {fileID: 2800000, guid: a45561062b77b77418a8d9c6e4e7d1bb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
+    - DissolveAmount_: 0.06
+    - DissolveScale_: 5
+    - DistortionAmount_: 0.1
+    - DistortionScale_: 3
     - Highlight_: 0
     - RimlPower_: 0.5
     m_Colors:
-    - BaseColor_: {r: 0.15686274, g: 0.21307184, b: 1, a: 0.8}
-    - RimColor_: {r: 1, g: 1, b: 1, a: 0.7921569}
+    - BaseColor_: {r: 0, g: 2.4941177, b: 4, a: 1}
+    - Color_00fc557168bc453dae3876ddb0a91dbc: {r: 0.08627451, g: 0.8666667, b: 0.8745098, a: 1}
+    - DissolveSpeed_: {r: -0.1, g: -0.7, b: 0, a: 0}
+    - DistortionSpeed_: {r: 0.1, g: -0.5, b: 0, a: 0}
+    - RimColor_: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Undercooked
@@ -7,12 +8,13 @@ namespace Undercooked
     /// Could allow certain items to be dropped/pickedup <see cref="IPickable"/>s into it.
     /// </summary>
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(MeshFilter))]
-    [RequireComponent(typeof(MeshRenderer))]
+    //[RequireComponent(typeof(MeshFilter))]
+    //[RequireComponent(typeof(MeshRenderer))]
     public abstract class Interactable : MonoBehaviour
     {
-        protected MeshFilter _meshFilter;
-        protected MeshRenderer _meshRenderer;
+        //protected MeshFilter _meshFilter;
+        //protected MeshRenderer _meshRenderer;
+        private readonly List<MeshRenderer> _meshes = new List<MeshRenderer>();
         
         [Tooltip("Pivot where IPickables could be dropped/pickedUp")]
         [SerializeField] protected Transform slot;
@@ -24,11 +26,23 @@ namespace Undercooked
         
         protected virtual void Awake()
         {
-            _meshFilter = GetComponent<MeshFilter>();
-            _meshRenderer = GetComponent<MeshRenderer>();
+            //_meshFilter = GetComponent<MeshFilter>();
+            //_meshRenderer = GetComponent<MeshRenderer>();
             _materialBlock = new MaterialPropertyBlock();
-            
+
+            CacheMeshRenderers();
             CheckSlotOccupied();
+        }
+
+        private void CacheMeshRenderers()
+        {
+            var baseMesh = transform.GetComponent<MeshRenderer>();
+            if (baseMesh != null) _meshes.Add(baseMesh);
+            foreach (Transform child in transform)
+            {
+                var childMesh = child.GetComponent<MeshRenderer>();
+                if (childMesh != null) _meshes.Add(childMesh);
+            }
         }
 
         private void CheckSlotOccupied()
@@ -43,7 +57,11 @@ namespace Undercooked
         private void ChangePropertyBlock(bool highlight)
         {
             _materialBlock.SetInt(Highlight, highlight ? 1 : 0);
-            _meshRenderer.SetPropertyBlock(_materialBlock);
+            //_meshRenderer.SetPropertyBlock(_materialBlock);
+            foreach (var mesh in _meshes)
+            {
+                mesh.SetPropertyBlock(_materialBlock);
+            }
         }
 
         public virtual void Interact()
