@@ -21,19 +21,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0015285371
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9999976
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0010455492
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.0012075045
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_RootOrder
@@ -41,23 +41,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 179.862
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 3660963031328763790, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.175
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4144871685411075380, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: m_Name
       value: IngredientCrate_Onion
       objectReference: {fileID: 0}
+    - target: {fileID: 5007720004717170439, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 05f778e278610a04fa64629d10a8d8b1, type: 2}
     - target: {fileID: 5130010277717869723, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
       propertyPath: ingredientPrefab
       value: 
       objectReference: {fileID: 4033104065792337176, guid: 5ed8f58a4b8d86e4fa824338dbb8c379, type: 3}
+    - target: {fileID: 6032152237952663949, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 288a53f49df37824fb4e6320a9b520c8, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 895d2d5d457a2a34c84cf879d0f98493, type: 3}

@@ -12,6 +12,8 @@ namespace Undercooked
         // plates can be dirty, empty or with ingredients
         // do we need a plate slot? to put extra models on top of it?
         
+        // plates have up to four UI icons to represent the plate's content
+        
         private Rigidbody _rigidbody;
         private Collider _collider;
         

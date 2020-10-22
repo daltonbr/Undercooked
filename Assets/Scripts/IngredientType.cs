@@ -3,6 +3,10 @@ namespace Undercooked
     public enum IngredientType
     {
         Onion,
-        Tomato
+        Tomato,
+        Mushroom,
+        Meat,
+        Lettuce,
+        Bun
     }
 }
