@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   processTime: 3
+  cookTime: 5
   rawMesh: {fileID: 5813642336083907405, guid: 0b3e58eff12f9404a9a23ddbec8ab7ea, type: 3}
   processedMesh: {fileID: -5242955811910527544, guid: b0266c9f9dcff8347bb6801014da125d, type: 3}
+  cookedMesh: {fileID: 0}
   ingredientMaterial: {fileID: 2100000, guid: d3c37f18219743e43be9a1088cb6afd3, type: 2}
   baseColor: {r: 0.8235294, g: 0.45882353, b: 0.1882353, a: 1}
+  sprite: {fileID: -8221990878993879952, guid: c286e9a30b9402c4e8ca82508e97d529, type: 3}
