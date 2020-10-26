@@ -1,28 +1,58 @@
+using System;
 using UnityEngine;
 
 namespace Undercooked
 {
     public class Hob : Interactable
     {
-        public override bool TryToDropIntoSlot(IPickable pickable)
+        private void Start()
         {
-            switch (pickable)
+            var pan = CurrentPickable as CookingPot;
+            pan?.DroppedIntoHob();
+        }
+
+        public override bool TryToDropIntoSlot(IPickable pickableToDrop)
+        {
+            if (CurrentPickable != null)
             {
-                case Ingredient ingredient:
-                    return false;
+                switch (CurrentPickable)
+                {
+                    case CookingPot cookingPot:
+                        Debug.Log("[Hob] Try drop cookingPot into Hob");
+                        return cookingPot.TryToDropIntoSlot(pickableToDrop);
+                        break;
+                    case Ingredient ingredient:
+                        break;
+                    case Plate plate:
+                        break;
+                    default:
+                        Debug.Log("[Hob] Trying tp drop into an unrecognized item in Hob");
+                        break;
+                }
+                return false;
+            }
+            // if (CurrentPickable != null)
+            // {
+            //     var pan = CurrentPickable as CookingPot;
+            //     if (pan != null)
+            //     {
+            //         return pan.TryToDropIntoSlot(pickableToDrop);
+            //     }
+            // }
+            
+            switch (pickableToDrop)
+            {
+                case CookingPot cookingPot:
+                    //TODO: accept all types of Pans, like Frying pans
+                    return TryDropIfNotOccupied(pickableToDrop);
                     break;
-                case Plate plate:
-                    //TODO: remove this later
-                    return TryDropIfNotOccupied(pickable);
-                    break;
-                //TODO: receive only Pan's
                 default:
-                    Debug.LogWarning("[Hob] IPickable not recognized. Refuse by default", this);
+                    Debug.LogWarning("[Hob] IPickable not accepted. Refuse by default", this);
                     return false;
             }
         }
 
-        public override IPickable TryToPickUpFromSlot()
+        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             if (CurrentPickable == null)
             {
@@ -33,6 +63,11 @@ namespace Undercooked
                 var output = CurrentPickable;
                 var interactable = CurrentPickable as Interactable;
                 interactable?.ToggleHighlightOff();
+                
+                // stop cooking process
+                var pan = CurrentPickable as CookingPot;
+                pan?.RemovedFromHob();
+                
                 CurrentPickable = null;
                 return output;
             }
@@ -49,6 +84,10 @@ namespace Undercooked
             CurrentPickable = pickable;
             CurrentPickable.gameObject.transform.SetParent(slot);
             CurrentPickable.gameObject.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
+            
+            // start cooking
+            var pan = CurrentPickable as CookingPot;
+            pan?.DroppedIntoHob();
             return true;
         }
     }

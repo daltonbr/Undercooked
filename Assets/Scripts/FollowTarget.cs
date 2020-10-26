@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Undercooked
 {
-    public class FollowWorld : MonoBehaviour
+    public class FollowTarget : MonoBehaviour
     {
         [SerializeField] private Transform target;
         [SerializeField] private Vector3 offset;

@@ -86,7 +86,7 @@ namespace Undercooked
 
         private void HandlePickUp(InputAction.CallbackContext context)
         {
-            Debug.Log("[PlayerController] Try to PickUp");
+            // Debug.Log("[PlayerController] Try to PickUp");
             var interactable = _interactableController.CurrentInteractable;
             
             // empty hands, try to pick
@@ -110,7 +110,7 @@ namespace Undercooked
                 else
                 {
                     // Interactable only (not a IPickable)
-                    _currentPickable = interactable.TryToPickUpFromSlot();
+                    _currentPickable = interactable.TryToPickUpFromSlot(_currentPickable);
                     //Debug.Log($"[PlayerController] Player pick {_currentPickable.gameObject.name}");
                     _currentPickable?.gameObject.transform.SetPositionAndRotation(
                         interactableHolder.position, Quaternion.identity);
@@ -129,9 +129,13 @@ namespace Undercooked
                 return;
             }
             
+            // we carry a pickable and we have an interactable in range
+            // we may drop into the interactable
+            // or we can try swap content (empty plate in hands with a full plate)
+            
             // Try to drop on the interactable. It may refuse it, e.g. dropping a plate into the CuttingBoard,
             // or simply it already have something on it
-            Debug.Log($"[PlayerController] {interactable.gameObject.name} Trying to drop into {_currentPickable.gameObject.name}");
+            Debug.Log($"[PlayerController] {_currentPickable.gameObject.name} trying to drop into {interactable.gameObject.name} ");
 
             bool dropSuccess = interactable.TryToDropIntoSlot(_currentPickable);
             if (dropSuccess)

@@ -6,8 +6,8 @@ namespace Undercooked
     public class IngredientData : ScriptableObject
     {
         public IngredientType type;
-        public float processTime = 4f;
-        public float cookTime = 5f;
+        public float processTime = 7.4f;
+        public float cookTime = 6f;
         
         [Header("Visuals")]
         public Mesh rawMesh;

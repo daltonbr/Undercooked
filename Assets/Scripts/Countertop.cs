@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Undercooked
@@ -5,16 +6,42 @@ namespace Undercooked
     public class Countertop : Interactable
     {
 
-        public override bool TryToDropIntoSlot(IPickable pickable)
+        public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
-            switch (pickable)
+            if (CurrentPickable != null)
+            {
+                switch (CurrentPickable)
+                {
+                    case CookingPot cookingPot:
+                        Debug.Log("[Countertop] Drop into CookingPot(on Countertop)");
+                        return cookingPot.TryToDropIntoSlot(pickableToDrop);
+                        break;
+                    case Ingredient ingredient:
+                        Debug.Log("[Countertop] Try to drop into Ingredient(on Countertop)");
+                        return ingredient.TryToDropIntoSlot(pickableToDrop);
+                        break;
+                    case Plate plate:
+                        Debug.Log("[Countertop] Drop into Plate(on Countertop)");
+                        return plate.TryToDropIntoSlot(pickableToDrop);
+                        break;
+                    default:
+                        Debug.Log("[Countertop] Trying tp drop into an unrecognized item in Countertop");
+                        break;
+                }
+                return false;
+            }
+            
+            switch (pickableToDrop)
             {
                 case Ingredient ingredient:
                     // we can filter ingredients here, by type/status.  For now we accept all
-                    return TryDropIfNotOccupied(pickable);
+                    return TryDropIfNotOccupied(pickableToDrop);
                     break;
                 case Plate plate:
-                    return TryDropIfNotOccupied(pickable);
+                    return TryDropIfNotOccupied(pickableToDrop);
+                    break;
+                case CookingPot cookingPot:
+                    return TryDropIfNotOccupied(pickableToDrop);
                     break;
                 default:
                     Debug.LogWarning("[Countertop] IPickable not recognized. Refuse by default", this);
@@ -22,7 +49,7 @@ namespace Undercooked
             }
         }
 
-        public override IPickable TryToPickUpFromSlot()
+        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             if (CurrentPickable == null)
             {

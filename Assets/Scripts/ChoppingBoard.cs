@@ -97,12 +97,12 @@ namespace Undercooked
             //TODO: add visual and sound FX
         }
         
-        public override bool TryToDropIntoSlot(IPickable pickable)
+        public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
-            switch (pickable)
+            switch (pickableToDrop)
             {
                 case Ingredient ingredient:
-                    return TryDropIfNotOccupied(pickable);
+                    return TryDropIfNotOccupied(pickableToDrop);
                     break;
                 default:
                     Debug.LogWarning("[ChoppingBoard] Refuse everything that is not raw ingredient");
@@ -110,7 +110,7 @@ namespace Undercooked
             }
         }
 
-        public override IPickable TryToPickUpFromSlot()
+        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             //TODO: only allow Pickup after we finish chopping the ingredient. Essentially locking it in place.
             if (CurrentPickable == null)

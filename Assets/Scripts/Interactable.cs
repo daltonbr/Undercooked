@@ -14,11 +14,14 @@ namespace Undercooked
         [SerializeField] protected Transform slot;
         // TODO: we may have a starting item.
         protected IPickable CurrentPickable;
+        protected List<IPickable> _pickables = new List<IPickable>();
 
         private readonly List<MeshRenderer> _meshes = new List<MeshRenderer>();
         private MaterialPropertyBlock _materialBlock;
         private static readonly int Highlight = Shader.PropertyToID("Highlight_");
         
+        public bool IsEmpty() => _pickables.Count == 0;
+        public List<IPickable> Pickables => _pickables;
         
         protected virtual void Awake()
         {
@@ -45,6 +48,7 @@ namespace Undercooked
             foreach (Transform child in slot)
             {
                 CurrentPickable = child.GetComponent<IPickable>();
+                if (CurrentPickable != null) return;
             }
         }
 
@@ -77,7 +81,7 @@ namespace Undercooked
             interactable?.ToggleHighlightOff();
         }
 
-        public abstract bool TryToDropIntoSlot(IPickable pickable);
-        public abstract IPickable TryToPickUpFromSlot();
+        public abstract bool TryToDropIntoSlot(IPickable pickableToDrop);
+        public abstract IPickable TryToPickUpFromSlot(IPickable playerHoldPickable);
     }
 }

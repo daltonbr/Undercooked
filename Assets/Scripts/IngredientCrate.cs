@@ -17,16 +17,16 @@ namespace Undercooked
             _animator = GetComponent<Animator>();
         }
 
-        public override bool TryToDropIntoSlot(IPickable pickable)
+        public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
-            Debug.Log($"[IngredientCrate] Try to drop {pickable.gameObject.name} into {this.gameObject.name}");
+            Debug.Log($"[IngredientCrate] Try to drop {pickableToDrop.gameObject.name} into {this.gameObject.name}");
 
             // it's empty, player can drop something here
             if (CurrentPickable == null)
             {
-                CurrentPickable = pickable;
+                CurrentPickable = pickableToDrop;
                 CurrentPickable.gameObject.transform.SetParent(slot);
-                pickable.gameObject.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
+                pickableToDrop.gameObject.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
                 return true;
             }
             else
@@ -36,7 +36,7 @@ namespace Undercooked
             }
         }
 
-        public override IPickable TryToPickUpFromSlot()
+        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             if (CurrentPickable == null)
             {

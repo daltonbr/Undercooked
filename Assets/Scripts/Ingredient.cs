@@ -15,8 +15,13 @@ namespace Undercooked
 
         public IngredientStatus Status { get; private set; }
         public IngredientType Type => data.type;
+        public Color BaseColor => data.baseColor;
+
+        [SerializeField] private IngredientStatus _startingStatus = IngredientStatus.Raw; 
 
         public float ProcessTime => data.processTime;
+        public float CookTime => data.cookTime;
+        public Sprite SpriteUI => data.sprite;
 
         protected override void Awake()
         {
@@ -39,6 +44,11 @@ namespace Undercooked
             Status = IngredientStatus.Raw;
             _meshFilter.mesh = data.rawMesh;
             _meshRenderer.material = data.ingredientMaterial;
+
+            if (_startingStatus == IngredientStatus.Processed)
+            {
+                ChangeToProcessed();
+            }
         }
         
         public void Pick()
@@ -60,14 +70,29 @@ namespace Undercooked
             _meshFilter.mesh = data.processedMesh;
         }
 
-        public override bool TryToDropIntoSlot(IPickable pickable)
+        public void ChangeToCooked()
+        {
+            Status = IngredientStatus.Cooked;
+            var cookedMesh = data.cookedMesh;
+            if (cookedMesh == null) return;
+            
+            _meshFilter.mesh = cookedMesh;
+            SetMeshRendererEnabled(true);
+        }
+
+        public void SetMeshRendererEnabled(bool enable)
+        {
+            _meshRenderer.enabled = enable;
+        }
+
+        public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
             // Ingredients normally don't get any pickables dropped into it.
             Debug.Log("[Ingredient] TryToDrop into an Ingredient isn't possible by design");
             return false;
         }
 
-        public override IPickable TryToPickUpFromSlot()
+        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             Debug.Log($"[Ingredient] Trying to PickUp {gameObject.name}");
             _rigidbody.isKinematic = true;
