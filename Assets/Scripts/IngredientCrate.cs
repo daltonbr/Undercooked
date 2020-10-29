@@ -7,15 +7,9 @@ namespace Undercooked
         //TODO: how to display the prefab onto the crate? Probably a texture into Ingredient Data Scriptable Object
         
         [SerializeField] private Ingredient ingredientPrefab;
-        private Animator _animator;
+        [SerializeField] private Animator animator;
         private static readonly int OpenHash = Animator.StringToHash("Open");
         private IngredientType IngredientType => ingredientPrefab.Type;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            _animator = GetComponent<Animator>();
-        }
 
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
@@ -40,7 +34,7 @@ namespace Undercooked
         {
             if (CurrentPickable == null)
             {
-                _animator.SetTrigger(OpenHash);
+                animator.SetTrigger(OpenHash);
                 return Instantiate(ingredientPrefab, slot.transform.position, Quaternion.identity);
             }
             else
