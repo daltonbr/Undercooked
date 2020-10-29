@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Undercooked
@@ -20,7 +22,7 @@ namespace Undercooked
         private MaterialPropertyBlock _materialBlock;
         private static readonly int Highlight = Shader.PropertyToID("Highlight_");
         
-        public bool IsEmpty() => _pickables.Count == 0;
+        public virtual bool IsEmpty() => _pickables.Count == 0;
         public List<IPickable> Pickables => _pickables;
         
         protected virtual void Awake()
@@ -54,11 +56,11 @@ namespace Undercooked
 
         private void ChangePropertyBlock(bool highlight)
         {
-            _materialBlock.SetInt(Highlight, highlight ? 1 : 0);
+            _materialBlock?.SetInt(Highlight, highlight ? 1 : 0);
             //_meshRenderer.SetPropertyBlock(_materialBlock);
             foreach (var mesh in _meshes)
             {
-                mesh.SetPropertyBlock(_materialBlock);
+                mesh?.SetPropertyBlock(_materialBlock);
             }
         }
 
@@ -82,6 +84,6 @@ namespace Undercooked
         }
 
         public abstract bool TryToDropIntoSlot(IPickable pickableToDrop);
-        public abstract IPickable TryToPickUpFromSlot(IPickable playerHoldPickable);
+        [CanBeNull] public abstract IPickable TryToPickUpFromSlot(IPickable playerHoldPickable);
     }
 }

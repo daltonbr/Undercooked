@@ -23,8 +23,10 @@ namespace Undercooked
         private Rigidbody _rigidbody;
         private Collider _collider;
 
-        private const int MaxNumberIngredients = 4;
-        private readonly List<Ingredient> _ingredients = new List<Ingredient>(MaxNumberIngredients);
+        private const int MaxNumberIngredients = 4; 
+        private List<Ingredient> _ingredients = new List<Ingredient>(MaxNumberIngredients);
+        
+        public override bool IsEmpty() =>_ingredients.Count == 0;
 
         protected override void Awake()
         {
@@ -37,9 +39,10 @@ namespace Undercooked
             _collider = GetComponent<Collider>();
             Setup();
         }
-
+        
         public bool AddIngredient(Ingredient ingredient)
         {
+            Debug.LogError("[Plate] AddIngredient not implemented");
             //TODO: not implemented
             UpdateIconsUI();
             return false;
@@ -49,8 +52,8 @@ namespace Undercooked
         {
             // check for soup (3 equal cooked ingredients, mushroom, onion or tomato)
             if (!IsEmpty()) return false;
-            
             _ingredients.AddRange(ingredients);
+            
             foreach (var ingredient in _ingredients)
             {
                 ingredient.transform.SetParent(slot);
@@ -69,25 +72,25 @@ namespace Undercooked
             return true;
         }
 
-        public void CleanIngredients()
+        public void EmptyPlate()
         {
             _ingredients.Clear();
             DisableSoup();
             UpdateIconsUI();
         }
-
+        
         private void UpdateIconsUI()
         {
-            for (int i = 0; i < _ingredients.Count; i++)
+            for (int i = 0; i < ingredientUISlots.Count; i++)
             {
-                if (_ingredients[i] == null)
-                {
-                    ingredientUISlots[i].enabled = false;
-                }
-                else
+                if (i < _ingredients.Count && _ingredients[i] != null)
                 {
                     ingredientUISlots[i].enabled = true;
                     ingredientUISlots[i].sprite = _ingredients[i].SpriteUI;
+                }
+                else
+                {
+                    ingredientUISlots[i].enabled = false;    
                 }
             }
         }
@@ -198,7 +201,7 @@ namespace Undercooked
                     Debug.Log("[Plate] Trying to drop something from a plate into other plate! We basically swap contents");
                     if (plate.IsEmpty()) return false;
                     plate.AddIngredients(this._ingredients);
-                    this.CleanIngredients();
+                    this.EmptyPlate();
                     return false;
                     break;
                 default:

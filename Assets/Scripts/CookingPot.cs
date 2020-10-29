@@ -106,10 +106,6 @@ namespace Undercooked
             // re-enabling when picked up.
             _rigidbody.isKinematic = true;
             _collider.enabled = false;
-            
-            //Status = IngredientStatus.Raw;
-            //_meshFilter.mesh = data.rawMesh;
-            //_meshRenderer.material = data.ingredientMaterial;
         }
         
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
@@ -205,7 +201,9 @@ namespace Undercooked
             //TODO: if we are swapping, we don't need to instantiate a soup again. 
             //TODO: Plate is now in charge of instantiating soupPrefab
             var soup = Instantiate(_soupPrefab, slot.transform.position, Quaternion.identity);
-            
+            plate.AddIngredients(_ingredients);
+
+            Debug.Log("[CookingPot] Filling plate");
             EmptyPan();
             return null;
         }
@@ -224,6 +222,8 @@ namespace Undercooked
             _isBurned = false;
             _isCookFinished = false;
             _isCooking = false;
+            warningPopup.transform.localScale = Vector3.zero;
+            greenCheckPopup.transform.localScale = Vector3.zero;
             
             UpdateIngredientsUI();
             
@@ -237,7 +237,7 @@ namespace Undercooked
         {
             Debug.Log("[CookingPot] We just have been dropped into fire!");
             _onHob = true;
-            warningPopup.enabled = true;
+            warningPopup.enabled = false;
 
             if (_ingredients.Count == 0 || _isBurned) return;
             
@@ -330,14 +330,13 @@ namespace Undercooked
             
             _inBurnProcess = true;
             slider.gameObject.SetActive(false);
-            warningPopup.enabled = true;
-            whiteSmoke.gameObject.SetActive(true);
 
             // GreenCheck
             if (_currentBurnTime <= timeLine[0])
             {
                 AnimateGreenCheck();    
             }
+            whiteSmoke.gameObject.SetActive(true);
             
             while (_currentBurnTime < timeLine[1])
             {
@@ -345,6 +344,8 @@ namespace Undercooked
                 yield return null;
             }
             
+            warningPopup.enabled = true;
+
             var internalCount = 0f;
             
             // pulsating at 2Hz
