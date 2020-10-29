@@ -213,6 +213,7 @@ namespace Undercooked
             if (_cookCoroutine != null) StopCoroutine(_cookCoroutine);
             if (_burnCoroutine != null) StopCoroutine(_burnCoroutine);
             
+            slider.gameObject.SetActive(false);
             _ingredients.Clear();
             
             liquidSurface.localPosition = Vector3.zero;
@@ -230,7 +231,6 @@ namespace Undercooked
             // deactivate FX's
             whiteSmoke.gameObject.SetActive(false);
             blackSmoke.gameObject.SetActive(false);
-            
         }
 
         public void DroppedIntoHob()
@@ -270,10 +270,8 @@ namespace Undercooked
                 
             warningPopup.enabled = false;
             greenCheckPopup.enabled = false;
-            //_isBurned = true;
             _inBurnProcess = false;
-            //_currentBurnTime = 0f;
-            
+
             UpdateIngredientsUI();
         }
         
