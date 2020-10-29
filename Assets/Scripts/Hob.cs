@@ -82,8 +82,8 @@ namespace Undercooked
                 return false;
             }
             CurrentPickable = pickable;
-            CurrentPickable.gameObject.transform.SetParent(slot);
-            CurrentPickable.gameObject.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
+            CurrentPickable.gameObject.transform.SetParent(Slot);
+            CurrentPickable.gameObject.transform.SetPositionAndRotation(Slot.position, Quaternion.identity);
             
             // start cooking
             var pan = CurrentPickable as CookingPot;

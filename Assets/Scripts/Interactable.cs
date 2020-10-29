@@ -15,7 +15,7 @@ namespace Undercooked
         [Tooltip("Pivot where IPickables could be dropped/pickedUp")]
         [SerializeField] protected Transform slot;
         // TODO: we may have a starting item.
-        protected IPickable CurrentPickable;
+        public IPickable CurrentPickable { get; protected set; }
         protected List<IPickable> _pickables = new List<IPickable>();
 
         private readonly List<MeshRenderer> _meshes = new List<MeshRenderer>();
@@ -24,6 +24,7 @@ namespace Undercooked
         
         public virtual bool IsEmpty() => _pickables.Count == 0;
         public List<IPickable> Pickables => _pickables;
+        public Transform Slot => slot;
         
         protected virtual void Awake()
         {
@@ -46,8 +47,8 @@ namespace Undercooked
 
         private void CheckSlotOccupied()
         {
-            if (slot == null) return;
-            foreach (Transform child in slot)
+            if (Slot == null) return;
+            foreach (Transform child in Slot)
             {
                 CurrentPickable = child.GetComponent<IPickable>();
                 if (CurrentPickable != null) return;

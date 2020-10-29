@@ -56,8 +56,8 @@ namespace Undercooked
             
             foreach (var ingredient in _ingredients)
             {
-                ingredient.transform.SetParent(slot);
-                ingredient.transform.SetPositionAndRotation(slot.transform.position, Quaternion.identity);
+                ingredient.transform.SetParent(Slot);
+                ingredient.transform.SetPositionAndRotation(Slot.transform.position, Quaternion.identity);
             }
             UpdateIconsUI();
             
@@ -146,8 +146,16 @@ namespace Undercooked
             #if UNITY_EDITOR
             Assert.IsNotNull(_soupMaterial);
             #endif
+
+            if (IsClean)
+            {
+                SetClean();
+            }
+            else
+            {
+                SetDirty();
+            }
             
-            SetClean();
             DisableSoup();
         }
 

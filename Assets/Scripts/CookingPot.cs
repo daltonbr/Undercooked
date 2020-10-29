@@ -200,7 +200,7 @@ namespace Undercooked
             //TODO: what to do with the ingredients? Destroy or put into soup?
             //TODO: if we are swapping, we don't need to instantiate a soup again. 
             //TODO: Plate is now in charge of instantiating soupPrefab
-            var soup = Instantiate(_soupPrefab, slot.transform.position, Quaternion.identity);
+            var soup = Instantiate(_soupPrefab, Slot.transform.position, Quaternion.identity);
             plate.AddIngredients(_ingredients);
 
             Debug.Log("[CookingPot] Filling plate");
@@ -464,7 +464,7 @@ namespace Undercooked
             
             // hide ingredient mesh
             ingredient.SetMeshRendererEnabled(false);
-            ingredient.gameObject.transform.SetParent(slot);
+            ingredient.gameObject.transform.SetParent(Slot);
             
             // reset burnProcess, if any
             _currentBurnTime = 0f;

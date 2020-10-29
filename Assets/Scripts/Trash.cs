@@ -49,8 +49,8 @@ namespace Undercooked
             if (pickable == null) yield break;
 
             // put pickable into slot
-            pickable.gameObject.transform.SetParent(slot);
-            pickable.gameObject.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
+            pickable.gameObject.transform.SetParent(Slot);
+            pickable.gameObject.transform.SetPositionAndRotation(Slot.position, Quaternion.identity);
             
             float currentTime = 0f;
             

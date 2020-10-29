@@ -19,8 +19,8 @@ namespace Undercooked
             if (CurrentPickable == null)
             {
                 CurrentPickable = pickableToDrop;
-                CurrentPickable.gameObject.transform.SetParent(slot);
-                pickableToDrop.gameObject.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
+                CurrentPickable.gameObject.transform.SetParent(Slot);
+                pickableToDrop.gameObject.transform.SetPositionAndRotation(Slot.position, Quaternion.identity);
                 return true;
             }
             else
@@ -35,7 +35,7 @@ namespace Undercooked
             if (CurrentPickable == null)
             {
                 animator.SetTrigger(OpenHash);
-                return Instantiate(ingredientPrefab, slot.transform.position, Quaternion.identity);
+                return Instantiate(ingredientPrefab, Slot.transform.position, Quaternion.identity);
             }
             else
             {

@@ -150,8 +150,8 @@ namespace Undercooked
 
             _finalProcessTime = _ingredient.ProcessTime;
             
-            CurrentPickable.gameObject.transform.SetParent(slot);
-            CurrentPickable.gameObject.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
+            CurrentPickable.gameObject.transform.SetParent(Slot);
+            CurrentPickable.gameObject.transform.SetPositionAndRotation(Slot.position, Quaternion.identity);
             knife.gameObject.SetActive(false);
             return true;
         }
