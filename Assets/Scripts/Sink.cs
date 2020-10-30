@@ -7,8 +7,8 @@ using UnityEngine.UI;
 namespace Undercooked
 {
     // Features
-    //TODO: we can carry a pile of plates from DishTray
-    //TODO: we can drop a pile of plates into Sink
+    // we can carry a pile of plates from DishTray
+    // we can drop a pile of plates into Sink
     // break line-of-sight pauses cleaning process
     // if one plate is cleaning the next one starts automatically
     
@@ -62,9 +62,11 @@ namespace Undercooked
         /// </summary>
         private void AddPileDirtyPlatesRecursively(Plate plate)
         {
-            while (plate.CurrentPickable != null)
+            Plate nextPlate = plate.Slot.GetComponentInChildren<Plate>();
+            if (nextPlate != null)
             {
-                AddPileDirtyPlatesRecursively(plate);
+                nextPlate.transform.SetParent(null);
+                AddPileDirtyPlatesRecursively(nextPlate);
             }
             
             _dirtyPlates.Push(plate);
@@ -79,7 +81,6 @@ namespace Undercooked
         public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             // we can only pick clean plates (if we have available ones). Potentially a pile
-            // We cannot put plates back into the sink
             if (playerHoldPickable != null)
             {
                 Debug.Log("[Sink] Player need empty hands to pick something from sink");
