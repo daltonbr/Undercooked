@@ -43,9 +43,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4033104065792337177}
   serializedVersion: 2
-  m_Mass: 3
-  m_Drag: 2
-  m_AngularDrag: 0.5
+  m_Mass: 2
+  m_Drag: 0.8
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slot: {fileID: 4033104065792337157}
   data: {fileID: 11400000, guid: e08b6a9503f12a0469880e51ecbaa65c, type: 2}
-  processTime: 3
+  _startingStatus: 0
 --- !u!135 &3873709974121421840
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -122,7 +122,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4033104065792337177}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: bc4a59c88acb5474abf917ca8b6d7ac4, type: 2}
   m_IsTrigger: 0
   m_Enabled: 0
   serializedVersion: 2

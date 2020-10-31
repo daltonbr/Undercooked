@@ -7,6 +7,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.daltonlima.core": {
+      "version": "https://github.com/daltonbr/com.daltonlima.core.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8623b55aca5271600fc16a00235792b6a9b158d7"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -67,7 +74,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -168,7 +175,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.1",
+      "version": "3.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
