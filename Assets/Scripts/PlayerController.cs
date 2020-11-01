@@ -1,4 +1,5 @@
 using System.Collections;
+using Lean.Transition;
 //using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -43,6 +44,9 @@ namespace Undercooked
         private InputAction _pickUpAction;
         private InputAction _interactAction;
 
+        [SerializeField] private ParticleSystem dashParticle;
+        [SerializeField] private AudioClip dashAudio;
+
         private void Awake()
         {
             _interactableController = GetComponentInChildren<InteractableController>();
@@ -74,6 +78,9 @@ namespace Undercooked
             _isDashingPossible = false;
             //Debug.Log("[PlayerController] Dash");
             playerRigidbody.AddRelativeForce(dashForce * Vector3.forward);
+            dashParticle.Play();
+            dashParticle.PlaySoundTransition(dashAudio);
+            
             yield return new WaitForFixedUpdate();
             _isDashing = true;
             yield return _dashDuration;
@@ -110,7 +117,7 @@ namespace Undercooked
                 else
                 {
                     // Interactable only (not a IPickable)
-                    _currentPickable = interactable.TryToPickUpFromSlot(_currentPickable);
+                    _currentPickable = interactable?.TryToPickUpFromSlot(_currentPickable);
                     //Debug.Log($"[PlayerController] Player pick {_currentPickable.gameObject.name}");
                     _currentPickable?.gameObject.transform.SetPositionAndRotation(
                         interactableHolder.position, Quaternion.identity);
@@ -185,7 +192,7 @@ namespace Undercooked
 
         private void HandleInteract(InputAction.CallbackContext context)
         {
-            Debug.Log("[PlayerController] Interact");
+            // Debug.Log("[PlayerController] Interact");
             // currentInteractable could be null
             _interactableController.CurrentInteractable?.Interact();
         }
