@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Undercooked
@@ -43,6 +42,8 @@ namespace Undercooked
                 case CookingPot cookingPot:
                     return TryDropIfNotOccupied(pickableToDrop);
                     break;
+                case Extinguisher extinguisher:
+                    return TryDropIfNotOccupied(pickableToDrop);
                 default:
                     Debug.LogWarning("[Countertop] IPickable not recognized. Refuse by default", this);
                     return false;
