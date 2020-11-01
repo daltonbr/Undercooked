@@ -1,8 +1,6 @@
 using System.Collections;
 using Lean.Transition;
-//using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 namespace Undercooked
@@ -76,7 +74,6 @@ namespace Undercooked
         private IEnumerator Dash()
         {
             _isDashingPossible = false;
-            //Debug.Log("[PlayerController] Dash");
             playerRigidbody.AddRelativeForce(dashForce * Vector3.forward);
             dashParticle.Play();
             dashParticle.PlaySoundTransition(dashAudio);
@@ -84,10 +81,8 @@ namespace Undercooked
             yield return new WaitForFixedUpdate();
             _isDashing = true;
             yield return _dashDuration;
-            // Debug.Log("[PlayerController] Dash finished");
             _isDashing = false;
             yield return _dashCooldown;
-            // Debug.Log("[PlayerController] Dash Cooldown is over");
             _isDashingPossible = true;
         }
 
@@ -214,19 +209,7 @@ namespace Undercooked
         {
             if (_isDashing)
             {
-                // keep the current velocity, only redirecting
                 var currentVelocity = playerRigidbody.velocity.magnitude;
-            
-                // velocity could fall lower than movement speed, while dashing
-                //currentVelocity = Mathf.Max(currentVelocity, movementSpeed);
-                // if (currentVelocity < movementSpeed)
-                // {
-                //     Debug.Log($"Dashing slower than walking {currentVelocity}");
-                // }
-                // else
-                // {
-                //     Debug.Log($"Dashing FASTER than walking {currentVelocity}");
-                // }
 
                 var inputNormalized = _inputDirection.normalized;
                 if (inputNormalized == Vector3.zero)

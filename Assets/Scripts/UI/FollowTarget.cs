@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.UI
 {
     public class FollowTarget : MonoBehaviour
     {
@@ -21,7 +21,7 @@ namespace Undercooked
             {
                 transform.position = position;
             }
-            
         }
     }
+    
 }

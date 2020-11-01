@@ -43,6 +43,8 @@ namespace Undercooked
         public static event CountdownTick OnCountdownTick;
         public delegate void ScoreUpdate(int score);
         public static event ScoreUpdate OnScoreUpdate;
+        public delegate void TipCalculated(int tip);
+        public static event TipCalculated OnTipCalculated;
         public delegate void DisplayNotification(string textToDisplay, Color color, float timeToDisplay);
         public static event DisplayNotification OnDisplayNotification;
         
@@ -67,25 +69,21 @@ namespace Undercooked
         {
             Score = 0;
             _timeRemaining = levelData.time;
-            // Start Order spawner
+            // TODO: Start "Order spawner"
             
-            // Unlock player movement
-            
-            // Countdown - Ready - Go
-            // NotificationUI.DisplayNotification("Ready?", new Color(.66f, .367f, .15f), 2f);
-            // NotificationUI.DisplayNotification("GO", new Color(.333f, .733f, .196f), 2f);
-            
-            await StartLevelAsync();
+            // TODO: Unlock player movement
+
+            await DisplayInitialNotifications();
             
             _countdownCoroutine = StartCoroutine(CountdownTimer(_timeRemaining));
             
             //TODO: handle pause (pause timer coroutine and restart)
         }
 
-        private static async Task StartLevelAsync()
+        private static async Task DisplayInitialNotifications()
         {
-            await NotificationUI.DisplayNotificationAsync("Ready?", new Color(.66f, .367f, .15f), 2f);
-            await NotificationUI.DisplayNotificationAsync("GO", new Color(.333f, .733f, .196f), 2f);
+            await NotificationUI.DisplayCenterNotificationAsync("Ready?", new Color(.66f, .367f, .15f), 2f);
+            await NotificationUI.DisplayCenterNotificationAsync("GO", new Color(.333f, .733f, .196f), 2f);
         }
         
         private void OnEnable()
@@ -118,6 +116,7 @@ namespace Undercooked
             
             // Evaluate plate
             EvaluatePlate(plate);
+            int tip = CalculateTip(plate);
             //TODO: improve this cycle
             // add score if is the case
                 // check for tips
@@ -128,6 +127,12 @@ namespace Undercooked
 
                 plate.RemoveAllIngredients();
                 StartCoroutine(ReturnPlateDirty(plate));
+        }
+
+        //TODO: Calculate Tip
+        private int CalculateTip(Plate plate)
+        {
+            return 2;
         }
 
         private void EvaluatePlate(Plate plate)
@@ -142,10 +147,17 @@ namespace Undercooked
                 Debug.Log("[GameManager] Plate is dirty");
             }
 
+            var score = 0;
             if (Plate.CheckSoupIngredients(plate.Ingredients))
             {
-                Score += 20;
+                score += 20;
             }
+            
+            var tip = CalculateTip(plate);
+            OnTipCalculated?.Invoke(tip);
+            score += tip;
+            
+            Score = score;
         }
 
         private IEnumerator ReturnPlateDirty(Plate plate)
@@ -176,7 +188,7 @@ namespace Undercooked
         private static async void TimeOver()
         {
             Debug.Log("[GameManager] TimeOver");
-            await NotificationUI.DisplayNotificationAsync("Time Over!", new Color(.66f, .367f, .15f), 3f);
+            await NotificationUI.DisplayCenterNotificationAsync("Time Over!", new Color(.66f, .367f, .15f), 3f);
         }
     }
 }
