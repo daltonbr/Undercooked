@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Lean.Transition;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -25,7 +26,7 @@ namespace Undercooked
         [SerializeField] private Transform liquidSurface;
         [SerializeField] private Material liquidMaterial;
         [SerializeField] private Color burnLiquid;
-        // each time we add an ingredient, we raise the liquid level by this amount
+        // each ingredient raise the liquid level by this amount
         private const float LiquidHeightRaise = 0.12f;
         
         [Header("FX's")] 
@@ -65,6 +66,9 @@ namespace Undercooked
 
         public bool IsCookFinished => _isCookFinished;
         public bool IsBurned => _isBurned;
+        public override bool IsEmpty() =>_ingredients.Count == 0;
+
+        public List<Ingredient> Ingredients => _ingredients;
 
         //Dish Class? Status?
         //recipe concept? (Recipe ScriptableObject
@@ -128,18 +132,20 @@ namespace Undercooked
                     return false;
                     break;
                 case Plate plate:
-                    Debug.Log("[CookingPot] Dragging a plate into CookingPot");
-                    if (_isCookFinished && !_isBurned)
+                    
+                    if (IsEmpty())
                     {
-                        if (plate.IsEmpty() == false)
+                        if (plate.IsEmpty() == false && Plate.CheckSoupIngredients(plate.Ingredients))
                         {
-                            Debug.Log("[CookingPot] Plate is full");
-                            //TODO:
-                            // check if it's a soup
-                            // then try to throw it back into the CookingPot
+                            // Drop soup back into CookingPan
+                            TryAddIngredients(plate.Ingredients);
+                            plate.RemoveAllIngredients();
                             return false;
                         }
-
+                    }
+                    
+                    if (_isCookFinished && !_isBurned)
+                    {
                         if (_isBurned)
                         {
                             Debug.Log("[CookingPot] Burned soup! Can only be thrash it away");
@@ -207,6 +213,25 @@ namespace Undercooked
             EmptyPan();
             return null;
         }
+        
+        public bool TryAddIngredients(List<Ingredient> ingredients)
+        {
+            if (!IsEmpty()) return false;
+            if (Plate.CheckSoupIngredients(ingredients) == false) return false;
+            _ingredients.AddRange(ingredients);
+            
+            foreach (var ingredient in _ingredients)
+            {
+                ingredient.transform.SetParent(Slot);
+                ingredient.transform.SetPositionAndRotation(Slot.transform.position, Quaternion.identity);
+            }
+            
+            SetLiquidLevelAndColor();
+            
+            _isCookFinished = true;
+            UpdateIngredientsUI();
+            return true;
+        }
 
         public void EmptyPan()
         {
@@ -235,7 +260,7 @@ namespace Undercooked
 
         public void DroppedIntoHob()
         {
-            Debug.Log("[CookingPot] We just have been dropped into fire!");
+            //Debug.Log("[CookingPot] We just have been dropped into fire!");
             _onHob = true;
             warningPopup.enabled = false;
 
@@ -458,10 +483,8 @@ namespace Undercooked
             // add time to FinalCookTime
             _totalCookTime += ingredient.CookTime;
             
-            // raise liquid level
-            liquidSurface.localPosition += new Vector3(0f, LiquidHeightRaise, 0f);
-            liquidMaterial.color = ingredient.BaseColor;
-            
+            SetLiquidLevelAndColor();
+
             // hide ingredient mesh
             ingredient.SetMeshRendererEnabled(false);
             ingredient.gameObject.transform.SetParent(Slot);
@@ -488,6 +511,13 @@ namespace Undercooked
             
             UpdateIngredientsUI();
             return true;
+        }
+
+        private void SetLiquidLevelAndColor()
+        {
+            var ingredientCount = Ingredients.Count;
+            liquidSurface.localPosition = new Vector3(0f, LiquidHeightRaise * ingredientCount, 0f);
+            liquidMaterial.color = Ingredients.Last().BaseColor;
         }
 
         private void UpdateIngredientsUI()

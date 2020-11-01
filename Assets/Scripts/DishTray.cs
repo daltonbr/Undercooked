@@ -33,9 +33,8 @@ namespace Undercooked
             var topPileSlot = _dirtyPlates.Count == 0 ? Slot : _dirtyPlates.Last().Slot;
             
             // plates are parented to the Slot of the previous one
-            Vector3 gap = new Vector3(0f, 0.05f, 0f);
             plate.transform.SetParent(topPileSlot);
-            plate.transform.SetPositionAndRotation(topPileSlot.transform.position + gap, Quaternion.identity);
+            plate.transform.SetPositionAndRotation(topPileSlot.transform.position, Quaternion.identity);
             _dirtyPlates.Add(plate);
         }
     }

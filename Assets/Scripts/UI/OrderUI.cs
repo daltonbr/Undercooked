@@ -20,7 +20,7 @@ namespace Undercooked.UI
         [SerializeField] private Color sliderFinalColor;
         // single or multiple bottomPanel?
         
-        public Order Order { get; }
+        public OrderData OrderData { get; }
 
         private void Awake()
         {
@@ -30,15 +30,15 @@ namespace Undercooked.UI
             _mainPanel = GetComponent<RectTransform>();
         }
 
-        public void Setup(Order order)
+        public void Setup(OrderData orderData)
         {
-            orderImage.sprite = order.sprite;
+            orderImage.sprite = orderData.sprite;
 
             // resize the basePanel according to the amount of Ingredients
             
             // spawn individual ingredients Image
             
-            foreach (IngredientData ingredientData in order.ingredients)
+            foreach (IngredientData ingredientData in orderData.ingredients)
             {
                 // fill the image sprites
             }

@@ -25,7 +25,8 @@ namespace Undercooked
 
         private const int MaxNumberIngredients = 4; 
         private List<Ingredient> _ingredients = new List<Ingredient>(MaxNumberIngredients);
-        
+
+        public List<Ingredient> Ingredients => _ingredients;
         public override bool IsEmpty() =>_ingredients.Count == 0;
 
         protected override void Awake()
@@ -40,13 +41,13 @@ namespace Undercooked
             Setup();
         }
         
-        public bool AddIngredient(Ingredient ingredient)
-        {
-            Debug.LogError("[Plate] AddIngredient not implemented");
-            //TODO: not implemented
-            UpdateIconsUI();
-            return false;
-        }
+        // public bool AddIngredient(Ingredient ingredient)
+        // {
+        //     Debug.LogError("[Plate] AddIngredient not implemented");
+        //     //TODO: not implemented
+        //     UpdateIconsUI();
+        //     return false;
+        // }
 
         public bool AddIngredients(List<Ingredient> ingredients)
         {
@@ -71,14 +72,18 @@ namespace Undercooked
             }
             return true;
         }
-
-        public void EmptyPlate()
+        
+        public void RemoveAllIngredients()
         {
-            _ingredients.Clear();
+            // foreach (var ingredient in _ingredients)
+            // {
+            //     Destroy(ingredient.gameObject);
+            // }
             DisableSoup();
+            _ingredients.Clear();
             UpdateIconsUI();
         }
-        
+
         private void UpdateIconsUI()
         {
             for (int i = 0; i < ingredientUISlots.Count; i++)
@@ -171,6 +176,7 @@ namespace Undercooked
         {
             _meshRenderer.material = dirtyMaterial;
             IsClean = false;
+            DisableSoup();
         }
         
         public void Pick()
@@ -185,7 +191,7 @@ namespace Undercooked
             _rigidbody.isKinematic = false;
             _collider.enabled = true;
         }
-
+        
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
             // player has empty hands - doesn't make sense
@@ -199,17 +205,23 @@ namespace Undercooked
             {
                 case CookingPot cookingPot:
                     Debug.Log("[Plate] Dropping CookingPot into Plate");
-                    //TODO: check if CookingPot finish cook and have a valid cook soup
+                    if (cookingPot.IsCookFinished &&
+                        cookingPot.IsBurned == false &&
+                        CheckSoupIngredients(cookingPot.Ingredients))
+                    {
+                        AddIngredients(cookingPot.Ingredients);
+                        cookingPot.EmptyPan();
+                        return false;
+                    }
                     break;
                 case Ingredient ingredient:
                     Debug.Log("[Plate] Trying to dropping Ingredient into Plate! Not implemented yet");
                     break;
                 case Plate plate:
-                    // TODO: drop something from a plate into other plate! We basically swap contents
                     Debug.Log("[Plate] Trying to drop something from a plate into other plate! We basically swap contents");
-                    if (plate.IsEmpty()) return false;
-                    plate.AddIngredients(this._ingredients);
-                    this.EmptyPlate();
+                    if (this.IsEmpty() == false || this.IsClean == false) return false;
+                    this.AddIngredients(plate.Ingredients);
+                    plate.RemoveAllIngredients();
                     return false;
                     break;
                 default:

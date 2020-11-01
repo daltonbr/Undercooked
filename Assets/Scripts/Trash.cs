@@ -28,7 +28,7 @@ namespace Undercooked
                         return false;
                     }
                     Debug.Log("[Trash] Thrashing away plate's content");
-                    plate.EmptyPlate();
+                    plate.RemoveAllIngredients();
                     return false;
                     break;
                 default:

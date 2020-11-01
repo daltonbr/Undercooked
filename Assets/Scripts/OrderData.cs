@@ -3,16 +3,10 @@ using UnityEngine;
 
 namespace Undercooked
 {
-    public class Order : ScriptableObject
+    [CreateAssetMenu(fileName = "OrderData", menuName = "OrderData", order = 2)]
+    public class OrderData : ScriptableObject
     {
         public Sprite sprite;
         public List<IngredientData> ingredients;
-        
-        
-        // Considerations
-        
-        // name - not sure
-        // start time - should this be here?
-
     }
 }

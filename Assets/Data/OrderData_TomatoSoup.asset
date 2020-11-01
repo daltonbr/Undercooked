@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 765d4f147e7a42529013b04139ae37ac, type: 3}
+  m_Name: OrderData_TomatoSoup
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 7214117213202875568, guid: c286e9a30b9402c4e8ca82508e97d529, type: 3}
+  ingredients:
+  - {fileID: 11400000, guid: e84eb8bed56d5f5449fb9908fc208d92, type: 2}
+  - {fileID: 11400000, guid: e84eb8bed56d5f5449fb9908fc208d92, type: 2}
+  - {fileID: 11400000, guid: e84eb8bed56d5f5449fb9908fc208d92, type: 2}

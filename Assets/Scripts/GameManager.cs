@@ -115,6 +115,23 @@ namespace Undercooked
         private void HandlePlateDropped(Plate plate)
         {
             Debug.Log("[GameManager] Plate has been dropped");
+            
+            // Evaluate plate
+            EvaluatePlate(plate);
+            //TODO: improve this cycle
+            // add score if is the case
+                // check for tips
+            // play Visual FX's
+                // DeliverCounterTop (event?) 
+                // update Score (event)
+                // update and animate Order UI (event)
+
+                plate.RemoveAllIngredients();
+                StartCoroutine(ReturnPlateDirty(plate));
+        }
+
+        private void EvaluatePlate(Plate plate)
+        {
             if (plate.IsEmpty())
             {
                 Debug.Log("[GameManager] Plate is empty");
@@ -124,17 +141,11 @@ namespace Undercooked
             {
                 Debug.Log("[GameManager] Plate is dirty");
             }
-            
-            // Evaluate plate
-            
-            // add score if is the case
-                // check for tips
-            // play Visual FX's
-                // DeliverCounterTop (event?) 
-                // update Score (event)
-                // update and animate Order UI (event)
 
-                StartCoroutine(ReturnPlateDirty(plate));
+            if (Plate.CheckSoupIngredients(plate.Ingredients))
+            {
+                Score += 20;
+            }
         }
 
         private IEnumerator ReturnPlateDirty(Plate plate)

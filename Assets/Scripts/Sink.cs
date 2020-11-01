@@ -146,9 +146,8 @@ namespace Undercooked
             var topStackSlot = _cleanPlates.Count == 0 ? Slot : _cleanPlates.Peek().Slot;
             
             // all plates parented to the base Slot, but physically positioned on the top of the stack
-            Vector3 gap = new Vector3(0f, 0.05f, 0f); 
             plateToClean.transform.SetParent(Slot);
-            plateToClean.transform.SetPositionAndRotation(topStackSlot.transform.position + gap, Quaternion.identity);
+            plateToClean.transform.SetPositionAndRotation(topStackSlot.transform.position, Quaternion.identity);
 
             _cleanPlates.Push(plateToClean);
             

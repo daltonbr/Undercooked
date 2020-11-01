@@ -8,7 +8,7 @@ namespace Undercooked
     {
         public string levelName;
         [Tooltip("Orders that going to be randomly spawned")]
-        public List<Order> orders;
+        public List<OrderData> orders;
         [Tooltip("Level total time in seconds")]
         public int time;
         [Header("Star Ratings")]
