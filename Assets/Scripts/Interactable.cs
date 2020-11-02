@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine;
 namespace Undercooked
 {
     /// <summary>
-    /// Structures that the user can highlight and optionally interact.
+    /// Structures that the user can highlight and optionally interact with.
     /// Could allow certain items to be dropped/pickedup <see cref="IPickable"/>s into it.
     /// </summary>
     [RequireComponent(typeof(Collider))]
@@ -38,10 +37,10 @@ namespace Undercooked
         {
             var baseMesh = transform.GetComponent<MeshRenderer>();
             if (baseMesh != null) _meshes.Add(baseMesh);
-            foreach (Transform child in transform)
+            var childMeshes = transform.GetComponentsInChildren<MeshRenderer>();
+            foreach (var mesh in childMeshes)
             {
-                var childMesh = child.GetComponent<MeshRenderer>();
-                if (childMesh != null) _meshes.Add(childMesh);
+                _meshes.Add(mesh);
             }
         }
 
@@ -58,7 +57,6 @@ namespace Undercooked
         private void ChangePropertyBlock(bool highlight)
         {
             _materialBlock?.SetInt(Highlight, highlight ? 1 : 0);
-            //_meshRenderer.SetPropertyBlock(_materialBlock);
             foreach (var mesh in _meshes)
             {
                 mesh?.SetPropertyBlock(_materialBlock);
