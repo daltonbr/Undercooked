@@ -16,51 +16,39 @@ namespace Undercooked.UI
         [SerializeField] private Slider slider;
         [SerializeField] private List<Image> ingredientImages = new List<Image>(); 
         
-        [SerializeField] AudioClip popAudio;
-        [SerializeField] AudioClip notificationAudio;
+        [Header("Audio")]
+        [SerializeField] private AudioClip popAudio;
+        [SerializeField] private AudioClip notificationAudio;
+        [SerializeField] private AudioClip buzzerAudio;
 
-        [SerializeField] private Image[] _images;
-        private Image sliderFill;
+        [SerializeField] private Image[] images;
+        [SerializeField] private Gradient sliderGradient;
+        private Image _sliderFillImage;
         private const float UIWidth = 190f;
 
-        private int ShakeIntervalTimeMs = 600;
+        private const int ShakeIntervalTimeMs = 600;
         private bool _shake;
-        private float InitialRemainingTime;
+        private float _initialRemainingTime;
         
         public float CurrentAnchorX { get; private set; }
 
-        // private Coroutine _shakeCoroutine;
-        
-        // how to handle color lerp in slider
-        [SerializeField] private Color sliderInitialColor;
-        [SerializeField] private Color sliderFinalColor;
-        
         private Material _uiMaterial;
         
-        public OrderData OrderData { get; }
         public float SizeDeltaX => rootRectTransform.sizeDelta.x;
 
         public Order Order { get; private set; }
-        
-        // public delegate void Delivered(Order order, int timeRemaining);
-        // public event Delivered OnDelivered;
 
         private void Awake()
         {
-            DuplicateMaterial();
-
-            //TODO: how to lerp the slider color individually?
-            sliderFill = slider.fillRect.gameObject.GetComponent<Image>();
-            sliderFill.material.color = sliderFinalColor;
             rootRectTransform = GetComponent<RectTransform>();
+            _sliderFillImage = slider.fillRect.GetComponent<Image>();
+            DuplicateMaterial();
         }
 
         private async void HandleExpired(Order order)
         {
             StopShake();
-            //TODO: play buzzer audio
-            await RotateAlertBasePanelAsync(Color.red, null);
-            // Timer will be reset
+            await RotateAlertBasePanelAsync(Color.red, buzzerAudio);
         }
 
         private void HandleAlertTime(Order order)
@@ -70,15 +58,13 @@ namespace Undercooked.UI
 
         private void DuplicateMaterial()
         {
-            _images = GetComponentsInChildren<Image>();
+            images = GetComponentsInChildren<Image>();
 
-            if (_images.Length > 0)
+            if (images.Length <= 0) return;
+            _uiMaterial = Instantiate(images[0].material);
+            foreach (var image in images)
             {
-                _uiMaterial = Instantiate(_images[0].material);
-                foreach (var image in _images)
-                {
-                    image.material = _uiMaterial;
-                }
+                image.material = _uiMaterial;
             }
         }
 
@@ -94,9 +80,8 @@ namespace Undercooked.UI
             basePanel.localPosition = new Vector3(basePanel.localPosition.x, 0f, 0f);
 
             orderImage.sprite = Order.OrderData.sprite;
-            InitialRemainingTime = Order.InitialRemainingTime;
-
-            //TODO: how to verify if we have exactly the same amount of ingredients and images?
+            _initialRemainingTime = Order.InitialRemainingTime;
+            
             for (var i = 0; i < Order.OrderData.ingredients.Count; i++)
             {
                 ingredientImages[i].sprite = Order.OrderData.ingredients[i].sprite;
@@ -110,8 +95,8 @@ namespace Undercooked.UI
 
         private void HandleUpdatedCountdown(float remainingTime)
         {
-            slider.value = remainingTime / InitialRemainingTime;
-            //sliderFill.material.color = Color.Lerp(sliderFinalColor, sliderInitialColor, slider.value);
+            slider.value = remainingTime / _initialRemainingTime;
+            _sliderFillImage.color = sliderGradient.Evaluate(slider.value);
         }
 
         private void HandleDelivered(Order order)
@@ -165,18 +150,14 @@ namespace Undercooked.UI
             CurrentAnchorX = desiredX;
             float initialSlideDuration = 0.5f;
             
-            // Vector2 small = new Vector2(0.8f, 1f);
-
             rootRectTransform
                 .anchoredPositionTransition_X(desiredX, initialSlideDuration, LeanEase.Decelerate);
         }
-         
-        [ContextMenu("Start Shake")]
-        public void StartShake()
+
+        private void StartShake()
         {
             _shake = true;
             ShakeAsync();
-            //_shakeCoroutine = StartCoroutine(ShakeCoroutine());
         }
         
         private async Task ShakeAsync()
@@ -193,22 +174,12 @@ namespace Undercooked.UI
                     .anchoredPositionTransition_X(0, 0.15f)
                     .JoinTransition();
                 await Task.Delay(ShakeIntervalTimeMs);
-                // yield return _shakeWait;
             }
 
             basePanel.anchoredPositionTransition_X(0, 0.15f);
-            //yield break;
         }
 
-        [ContextMenu("StopShake")]
-        public void StopShake()
-        {
-            _shake = false;
-            // if (_shakeCoroutine != null)
-            // {
-            //     StopCoroutine(_shakeCoroutine);
-            // }
-        }
+        private void StopShake() => _shake = false;
         
         private async Task RotateAlertBasePanelAsync(Color flickerColor, AudioClip audioClip = null)
         {
@@ -244,7 +215,6 @@ namespace Undercooked.UI
             
         }
         
-        [ContextMenu("SlideUp")]
         private void SlideUp()
         {
             const float deltaY = 400f;
