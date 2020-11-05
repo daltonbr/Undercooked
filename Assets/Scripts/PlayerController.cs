@@ -22,7 +22,7 @@ namespace Undercooked
 
         private Vector3 _inputDirection;
 
-        //  Dashing
+        // Dashing
         [SerializeField] private float dashForce = 400f;
         private bool _isDashing = false;
         private bool _isDashingPossible = true;
@@ -88,37 +88,27 @@ namespace Undercooked
 
         private void HandlePickUp(InputAction.CallbackContext context)
         {
-            // Debug.Log("[PlayerController] Try to PickUp");
             var interactable = _interactableController.CurrentInteractable;
             
             // empty hands, try to pick
             if (_currentPickable == null)
             {
-                Debug.Log("[PlayerController] Player currentPickable is null - empty hands");
-
                 _currentPickable = interactable as IPickable;
                 if (_currentPickable != null)
                 {
-                    Debug.Log("[PlayerController] Trying to Pickup an IPickable");
-                    // e.g.ingredient on the floor (IPickable)
-                    // Interactable is pickable, so we are going to pick it =)
-                    _currentPickable.Pick(); // maybe we don't need this =)
+                    _currentPickable.Pick();
                     _interactableController.Remove(_currentPickable as Interactable);
-                    //_currentPickable = pickable;
                     _currentPickable.gameObject.transform.SetPositionAndRotation(interactableHolder.transform.position, Quaternion.identity);
                     _currentPickable.gameObject.transform.SetParent(interactableHolder);
                     return;
                 }
-                else
-                {
-                    // Interactable only (not a IPickable)
-                    _currentPickable = interactable?.TryToPickUpFromSlot(_currentPickable);
-                    //Debug.Log($"[PlayerController] Player pick {_currentPickable.gameObject.name}");
-                    _currentPickable?.gameObject.transform.SetPositionAndRotation(
-                        interactableHolder.position, Quaternion.identity);
-                    _currentPickable?.gameObject.transform.SetParent(interactableHolder);
-                    return;
-                }
+
+                // Interactable only (not a IPickable)
+                _currentPickable = interactable?.TryToPickUpFromSlot(_currentPickable);
+                _currentPickable?.gameObject.transform.SetPositionAndRotation(
+                    interactableHolder.position, Quaternion.identity);
+                _currentPickable?.gameObject.transform.SetParent(interactableHolder);
+                return;
             }
             
             // we carry a pickable, let's try to drop it (we may fail)
@@ -133,22 +123,21 @@ namespace Undercooked
             
             // we carry a pickable and we have an interactable in range
             // we may drop into the interactable
-            // or we can try swap content (empty plate in hands with a full plate)
             
             // Try to drop on the interactable. It may refuse it, e.g. dropping a plate into the CuttingBoard,
             // or simply it already have something on it
-            Debug.Log($"[PlayerController] {_currentPickable.gameObject.name} trying to drop into {interactable.gameObject.name} ");
+            //Debug.Log($"[PlayerController] {_currentPickable.gameObject.name} trying to drop into {interactable.gameObject.name} ");
 
             bool dropSuccess = interactable.TryToDropIntoSlot(_currentPickable);
             if (dropSuccess)
             {
                 // clean pickable references
-                Debug.Log($"[PlayerController] Successfully dropped {_currentPickable.gameObject.name} into {interactable.gameObject.name}");
+                //Debug.Log($"[PlayerController] Successfully dropped {_currentPickable.gameObject.name} into {interactable.gameObject.name}");
                 _currentPickable = null;
             }
             else
             {
-                Debug.Log("[PlayerController] Interactable refuse dropped pickable");
+                //Debug.Log("[PlayerController] Interactable refuse dropped pickable");
             }
         }
     
@@ -187,8 +176,6 @@ namespace Undercooked
 
         private void HandleInteract(InputAction.CallbackContext context)
         {
-            // Debug.Log("[PlayerController] Interact");
-            // currentInteractable could be null
             _interactableController.CurrentInteractable?.Interact();
         }
 

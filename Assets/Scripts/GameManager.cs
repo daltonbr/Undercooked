@@ -6,20 +6,30 @@ using UnityEngine.Assertions;
 
 namespace Undercooked
 {
+    [RequireComponent(typeof(OrderManager))]
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private DishTray dishTray;
-
+        [SerializeField] private OrderManager orderManager;
+        [SerializeField] private LevelData level1;
+        [SerializeField] private const int BaseScorePerPlate = 20;
+        [SerializeField] private const int PenaltyExpiredScore = 10;
+        [SerializeField] private const float TimeToReturnPlateSeconds = 3f;
+        
+        private Coroutine _countdownCoroutine;
+        private readonly WaitForSeconds TimeToReturnPlate = new WaitForSeconds(TimeToReturnPlateSeconds);
+        private readonly WaitForSeconds OneSecondWait = new WaitForSeconds(1f);
         private int _score;
         private int _timeRemaining;
 
-        public int Score
+        private int Score
         {
             get => _score;
-            private set
+            set
             {
+                var previous = _score;
                 _score = value;
-                OnScoreUpdate?.Invoke(_score);
+                OnScoreUpdate?.Invoke(_score, _score - previous);
             }
         }
 
@@ -32,26 +42,17 @@ namespace Undercooked
                 OnCountdownTick?.Invoke(_timeRemaining);
             }
         }
-
-        private const int BaseScorePerPlate = 20;
-        //TODO: how to compute tips (0/2/4/6) ? consider time remaining
         
-        private readonly WaitForSeconds TimeToReturnPlate = new WaitForSeconds(3f);
-        private readonly WaitForSeconds OneSecondWait = new WaitForSeconds(1f);
-
         public delegate void CountdownTick(int timeRemaining);
         public static event CountdownTick OnCountdownTick;
-        public delegate void ScoreUpdate(int score);
+        public delegate void ScoreUpdate(int score, int delta);
         public static event ScoreUpdate OnScoreUpdate;
-        public delegate void TipCalculated(int tip);
-        public static event TipCalculated OnTipCalculated;
         public delegate void DisplayNotification(string textToDisplay, Color color, float timeToDisplay);
         public static event DisplayNotification OnDisplayNotification;
-        
-
-        [SerializeField] private LevelData level1;
-        
-        private Coroutine _countdownCoroutine;
+        public delegate void TimeIsOver();
+        public static event TimeIsOver OnTimeIsOver;
+        public delegate void LevelStart();
+        public static event LevelStart OnLevelStart;
         
         private void Awake()
         {
@@ -62,22 +63,30 @@ namespace Undercooked
 
         private void Start()
         {
-            StartLevelAsync(level1);
+            GameLoop();
         }
 
         private async Task StartLevelAsync(LevelData levelData)
         {
             Score = 0;
             _timeRemaining = levelData.time;
+            
+            await DisplayInitialNotifications();
+            //OnLevelStart?.Invoke();
+            orderManager.Init(levelData);
+            
             // TODO: Start "Order spawner"
             
             // TODO: Unlock player movement
-
-            await DisplayInitialNotifications();
             
             _countdownCoroutine = StartCoroutine(CountdownTimer(_timeRemaining));
-            
+
             //TODO: handle pause (pause timer coroutine and restart)
+        }
+
+        private async Task GameLoop()
+        {
+            StartLevelAsync(level1);
         }
 
         private static async Task DisplayInitialNotifications()
@@ -89,11 +98,25 @@ namespace Undercooked
         private void OnEnable()
         {
             DeliverCountertop.OnPlateDropped += HandlePlateDropped;
+            OrderManager.OnOrderExpired += HandleOrderExpired;
+            OrderManager.OnOrderDelivered += HandleOrderDelivered;
         }
-
+        
         private void OnDisable()
         {
             DeliverCountertop.OnPlateDropped -= HandlePlateDropped;
+            OrderManager.OnOrderExpired -= HandleOrderExpired;
+            OrderManager.OnOrderDelivered -= HandleOrderDelivered;
+        }
+
+        private void HandleOrderDelivered(Order order, int tipCalculated)
+        {
+            Score += BaseScorePerPlate + tipCalculated;
+        }
+        
+        private void HandleOrderExpired(Order order)
+        {
+            Score -= PenaltyExpiredScore;
         }
 
         public void Pause()
@@ -112,52 +135,16 @@ namespace Undercooked
         
         private void HandlePlateDropped(Plate plate)
         {
-            Debug.Log("[GameManager] Plate has been dropped");
-            
-            // Evaluate plate
-            EvaluatePlate(plate);
-            int tip = CalculateTip(plate);
-            //TODO: improve this cycle
-            // add score if is the case
-                // check for tips
-            // play Visual FX's
-                // DeliverCounterTop (event?) 
-                // update Score (event)
-                // update and animate Order UI (event)
-
+            if (plate.IsEmpty() || plate.IsClean == false)
+            {
                 plate.RemoveAllIngredients();
                 StartCoroutine(ReturnPlateDirty(plate));
-        }
-
-        //TODO: Calculate Tip
-        private int CalculateTip(Plate plate)
-        {
-            return 2;
-        }
-
-        private void EvaluatePlate(Plate plate)
-        {
-            if (plate.IsEmpty())
-            {
-                Debug.Log("[GameManager] Plate is empty");
-            }
-
-            if (plate.IsClean == false)
-            {
-                Debug.Log("[GameManager] Plate is dirty");
-            }
-
-            var score = 0;
-            if (Plate.CheckSoupIngredients(plate.Ingredients))
-            {
-                score += 20;
+                return;
             }
             
-            var tip = CalculateTip(plate);
-            OnTipCalculated?.Invoke(tip);
-            score += tip;
-            
-            Score = score;
+            orderManager.CheckIngredientsMatchOrder(plate.Ingredients);
+            plate.RemoveAllIngredients();
+            StartCoroutine(ReturnPlateDirty(plate));
         }
 
         private IEnumerator ReturnPlateDirty(Plate plate)
@@ -165,11 +152,7 @@ namespace Undercooked
             plate.gameObject.SetActive(true);
             plate.SetDirty();
             yield return TimeToReturnPlate;
-            // delete all ingredients if any
-            
             dishTray.AddDirtyPlate(plate);
-            
-            // reenable the plate in DishTray, we could pile it as well, like Sink
         }
 
         private IEnumerator CountdownTimer(int timeInSeconds)
@@ -178,17 +161,25 @@ namespace Undercooked
             while (timeRemaining > 0)
             {
                 timeRemaining--;
-                OnCountdownTick?.Invoke(timeRemaining);
                 yield return OneSecondWait;
+                OnCountdownTick?.Invoke(timeRemaining);
             }
 
             TimeOver();
         }
 
-        private static async void TimeOver()
+        private async void TimeOver()
         {
             Debug.Log("[GameManager] TimeOver");
             await NotificationUI.DisplayCenterNotificationAsync("Time Over!", new Color(.66f, .367f, .15f), 3f);
+            
+            // Take control from player
+            
+            // Show summary end screen - prompt to play again
+            
+            // Stop OrderManager
+            orderManager.StopAndClear();
+
         }
     }
 }
