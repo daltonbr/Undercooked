@@ -63,10 +63,7 @@ namespace Undercooked
             }
         }
 
-        public virtual void Interact()
-        {
-            //Debug.Log($"[Interactable] Interact with {gameObject.name}");
-        }
+        public virtual void Interact() {}
         
         public virtual void ToggleHighlightOn()
         {

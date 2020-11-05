@@ -126,7 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52535aebad624e0c95d12a36632764b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positiveFeedbackParticle: {fileID: 1372035240}
   _canvasGroup: {fileID: 669227062}
   positiveColorOutline: {r: 0.20487562, g: 0.355, b: 0.1536567, a: 1}
   positiveColorBase: {r: 0.36078432, g: 0.627451, b: 0.27058825, a: 1}
@@ -5396,7 +5395,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 7.48e-43, y: 48.237946, z: 7.48e-43, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0

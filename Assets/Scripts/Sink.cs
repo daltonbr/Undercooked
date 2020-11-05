@@ -6,11 +6,10 @@ using UnityEngine.UI;
 
 namespace Undercooked
 {
-    // Features
-    // we can carry a pile of plates from DishTray
+    // -- Particular Features --
     // we can drop a pile of plates into Sink
-    // break line-of-sight pauses cleaning process
-    // if one plate is cleaning the next one starts automatically
+    // when player breaks contact cleaning process is paused (it could be resumed)
+    // when one plate  is cleaned the next one starts automatically
     
     public class Sink : Interactable
     {
@@ -23,8 +22,7 @@ namespace Undercooked
         private const float CleaningTime = 3f;
         private float _currentCleaningTime;
         private Coroutine _cleanCoroutine;
-        private bool _isCleaning;
-        
+
         protected override void Awake()
         {
             base.Awake();
@@ -80,37 +78,17 @@ namespace Undercooked
 
         public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
-            // we can only pick clean plates (if we have available ones). Potentially a pile
-            if (playerHoldPickable != null)
-            {
-                Debug.Log("[Sink] Player need empty hands to pick something from sink");
-                return null;
-            }
+            if (playerHoldPickable != null) return null;
             
-            if (_cleanPlates.Count > 0)
-            {
-                // Debug.Log("[Sink] Picked a clean plate");
-                return _cleanPlates.Pop();
-            }
-            else
-            {
-                // Debug.Log("[Sink] There is no clean plates to pick");
-                return null;    
-            }
+            return _cleanPlates.Count > 0 ? _cleanPlates.Pop() : null;
         }
 
         public override void Interact()
         {
             base.Interact();
+
+            if (_dirtyPlates.Count == 0) return;
             
-            // set animation (should this be player's responsibility?
-
-            if (_dirtyPlates.Count == 0)
-            {
-                Debug.Log("[Sink] There are no dirty plates");
-                return;
-            }
-
             if (_cleanCoroutine == null)
             {
                 _currentCleaningTime = 0f;
@@ -119,17 +97,13 @@ namespace Undercooked
                 _cleanCoroutine = StartCoroutine(Clean());
                 return;
             }
-            else
-            {
-                PauseCleanCoroutine();
-                _cleanCoroutine = StartCoroutine(Clean());
-                return;
-            }
+            
+            PauseCleanCoroutine();
+            _cleanCoroutine = StartCoroutine(Clean());
         }
 
         private IEnumerator Clean()
         {
-            _isCleaning = true;
             slider.gameObject.SetActive(true);
             while (_currentCleaningTime < CleaningTime)
             {
@@ -154,14 +128,12 @@ namespace Undercooked
             _cleanCoroutine = null;
             slider.gameObject.SetActive(false);
             _currentCleaningTime = 0f;
-            _isCleaning = false;
 
             // Clean next plate
             if (_dirtyPlates.Count > 0)
             {
                 _cleanCoroutine = StartCoroutine(Clean());
             }
-            yield break;
         }
         
         public override void ToggleHighlightOff()
@@ -173,7 +145,6 @@ namespace Undercooked
         private void PauseCleanCoroutine()
         {
             slider.gameObject.SetActive(false);
-            _isCleaning = false;
             if (_cleanCoroutine != null) StopCoroutine(_cleanCoroutine);
         }
         

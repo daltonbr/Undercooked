@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Undercooked
@@ -25,8 +22,6 @@ namespace Undercooked
         
         private void Setup()
         {
-            // Rigidbody is kinematic almost all the time, except when we drop it on the floor
-            // re-enabling when picked up.
             _rigidbody.isKinematic = true;
             _collider.enabled = false;
         }
@@ -34,17 +29,12 @@ namespace Undercooked
         public override void Interact()
         {
             base.Interact();
-            
-            // set animation (should this be player's responsibility?
             //TODO: implement Extinguisher
             Debug.Log("[Extinguisher] Not implemented", this);
         }
-        
-        public override bool TryToDropIntoSlot(IPickable pickableToDrop)
-        {
-            return false;
-        }
 
+        public override bool TryToDropIntoSlot(IPickable pickableToDrop) => false;
+        
         public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             return playerHoldPickable == null ? this : null;

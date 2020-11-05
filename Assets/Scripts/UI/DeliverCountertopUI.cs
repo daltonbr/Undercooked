@@ -22,27 +22,28 @@ namespace Undercooked.UI
         
         private void OnEnable()
         {
-            GameManager.OnTipCalculated += HandleTipCalculate;
+            OrderManager.OnOrderDelivered += HandleOrderDelivered;
             DeliverCountertop.OnPlateMissing += HandlePlateMissing;
         }
 
         private void OnDisable()
         {
-            GameManager.OnTipCalculated -= HandleTipCalculate;
+            OrderManager.OnOrderDelivered -= HandleOrderDelivered;
             DeliverCountertop.OnPlateMissing -= HandlePlateMissing;
         }
 
         private void HandlePlateMissing()
         {
-            DisplayNotification($"NEEDS PLATE!", negativeColorBase, negativeColorOutline, 2f);
+            ScrollAndFadeText($"NEEDS PLATE!", negativeColorBase, negativeColorOutline, 2f);
         }
 
-        private void HandleTipCalculate(int tip)
+        private void HandleOrderDelivered(Order order, int tip)
         {
-            DisplayNotification($"+{tip} TIP!", positiveColorBase, positiveColorOutline, 2f);
+            if (tip == 0) return;
+            ScrollAndFadeText($"+{tip} TIP!", positiveColorBase, positiveColorOutline, 2f);
         }
 
-        private void DisplayNotification(string textToDisplay, Color baseColor, Color outlineColor, float timeToDisplayInSeconds = 2f)
+        private void ScrollAndFadeText(string textToDisplay, Color baseColor, Color outlineColor, float timeToDisplayInSeconds = 2f)
         {
             _text.gameObject.transform.localPosition = Vector3.zero;
             _canvasGroup.alpha = 1f;
@@ -55,5 +56,4 @@ namespace Undercooked.UI
         }
         
     }
-    
 }

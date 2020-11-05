@@ -77,6 +77,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7974988571810610490, guid: 59b5b662243a69f4fa70a84b3e331bff, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -974235952483097124, guid: 59b5b662243a69f4fa70a84b3e331bff, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -84,10 +88,10 @@ PrefabInstance:
     - target: {fileID: -265210443706549537, guid: 59b5b662243a69f4fa70a84b3e331bff, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f73c19fb63b5621428e253e6def96e26, type: 2}
+      objectReference: {fileID: 2100000, guid: e033bbc1ffa794b47bc00ea54f9ce9f9, type: 2}
     - target: {fileID: 919132149155446097, guid: 59b5b662243a69f4fa70a84b3e331bff, type: 3}
       propertyPath: m_Name
-      value: Hob_Model
+      value: Hob
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59b5b662243a69f4fa70a84b3e331bff, type: 3}

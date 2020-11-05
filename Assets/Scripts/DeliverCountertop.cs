@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Lean.Transition;
-using Undercooked.UI;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UI;
 
 namespace Undercooked
 {
@@ -26,7 +20,6 @@ namespace Undercooked
             switch (pickableToDrop)
             {
                 case Plate plate:
-                    //TODO: give feedback (positive or negative). Score? Tips?
                     plate.transform.SetParent(null);
                     plate.transform.SetPositionAndRotation(Slot.position, Quaternion.identity);
                     OnPlateDropped?.Invoke(plate);
@@ -34,12 +27,10 @@ namespace Undercooked
                     // move the plate out-of sight
                     plate.transform.position = new Vector3(10000f, 10000f, 10000f);
                     return true;
-                    break;
                 case Ingredient ingredient:
                     Debug.Log("[DeliverCountertop] Need plate.");
                     OnPlateMissing?.Invoke();
                     return false;
-                    break;
                 default:
                     Debug.Log($"[DeliverCountertop] Dropping {pickableToDrop.gameObject.name} isn't accepted.");
                     break;
@@ -47,11 +38,8 @@ namespace Undercooked
             return false;
         }
 
-        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
-        {
-            return null;
-        }
-
+        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable) => null;
+        
         private void PlayPositiveFeedback()
         {
             starParticle.Play();

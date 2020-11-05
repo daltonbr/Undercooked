@@ -23,62 +23,33 @@ namespace Undercooked
         public override void Interact()
         {
             base.Interact();
-            if (CurrentPickable == null)
+            if (CurrentPickable == null ||
+                _ingredient == null ||
+                _ingredient.Status != IngredientStatus.Raw) return;
+            
+            if (_chopCoroutine == null)
             {
-                Debug.Log("[ChoppingBoard] There is nothing to chop");
+                _finalProcessTime = _ingredient.ProcessTime;
+                _currentProcessTime = 0f;
+                slider.value = 0f;
+                slider.gameObject.SetActive(true);
+                _chopCoroutine = StartCoroutine(Chop());
                 return;
             }
 
-            if (_ingredient == null) return;
-            
-            switch (_ingredient.Status)
+            if (_isChopping == false)
             {
-                case IngredientStatus.Raw:
-                    // start/resume chopping
-                    if (_chopCoroutine == null)
-                    {
-                        _finalProcessTime = _ingredient.ProcessTime;
-                        _currentProcessTime = 0f;
-                        slider.value = 0f;
-                        slider.gameObject.SetActive(true);
-                        _chopCoroutine = StartCoroutine(Chop());
-                        return;
-                    }
-                    else
-                    {
-                        if (_isChopping == false)
-                        {
-                            Debug.Log("[ChoppingBoard] Resume Chopping");
-                            _chopCoroutine = StartCoroutine(Chop());
-                        }
-                        else
-                        {
-                            Debug.Log("[ChoppingBoard] Coroutine already in progress. Ignoring");        
-                        }
-                        return;
-                    }
-                    break;
-                case IngredientStatus.Processed:
-                    Debug.Log("[ChoppingBoard] Ingredient already chopped. Ignoring");
-                    break;
-                default:
-                    Debug.Log("[ChoppingBoard] IPickable wasn't expected", this);
-                    break;
+                _chopCoroutine = StartCoroutine(Chop());
             }
         }
 
         public override void ToggleHighlightOff()
         {
             base.ToggleHighlightOff();
-            PauseChop();
-        }
-        
-        private void PauseChop()
-        {
             _isChopping = false;
             if (_chopCoroutine != null) StopCoroutine(_chopCoroutine);
         }
-
+        
         private IEnumerator Chop()
         {
             _isChopping = true;
@@ -94,59 +65,38 @@ namespace Undercooked
             slider.gameObject.SetActive(false);
             _isChopping = false;
             _chopCoroutine = null;
-            //TODO: add visual and sound FX
         }
         
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
-            switch (pickableToDrop)
+            if (pickableToDrop is Ingredient)
             {
-                case Ingredient ingredient:
-                    return TryDropIfNotOccupied(pickableToDrop);
-                    break;
-                default:
-                    Debug.LogWarning("[ChoppingBoard] Refuse everything that is not raw ingredient");
-                    return false;
+                return TryDropIfNotOccupied(pickableToDrop);
             }
+            return false;
         }
 
         public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
-            //TODO: only allow Pickup after we finish chopping the ingredient. Essentially locking it in place.
-            if (CurrentPickable == null)
-            {
-                return null;
-            }
-            else
-            {
-                if (_chopCoroutine != null)
-                {
-                    Debug.Log("[ChoppingBoard] We have a chop underway. Finish chop to pickup");
-                    return null;
-                }
-                var output = CurrentPickable;
-                _ingredient = null;
-                var interactable = CurrentPickable as Interactable;
-                interactable?.ToggleHighlightOff();
-                CurrentPickable = null;
-                knife.gameObject.SetActive(true);
-                return output;
-            }
+            // only allow Pickup after we finish chopping the ingredient. Essentially locking it in place.
+            if (CurrentPickable == null) return null;
+            if (_chopCoroutine != null) return null;
+            
+            var output = CurrentPickable;
+            _ingredient = null;
+            var interactable = CurrentPickable as Interactable;
+            interactable?.ToggleHighlightOff();
+            CurrentPickable = null;
+            knife.gameObject.SetActive(true);
+            return output;
         }
         
         private bool TryDropIfNotOccupied(IPickable pickable)
         {
-            if (CurrentPickable != null)
-            {
-                Debug.Log("[ChoppingBoard] Try to drop into ChoppingBoard, but it's already occupied");
-                return false;
-            }
+            if (CurrentPickable != null) return false;
             CurrentPickable = pickable;
             _ingredient = pickable as Ingredient;
-            if (_ingredient == null)
-            {
-                Debug.Log("[ChoppingBoard] IPickable is not an Ingredient", this);    
-            }
+            if (_ingredient == null) return false;
 
             _finalProcessTime = _ingredient.ProcessTime;
             

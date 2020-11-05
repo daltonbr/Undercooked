@@ -36,8 +36,6 @@ namespace Undercooked
         [SerializeField] private AudioClip beep;
         [SerializeField] private AudioClip fireBurning;
 
-        private AudioSource _audioSource;
-        
         // Timers
         private float _totalCookTime;
         private float _currentCookTime;
@@ -51,9 +49,6 @@ namespace Undercooked
         private const int MaxNumberIngredients = 3;
         private readonly List<Ingredient> _ingredients = new List<Ingredient>(MaxNumberIngredients);
 
-        // Visually all the soups are equal except for the floating icons on the plate
-        [SerializeField] private Interactable _soupPrefab; // Ingredient? IPickable? or Dish?
-        
         // Flags
         private bool _isBurned;
         private bool _isCookFinished;
@@ -70,25 +65,10 @@ namespace Undercooked
 
         public List<Ingredient> Ingredients => _ingredients;
 
-        //Dish Class? Status?
-        //recipe concept? (Recipe ScriptableObject
-        // e.g. Onion soup x 3 onion boiled
-        // e.g. burger - chop bread, chop meat (+pan), optional: lettuce, tomato
-        
         // [GameDesign]
         // if there is a mixed soup (e.g. 2x onions 1x tomato) we can't pickup the soup (it's locked),
         // the only option is to trash it
         // we only deliver single ingredient soups
-        
-        // finalized dish is a IPickable that can be put in a plate,
-        // some can be put into a slot (or drop into floor) like a regular IPickable
-        // others like soup can only be put in a plate.
-        // for soup, we can drop the CookingPot into a plate
-        // or PickUp from the CookingPot with an empty plate in hands
-        
-        // TODO: [N2H] Fire and FX's
-        // fire
-        // starting smoke fire (investigate more)
         
         protected override void Awake()
         {
@@ -100,7 +80,6 @@ namespace Undercooked
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
-            _audioSource = GetComponent<AudioSource>();
             Setup();
         }
         
@@ -130,7 +109,6 @@ namespace Undercooked
                     }
                     Debug.Log("[CookingPot] Only accept Onions, tomatoes or Mushrooms");
                     return false;
-                    break;
                 case Plate plate:
                     
                     if (IsEmpty())
@@ -146,33 +124,16 @@ namespace Undercooked
                     
                     if (_isCookFinished && !_isBurned)
                     {
-                        if (_isBurned)
-                        {
-                            Debug.Log("[CookingPot] Burned soup! Can only be thrash it away");
-                            return false;
-                        }
+                        if (_isBurned) return false;
+                        if (plate.IsClean == false) return false;
                         
-                        if (plate.IsClean == false)
-                        {
-                            Debug.Log("[CookingPot] Plate is dirty");
-                            return false;
-                        }
-                        
-                        Debug.Log("[CookingPot] Plate is empty and clean");
-
                         bool isSoup = Plate.CheckSoupIngredients(this._ingredients);
 
-                        if (isSoup)
-                        {
-                            plate.AddIngredients(this._ingredients);
-                            EmptyPan();
-                            return false;    
-                        }
-                        else
-                        {
-                            Debug.Log("[CookingPot] Mixed ingredients! Not a soup");
-                            return false;
-                        }
+                        if (!isSoup) return false;
+                        
+                        plate.AddIngredients(this._ingredients);
+                        EmptyPan();
+                        return false;
                     }
                     break;
                 
@@ -185,31 +146,22 @@ namespace Undercooked
         
         public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
-            //TODO: how to verify that user has a Plate?
             // we can only pick a soup when it's ready and Player has a Plate in hands, otherwise refuse
-
             if (!_isCookFinished || _isBurned) return null;
             
-            //TODO: we also "lock" a soup if there are different ingredients. Player has to trash it away
-
+            // we "lock" a soup if there are different ingredients. Player has to trash it away
             if (_ingredients[0].Type != _ingredients[1].Type ||
                 _ingredients[1].Type != _ingredients[2].Type ||
                 _ingredients[0].Type != _ingredients[2].Type)
             {
-                Debug.Log("[CookingPot] Soup with mixed ingredients! You must thrash it away! What a waste!");
+                // Debug.Log("[CookingPot] Soup with mixed ingredients! You must thrash it away! What a waste!");
                 return null;
             }
 
             if (!(playerHoldPickable is Plate plate)) return null;
             if (!plate.IsClean || !plate.IsEmpty()) return null;
-                
-            //TODO: what to do with the ingredients? Destroy or put into soup?
-            //TODO: if we are swapping, we don't need to instantiate a soup again. 
-            //TODO: Plate is now in charge of instantiating soupPrefab
-            var soup = Instantiate(_soupPrefab, Slot.transform.position, Quaternion.identity);
+            
             plate.AddIngredients(_ingredients);
-
-            Debug.Log("[CookingPot] Filling plate");
             EmptyPan();
             return null;
         }
@@ -260,7 +212,6 @@ namespace Undercooked
 
         public void DroppedIntoHob()
         {
-            //Debug.Log("[CookingPot] We just have been dropped into fire!");
             _onHob = true;
             warningPopup.enabled = false;
 
@@ -270,13 +221,11 @@ namespace Undercooked
             if (_isCookFinished)
             {
                 _burnCoroutine = StartCoroutine(Burn());
-                Debug.Log("[CookingPot] Resume Burn");
                 return;
             }
 
-            // ...or restart cooking
+            // or restart cooking
             _cookCoroutine = StartCoroutine(Cook());
-            Debug.Log("[CookingPot] Resume Cook");
         }
 
         private void TryStopCook()
@@ -302,22 +251,18 @@ namespace Undercooked
         
         public void RemovedFromHob()
         {
-            // Debug.Log("[CookingPot] We just have been removed from fire!");
-            // stop cooking process
             _onHob = false;
             warningPopup.enabled = false;;
 
             if (_inBurnProcess)
             {
                 TryStopBurn();
-                // Debug.Log($"[CookingPot] Stop burning at {_currentBurnTime}");
                 return;
             }
 
             if (_isCooking)
             {
                 TryStopCook();
-                // Debug.Log($"[CookingPot] Stop cooking at {_currentCookTime}");
             }
         }
 
@@ -426,7 +371,7 @@ namespace Undercooked
             
             whiteSmoke.gameObject.SetActive(false);
             blackSmoke.gameObject.SetActive(true);
-            Debug.Log("[CookingPot] The food is burnt!");
+             Debug.Log("[CookingPot] The food is burned!");
         }
         
         private void AnimateGreenCheck()
@@ -471,16 +416,11 @@ namespace Undercooked
 
         private bool TryDrop(IPickable pickable)
         {
-            if (_ingredients.Count >= MaxNumberIngredients)
-            {
-                Debug.Log("[CookingPot] Try to drop into a full CookingPot");
-                return false;
-            }
+            if (_ingredients.Count >= MaxNumberIngredients) return false;
 
             var ingredient = pickable as Ingredient;
             _ingredients.Add(ingredient);
             
-            // add time to FinalCookTime
             _totalCookTime += ingredient.CookTime;
             
             SetLiquidLevelAndColor();
@@ -493,8 +433,6 @@ namespace Undercooked
             _currentBurnTime = 0f;
             if (_inBurnProcess && _burnCoroutine != null)
             {
-                Debug.Log("[CookingPot] Stop burning");
-                //StopCoroutine(_burnCoroutine);
                 TryStopBurn();
                 // resume cooking, because we are already burning
                 _cookCoroutine = StartCoroutine(Cook());
@@ -506,9 +444,7 @@ namespace Undercooked
             {
                 _cookCoroutine = StartCoroutine(Cook());
             }
-            
-            Debug.Log("[CookingPot] Added ingredient into CookingPot");
-            
+
             UpdateIngredientsUI();
             return true;
         }

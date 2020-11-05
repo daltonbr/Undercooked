@@ -40,14 +40,6 @@ namespace Undercooked
             _collider = GetComponent<Collider>();
             Setup();
         }
-        
-        // public bool AddIngredient(Ingredient ingredient)
-        // {
-        //     Debug.LogError("[Plate] AddIngredient not implemented");
-        //     //TODO: not implemented
-        //     UpdateIconsUI();
-        //     return false;
-        // }
 
         public bool AddIngredients(List<Ingredient> ingredients)
         {
@@ -75,10 +67,6 @@ namespace Undercooked
         
         public void RemoveAllIngredients()
         {
-            // foreach (var ingredient in _ingredients)
-            // {
-            //     Destroy(ingredient.gameObject);
-            // }
             DisableSoup();
             _ingredients.Clear();
             UpdateIconsUI();
@@ -248,22 +236,6 @@ namespace Undercooked
                 // we just pick the soup ingredients, not the CookingPot itself
                 case CookingPot cookingPot:
                     Debug.Log("[Plate] Trying to pick from a plate with a CookingPot", this);
-                    // if (cookingPot.IsCookFinished == false || cookingPot.IsBurned) return null;
-                    // List<Ingredient> ingredients = cookingPot.Pickables.Cast<Ingredient>().ToList();
-                    // if (CheckSoupIngredients(ingredients))
-                    // {
-                    //     // soup is ready
-                    //     //_pickables = ingredients as IPickable;
-                    //     _ingredients.Clear();
-                    //     _ingredients.AddRange(ingredients);
-                    //     foreach (var ingredient in ingredients)
-                    //     {
-                    //         ingredient.transform.SetParent(slot);
-                    //         ingredient.transform.SetPositionAndRotation(slot.position, Quaternion.identity);
-                    //     }
-                    //     EnableSoup(ingredients[0]);
-                    //     return null;
-                    // }
                     break;
                 case Ingredient ingredient:
                     //TODO: we can pickup some ingredients into plate, not all
