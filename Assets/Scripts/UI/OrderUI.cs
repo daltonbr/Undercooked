@@ -33,7 +33,8 @@ namespace Undercooked.UI
         public float CurrentAnchorX { get; private set; }
 
         private Material _uiMaterial;
-        
+        private Vector2 _bottomPanelInitialAnchoredPosition;
+
         public float SizeDeltaX => rootRectTransform.sizeDelta.x;
 
         public Order Order { get; private set; }
@@ -42,6 +43,7 @@ namespace Undercooked.UI
         {
             rootRectTransform = GetComponent<RectTransform>();
             _sliderFillImage = slider.fillRect.GetComponent<Image>();
+            _bottomPanelInitialAnchoredPosition = bottomPanel.anchoredPosition;
             DuplicateMaterial();
         }
 
@@ -86,13 +88,25 @@ namespace Undercooked.UI
             {
                 ingredientImages[i].sprite = Order.OrderData.ingredients[i].sprite;
             }
-
+            SubscribeEvents();
+        }
+        
+        private void SubscribeEvents()
+        {   
             Order.OnDelivered += HandleDelivered;
             Order.OnAlertTime += HandleAlertTime;
             Order.OnExpired += HandleExpired;
             Order.OnUpdatedCountdown += HandleUpdatedCountdown;
         }
 
+        private void UnsubscribeEvents()
+        {
+            Order.OnDelivered -= HandleDelivered;
+            Order.OnAlertTime -= HandleAlertTime;
+            Order.OnExpired -= HandleExpired;
+            Order.OnUpdatedCountdown -= HandleUpdatedCountdown;
+        }
+        
         private void HandleUpdatedCountdown(float remainingTime)
         {
             slider.value = remainingTime / _initialRemainingTime;
@@ -106,20 +120,19 @@ namespace Undercooked.UI
 
         private async void HandleDeliveredAsync(Order order)
         {
-            //TODO: play a positive feedback audio
             await RotateAlertBasePanelAsync(Color.green, null);
             SlideUp();
+            Deactivate();
         }
 
-        private void OnDestroy()
+        private void Deactivate()
         {
-            Order.OnDelivered -= HandleDelivered;
-            Order.OnAlertTime -= HandleAlertTime;
-            Order.OnExpired -= HandleExpired;
-            Order.OnUpdatedCountdown -= HandleUpdatedCountdown;
+            StopShake();
+            UnsubscribeEvents();
+            bottomPanel.anchoredPosition = _bottomPanelInitialAnchoredPosition;
         }
 
-        public void SlideInAnimation(float desiredX)
+        public void SlideInSpawn(float desiredX)
         {
             CurrentAnchorX = desiredX;
             float initialSlideDuration = 1f;
@@ -212,7 +225,6 @@ namespace Undercooked.UI
             {
                 basePanel.PlaySoundTransition(audioClip);
             }
-            
         }
         
         private void SlideUp()

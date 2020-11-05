@@ -55,7 +55,7 @@ namespace Undercooked
             _countdownCoroutine = StartCoroutine(CountdownCoroutine());
         }
 
-        private void PauseCountdown()
+        private void StopCountdown()
         {
             if (_countdownCoroutine != null)
             {
@@ -105,6 +105,7 @@ namespace Undercooked
         {
             TimeRemainingWhenDelivered = RemainingTime;
             IsDelivered = true;
+            StopCountdown();
             OnDelivered?.Invoke(this);
         }
         

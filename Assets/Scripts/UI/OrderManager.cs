@@ -17,7 +17,7 @@ namespace Undercooked.UI
         private bool _isGeneratorActive;
         
         [SerializeField] private Order orderPrefab;
-        [SerializeField] private float intervalBetweenDrops = 5f;
+        [SerializeField] private float spawnIntervalBetweenOrders = 20f;
         [SerializeField] private int maxConcurrentOrders = 5;
         [SerializeField] private OrdersPanelUI ordersPanelUI;
         
@@ -41,7 +41,7 @@ namespace Undercooked.UI
         {
             currentLevel = levelData;
             _orders.Clear();
-            _intervalBetweenDropsWait = new WaitForSeconds(intervalBetweenDrops);
+            _intervalBetweenDropsWait = new WaitForSeconds(spawnIntervalBetweenOrders);
             _isGeneratorActive = true;
             _generatorCoroutine = StartCoroutine(OrderGeneratorCoroutine());
         }

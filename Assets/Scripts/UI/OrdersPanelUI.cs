@@ -32,7 +32,7 @@ namespace Undercooked
             var orderUI = GetOrderUIFromPool();
             orderUI.Setup(order);
             _ordersUI.Add(orderUI);
-            orderUI.SlideInAnimation(rightmostX);
+            orderUI.SlideInSpawn(rightmostX);
         }
 
         private float GetRightmostXFromLastElement()
