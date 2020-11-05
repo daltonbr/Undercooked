@@ -44,6 +44,12 @@ TextureImporter:
   - first:
       213: -6621405077816047098
     second: BurguerIcon
+  - first:
+      213: -2868483261716031048
+    second: Stopwatch
+  - first:
+      213: 5966772757411358811
+    second: Coin
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -470,6 +476,48 @@ TextureImporter:
       bones: []
       spriteID: 60a8ec6d92b0c14a0800000000000000
       internalID: -6621405077816047098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stopwatch
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b9134ddba91138d0800000000000000
+      internalID: -2868483261716031048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Coin
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b586bf4a53c3ec250800000000000000
+      internalID: 5966772757411358811
       vertices: []
       indices: 
       edges: []

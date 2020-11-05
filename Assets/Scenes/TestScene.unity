@@ -1846,7 +1846,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: {fileID: 0}
   orderPrefab: {fileID: 3549545836017584286, guid: bd6f0200ee3ac704887707b256c6f63f, type: 3}
-  intervalBetweenDrops: 5
+  spawnIntervalBetweenOrders: 20
   maxConcurrentOrders: 5
   ordersPanelUI: {fileID: 1698801476}
 --- !u!4 &302800150 stripped
@@ -2035,7 +2035,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &354008202
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11848,7 +11848,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1741840085
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16501,11 +16501,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4362533872796279070, guid: c61976d77bbb4ab4eb1c02e708bb611d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4362533872796279070, guid: c61976d77bbb4ab4eb1c02e708bb611d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 4362533872796279070, guid: c61976d77bbb4ab4eb1c02e708bb611d, type: 3}
       propertyPath: m_SizeDelta.x
@@ -16936,11 +16936,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9050490324768170078, guid: d258f7ab03a7a2743b0766629d251342, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 9050490324768170078, guid: d258f7ab03a7a2743b0766629d251342, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9050490324768170078, guid: d258f7ab03a7a2743b0766629d251342, type: 3}
       propertyPath: m_SizeDelta.x
