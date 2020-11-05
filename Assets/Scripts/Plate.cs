@@ -211,12 +211,10 @@ namespace Undercooked
                     this.AddIngredients(plate.Ingredients);
                     plate.RemoveAllIngredients();
                     return false;
-                    break;
                 default:
                     Debug.LogWarning("[Plate] Drop not recognized", this);
                     break;
             }
-            // plates will receive pickables (processed ingredients), not when they are on the floor
             return false;
         }
 
@@ -245,7 +243,6 @@ namespace Undercooked
                     Debug.Log("[Plate] Trying to pick from a plate with a plate", this);
                     if (plate.IsEmpty())
                     {
-                        // the other plate is empty we can swap contents (if any)
                         if (this.IsEmpty())
                         {
                             Debug.Log("[Plate] Trying to pick something from a empty plate! No effect", this);       

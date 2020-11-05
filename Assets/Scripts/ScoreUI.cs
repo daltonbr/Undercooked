@@ -1,4 +1,3 @@
-using System;
 using Lean.Transition;
 using UnityEngine;
 using TMPro;

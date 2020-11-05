@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Lean.Transition;
 using Undercooked.UI;
 using UnityEngine;
 
@@ -16,12 +13,7 @@ namespace Undercooked
 
         private OrderUI GetOrderUIFromPool()
         {
-            OrderUI orderUI;
-            if (_orderUIPool.Count > 0)
-            {
-                return _orderUIPool.Dequeue();
-            }
-            return Instantiate(orderUIPrefab, transform);
+            return _orderUIPool.Count > 0 ? _orderUIPool.Dequeue() : Instantiate(orderUIPrefab, transform);
         }
         
         private void OnEnable()
@@ -42,17 +34,12 @@ namespace Undercooked
             _ordersUI.Add(orderUI);
             orderUI.SlideInAnimation(rightmostX);
         }
-        
-        //TODO: how to add back to the pool?
-        
+
         private float GetRightmostXFromLastElement()
         {
-            if (_ordersUI.Count == 0)
-            {
-                return 0;
-            }
+            if (_ordersUI.Count == 0) return 0;
             
-            float rightmostX = 0;
+            float rightmostX = 0f;
             
             List<OrderUI> orderUisNotDeliveredOrderedByLeftToRight = _ordersUI
                 .Where(x => x.Order.IsDelivered == false)
@@ -65,22 +52,10 @@ namespace Undercooked
 
             return rightmostX;
         }
-
-        public void RemoveDeliveredOrders()
-        {
-            _ordersUI.RemoveAll(x => x.Order.IsDelivered);
-        }
         
         public void RegroupPanelsLeft()
         {
             float leftmostX = 0f;
-            
-            //var ordersUILeftToRight = ordersUI.OrderBy(x => x.CurrentAnchorX).ToList();
-            // for (var i = 0; i < ordersUILeftToRight.Count; i++)
-            // {
-            //     var orderUI = ordersUILeftToRight[i];
-            //     
-            // }
 
             for (var i = 0; i < _ordersUI.Count; i++)
             {

@@ -47,7 +47,6 @@ namespace Undercooked
                     }
                     AddPileDirtyPlatesRecursively(plate);
                     return true;
-                    break;
                 default:
                     Debug.Log("[Sink] Only accept dirty empty plates.");
                     break;

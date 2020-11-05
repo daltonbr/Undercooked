@@ -40,10 +40,10 @@ public class Player : MonoBehaviour
     {
         Debug.Log($"ActionTriggered {context.action.name} phase: {context.action.phase}");
 
-        switch (context.action)
-        {
-            
-        }
+        // switch (context.action)
+        // {
+        //     
+        // }
     }
     
     private void HandleDeviceLost(PlayerInput context)

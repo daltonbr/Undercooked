@@ -20,7 +20,6 @@ namespace Undercooked
                     //TODO: delete ingredient nonetheless
                     StartCoroutine(AnimateAndDestroy(ingredient));
                     return true;
-                    break;
                 case Plate plate:
                     if (plate.IsEmpty())
                     {
@@ -30,7 +29,6 @@ namespace Undercooked
                     Debug.Log("[Trash] Thrashing away plate's content");
                     plate.RemoveAllIngredients();
                     return false;
-                    break;
                 default:
                     Debug.Log("[Trash] Unrecognized IPickable", this);
                     return false;

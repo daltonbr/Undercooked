@@ -34,7 +34,7 @@ namespace Undercooked.UI
 
         private void HandlePlateMissing()
         {
-            ScrollAndFadeText($"NEEDS PLATE!", negativeColorBase, negativeColorOutline, 2f);
+            ScrollAndFadeText("NEEDS PLATE!", negativeColorBase, negativeColorOutline, 2f);
         }
 
         private void HandleOrderDelivered(Order order, int tip)

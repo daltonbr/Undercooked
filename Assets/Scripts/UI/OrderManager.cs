@@ -152,19 +152,14 @@ namespace Undercooked.UI
                 if (plateIngredients.Count != orderIngredients.Count) continue;
                 
                 var intersection = plateIngredients.Except(orderIngredients).ToList();
-                if (intersection.Count == 0)
-                {
-                    Debug.Log($"[OrderManager] order{i} MATCH the plate");
-                    var tip = CalculateTip(order);
-                    DeactivateSendBackToPool(order);
-                    OnOrderDelivered?.Invoke(order, tip);
-                    ordersPanelUI.RegroupPanelsLeft();
-                    return;
-                }
-                else
-                {
-                    Debug.Log($"[OrderManager] order#{i} doesn't match plate");
-                }
+                
+                if (intersection.Count != 0) continue; // doesn't match any plate
+                
+                var tip = CalculateTip(order);
+                DeactivateSendBackToPool(order);
+                OnOrderDelivered?.Invoke(order, tip);
+                ordersPanelUI.RegroupPanelsLeft();
+                return;
             }
         }
 
