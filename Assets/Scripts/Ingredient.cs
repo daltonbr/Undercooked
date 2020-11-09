@@ -88,13 +88,13 @@ namespace Undercooked
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
             // Ingredients normally don't get any pickables dropped into it.
-            Debug.Log("[Ingredient] TryToDrop into an Ingredient isn't possible by design");
+            // Debug.Log("[Ingredient] TryToDrop into an Ingredient isn't possible by design");
             return false;
         }
 
         public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
-            Debug.Log($"[Ingredient] Trying to PickUp {gameObject.name}");
+            // Debug.Log($"[Ingredient] Trying to PickUp {gameObject.name}");
             _rigidbody.isKinematic = true;
             return this;
         }

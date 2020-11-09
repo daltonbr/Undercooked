@@ -23,6 +23,10 @@ namespace Undercooked
         private float _currentCleaningTime;
         private Coroutine _cleanCoroutine;
 
+        public delegate void CleanStatus();
+        public static event CleanStatus OnCleanStart;
+        public static event CleanStatus OnCleanStop;
+        
         protected override void Awake()
         {
             base.Awake();
@@ -93,14 +97,14 @@ namespace Undercooked
                 _currentCleaningTime = 0f;
                 slider.value = 0f;
                 slider.gameObject.SetActive(true);
-                _cleanCoroutine = StartCoroutine(Clean());
+                StartCleanCoroutine();
                 return;
             }
             
-            PauseCleanCoroutine();
-            _cleanCoroutine = StartCoroutine(Clean());
+            StopCleanCoroutine();
+            StartCleanCoroutine();
         }
-
+        
         private IEnumerator Clean()
         {
             slider.gameObject.SetActive(true);
@@ -125,27 +129,33 @@ namespace Undercooked
             _cleanPlates.Push(plateToClean);
             
             _cleanCoroutine = null;
-            slider.gameObject.SetActive(false);
             _currentCleaningTime = 0f;
 
             // Clean next plate
             if (_dirtyPlates.Count > 0)
             {
-                _cleanCoroutine = StartCoroutine(Clean());
+                StartCleanCoroutine();
             }
+            StopCleanCoroutine();
         }
         
         public override void ToggleHighlightOff()
         {
             base.ToggleHighlightOff();
-            PauseCleanCoroutine();
+            StopCleanCoroutine();
         }
         
-        private void PauseCleanCoroutine()
+        private void StartCleanCoroutine()
         {
+            OnCleanStart?.Invoke();
+            _cleanCoroutine = StartCoroutine(Clean());
+        }
+        
+        private void StopCleanCoroutine()
+        {
+            OnCleanStop?.Invoke();
             slider.gameObject.SetActive(false);
             if (_cleanCoroutine != null) StopCoroutine(_cleanCoroutine);
         }
-        
     }
 }

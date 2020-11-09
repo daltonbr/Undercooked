@@ -14,6 +14,10 @@ namespace Undercooked
         private Ingredient _ingredient;
         private bool _isChopping;
 
+        public delegate void ChoppingStatus();
+        public static event ChoppingStatus OnChoppingStart;
+        public static event ChoppingStatus OnChoppingStop;
+
         protected override void Awake()
         {
             base.Awake();
@@ -33,21 +37,33 @@ namespace Undercooked
                 _currentProcessTime = 0f;
                 slider.value = 0f;
                 slider.gameObject.SetActive(true);
-                _chopCoroutine = StartCoroutine(Chop());
+                StartChopCoroutine();
                 return;
             }
 
             if (_isChopping == false)
             {
-                _chopCoroutine = StartCoroutine(Chop());
+                StartChopCoroutine();
             }
+        }
+
+        private void StartChopCoroutine()
+        {
+            OnChoppingStart?.Invoke();
+            _chopCoroutine = StartCoroutine(Chop());
+        }
+
+        private void StopChopCoroutine()
+        {
+            OnChoppingStop?.Invoke();
+            _isChopping = false;
+            if (_chopCoroutine != null) StopCoroutine(_chopCoroutine);
         }
 
         public override void ToggleHighlightOff()
         {
             base.ToggleHighlightOff();
-            _isChopping = false;
-            if (_chopCoroutine != null) StopCoroutine(_chopCoroutine);
+            StopChopCoroutine();
         }
         
         private IEnumerator Chop()
@@ -65,6 +81,7 @@ namespace Undercooked
             slider.gameObject.SetActive(false);
             _isChopping = false;
             _chopCoroutine = null;
+            OnChoppingStop?.Invoke();
         }
         
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
