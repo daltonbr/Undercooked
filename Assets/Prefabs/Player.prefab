@@ -9751,7 +9751,7 @@ GameObject:
   - component: {fileID: 6673497687624136402}
   - component: {fileID: 1772031625}
   m_Layer: 0
-  m_Name: ItemHolder
+  m_Name: Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9946,7 +9946,7 @@ MonoBehaviour:
   playerInput: {fileID: 1485522067879705168}
   dashForce: 900
   movementSpeed: 5.5
-  interactableHolder: {fileID: 1661294295472546154}
+  slot: {fileID: 1661294295472546154}
   dashParticle: {fileID: 1247608749}
   dashAudio: {fileID: 8300000, guid: e209557e7335be64993857cecdca6200, type: 3}
   knife: {fileID: 4964845640939026712}

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Lean.Transition;
 using UnityEngine;
@@ -34,11 +33,10 @@ namespace Undercooked
 
         [Header("Movement Settings")] [SerializeField]
         private float movementSpeed = 5f;
-
-        //TODO: should this be handled by InteractableController?
+        
         private IPickable _currentPickable;
-        //TODO: how to populate this automatically and/or feed from InteractableController
-        [SerializeField] private Transform interactableHolder;
+        
+        [SerializeField] private Transform slot;
         
         private InputAction _moveAction;
         private InputAction _dashAction;
@@ -150,8 +148,8 @@ namespace Undercooked
                     animator.SetBool(_hasPickupHash, true);
                     _currentPickable.Pick();
                     _interactableController.Remove(_currentPickable as Interactable);
-                    _currentPickable.gameObject.transform.SetPositionAndRotation(interactableHolder.transform.position, Quaternion.identity);
-                    _currentPickable.gameObject.transform.SetParent(interactableHolder);
+                    _currentPickable.gameObject.transform.SetPositionAndRotation(slot.transform.position, Quaternion.identity);
+                    _currentPickable.gameObject.transform.SetParent(slot);
                     return;
                 }
 
@@ -162,8 +160,8 @@ namespace Undercooked
                     animator.SetBool(_hasPickupHash, true);
                 }
                 _currentPickable?.gameObject.transform.SetPositionAndRotation(
-                    interactableHolder.position, Quaternion.identity);
-                _currentPickable?.gameObject.transform.SetParent(interactableHolder);
+                    slot.position, Quaternion.identity);
+                _currentPickable?.gameObject.transform.SetParent(slot);
                 return;
             }
             
@@ -192,10 +190,6 @@ namespace Undercooked
                 // clean pickable references
                 //Debug.Log($"[PlayerController] Successfully dropped {_currentPickable.gameObject.name} into {interactable.gameObject.name}");
                 _currentPickable = null;
-            }
-            else
-            {
-                //Debug.Log("[PlayerController] Interactable refuse dropped pickable");
             }
         }
     

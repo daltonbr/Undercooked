@@ -13,34 +13,20 @@ namespace Undercooked
             switch (pickableToDrop)
             {
                 case CookingPot cookingPot:
-                    Debug.Log("[Trash] Cooking Pan");
                     cookingPot.EmptyPan();
                     break;
                 case Ingredient ingredient:
-                    //TODO: delete ingredient nonetheless
                     StartCoroutine(AnimateAndDestroy(ingredient));
                     return true;
                 case Plate plate:
-                    if (plate.IsEmpty())
-                    {
-                        Debug.Log("[Trash] Plate is empty! Just ignore it!");
-                        return false;
-                    }
-                    Debug.Log("[Trash] Thrashing away plate's content");
+                    if (plate.IsEmpty()) return false;
                     plate.RemoveAllIngredients();
-                    return false;
-                default:
-                    Debug.Log("[Trash] Unrecognized IPickable", this);
                     return false;
             }
             return false;
         }
 
-        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
-        {
-            Debug.Log("[Trash] There is nothing to pick from the trash");
-            return null;
-        }
+        public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable) => null;
 
         private IEnumerator AnimateAndDestroy(IPickable pickable)
         {
@@ -51,18 +37,19 @@ namespace Undercooked
             pickable.gameObject.transform.SetPositionAndRotation(Slot.position, Quaternion.identity);
             
             float currentTime = 0f;
-            
+
             while (currentTime < TotalAnimTime)
             {
                 // rotate and shrink pickable
                 pickable.gameObject.transform.SetParent(null);
                 pickable.gameObject.transform.Rotate(0f, AngularSpeed, 0f, Space.Self);
-                pickable.gameObject.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, currentTime / TotalAnimTime);
+                pickable.gameObject.transform.localScale =
+                    Vector3.Lerp(Vector3.one, Vector3.zero, currentTime / TotalAnimTime);
                 currentTime += Time.deltaTime;
                 yield return null;
             }
-             
-            Destroy(pickable.gameObject, 3f);
+
+            Destroy(pickable.gameObject);
         }
     }
 }
