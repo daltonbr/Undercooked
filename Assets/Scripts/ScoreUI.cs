@@ -43,7 +43,7 @@ namespace Undercooked
                 ScrollAndFadeText(delta.ToString(), negativeColorOutline, negativeColorBase);
                 return;
             }
-            ScrollAndFadeText($"+{delta.ToString()}", positiveColorOutline, positiveColorBase);
+            ScrollAndFadeText(delta.ToString(), positiveColorOutline, positiveColorBase);
         }
         
         private void ScrollAndFadeText(string textToDisplay, Color baseColor, Color outlineColor, float timeToDisplayInSeconds = 2f)

@@ -31,9 +31,6 @@ namespace Undercooked
                     Debug.Log("[DeliverCountertop] Need plate.");
                     OnPlateMissing?.Invoke();
                     return false;
-                default:
-                    Debug.Log($"[DeliverCountertop] Dropping {pickableToDrop.gameObject.name} isn't accepted.");
-                    break;
             }
             return false;
         }
