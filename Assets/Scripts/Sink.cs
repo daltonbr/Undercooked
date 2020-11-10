@@ -23,7 +23,7 @@ namespace Undercooked
         private float _currentCleaningTime;
         private Coroutine _cleanCoroutine;
 
-        public delegate void CleanStatus();
+        public delegate void CleanStatus(PlayerController playerController);
         public static event CleanStatus OnCleanStart;
         public static event CleanStatus OnCleanStop;
         
@@ -75,9 +75,9 @@ namespace Undercooked
             return _cleanPlates.Count > 0 ? _cleanPlates.Pop() : null;
         }
 
-        public override void Interact()
+        public override void Interact(PlayerController playerController)
         {
-            base.Interact();
+            base.Interact(playerController);
 
             if (_dirtyPlates.Count == 0) return;
             
@@ -138,13 +138,13 @@ namespace Undercooked
         
         private void StartCleanCoroutine()
         {
-            OnCleanStart?.Invoke();
+            OnCleanStart?.Invoke(LastPlayerControllerInteracting);
             _cleanCoroutine = StartCoroutine(Clean());
         }
         
         private void StopCleanCoroutine()
         {
-            OnCleanStop?.Invoke();
+            OnCleanStop?.Invoke(LastPlayerControllerInteracting);
             slider.gameObject.SetActive(false);
             if (_cleanCoroutine != null) StopCoroutine(_cleanCoroutine);
         }

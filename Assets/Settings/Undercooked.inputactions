@@ -46,7 +46,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "SwitchCharacter",
+                    "name": "SwitchAvatar",
                     "type": "Button",
                     "id": "634fb479-b2b2-459f-ae06-fb38627a5d01",
                     "expectedControlType": "Button",
@@ -293,7 +293,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "SwitchCharacter",
+                    "action": "SwitchAvatar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -304,7 +304,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "SwitchCharacter",
+                    "action": "SwitchAvatar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

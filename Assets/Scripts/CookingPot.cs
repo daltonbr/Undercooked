@@ -165,8 +165,8 @@ namespace Undercooked
             EmptyPan();
             return null;
         }
-        
-        public bool TryAddIngredients(List<Ingredient> ingredients)
+
+        private bool TryAddIngredients(List<Ingredient> ingredients)
         {
             if (!IsEmpty()) return false;
             if (Plate.CheckSoupIngredients(ingredients) == false) return false;
@@ -286,8 +286,7 @@ namespace Undercooked
                 yield break;
             }
 
-            Debug.Log("[CookingPot] Finish partial cooking");
-            // finish partial cooking
+            // Debug.Log("[CookingPot] Finish partial cooking");
             
             _burnCoroutine = StartCoroutine(Burn());
         }

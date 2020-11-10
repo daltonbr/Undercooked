@@ -9,8 +9,6 @@ namespace Undercooked
     {
         [Header("Physics")] [SerializeField] private Rigidbody playerRigidbody;
 
-        private InteractableController _interactableController;
-
         [Header("Animation")] [SerializeField] private Animator animator;
         private readonly int _isCleaningHash = Animator.StringToHash("isCleaning");
         private readonly int _hasPickupHash = Animator.StringToHash("hasPickup");
@@ -21,9 +19,7 @@ namespace Undercooked
 
         private const string ActionMapGameplay = "PlayerControls";
         private const string ActionMapMenu = "MenuControls";
-
-        private Vector3 _inputDirection;
-
+        
         // Dashing
         [SerializeField] private float dashForce = 400f;
         private bool _isDashing = false;
@@ -34,7 +30,11 @@ namespace Undercooked
         [Header("Movement Settings")] [SerializeField]
         private float movementSpeed = 5f;
         
+        private InteractableController _interactableController;
+        private bool _isActive;
         private IPickable _currentPickable;
+        private Vector3 _inputDirection;
+        private bool _hasSubscribedControllerEvents;
         
         [SerializeField] private Transform slot;
         
@@ -46,12 +46,14 @@ namespace Undercooked
         [SerializeField] private ParticleSystem dashParticle;
         [SerializeField] private AudioClip dashAudio;
         [SerializeField] private Transform knife;
+
         private void Awake()
         {
             _interactableController = GetComponentInChildren<InteractableController>();
+            knife.gameObject.SetActive(false);
         }
-
-        private void Start()
+        
+        public void EnableController()
         {
             _moveAction = playerInput.currentActionMap["Move"];
             _dashAction = playerInput.currentActionMap["Dash"];
@@ -60,56 +62,92 @@ namespace Undercooked
 
             EnableGameplayControls();
             playerInput.currentActionMap.Enable();
-            knife.gameObject.SetActive(false);
-            
-            SubscribeEvents();
+
+            SubscribeControllerEvents();
+            _isActive = true;
+        }
+        
+        public void DisableController()
+        {
+            _isActive = false;
+            playerInput.currentActionMap.Disable();
+            UnsubscribeControllerEvents();
+            animator.SetFloat(_velocityHash, 0f);
         }
 
-        private void SubscribeEvents()
+        private void OnEnable()
         {
+            SubscribeInteractableEvents();
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeInteractableEvents();
+        }
+
+        private void SubscribeControllerEvents()
+        {
+            if (_hasSubscribedControllerEvents) return;
+            _hasSubscribedControllerEvents = true;
             _moveAction.performed += HandleMove;
             _dashAction.performed += HandleDash;
             _pickUpAction.performed += HandlePickUp;
             _interactAction.performed += HandleInteract;
+        }
+        
+        private void UnsubscribeControllerEvents()
+        {
+            if (_hasSubscribedControllerEvents == false) return;
+            
+            _hasSubscribedControllerEvents = false;
+            _moveAction.performed -= HandleMove;
+            _dashAction.performed -= HandleDash;
+            _pickUpAction.performed -= HandlePickUp;
+            _interactAction.performed -= HandleInteract;
+        }
 
+        private void SubscribeInteractableEvents()
+        {
             ChoppingBoard.OnChoppingStart += HandleChoppingStart;
             ChoppingBoard.OnChoppingStop += HandleChoppingStop;
             Sink.OnCleanStart += HandleCleanStart;
             Sink.OnCleanStop += HandleCleanStop;
         }
-
-        //TODO: when to Unsubscribe
-        private void UnsubscribeEvents()
+        
+        private void UnsubscribeInteractableEvents()
         {
-            _moveAction.performed -= HandleMove;
-            _dashAction.performed -= HandleDash;
-            _pickUpAction.performed -= HandlePickUp;
-            _interactAction.performed -= HandleInteract;
-
             ChoppingBoard.OnChoppingStart -= HandleChoppingStart;
             ChoppingBoard.OnChoppingStop -= HandleChoppingStop;
             Sink.OnCleanStart -= HandleCleanStart;
             Sink.OnCleanStop -= HandleCleanStop;
         }
 
-        private void HandleCleanStart()
+        private void HandleCleanStart(PlayerController playerController)
         {
+            if (Equals(playerController) == false) return;
+            
             animator.SetBool(_isCleaningHash, true);
         }
 
-        private void HandleCleanStop()
+        private void HandleCleanStop(PlayerController playerController)
         {
+            if (Equals(playerController) == false) return;
+            
             animator.SetBool(_isCleaningHash, false);
         }
 
-        private void HandleChoppingStart()
+        private void HandleChoppingStart(PlayerController playerController)
         {
+            if (Equals(playerController) == false) return;
+            
             animator.SetBool(_isChoppingHash, true);
             knife.gameObject.SetActive(true);
         }
 
-        private void HandleChoppingStop()
+        private void HandleChoppingStop(PlayerController playerController)
         {
+            if (Equals(playerController) == false) return;
+            
             animator.SetBool(_isChoppingHash, false);
             knife.gameObject.SetActive(false);
         }
@@ -184,13 +222,10 @@ namespace Undercooked
             //Debug.Log($"[PlayerController] {_currentPickable.gameObject.name} trying to drop into {interactable.gameObject.name} ");
 
             bool dropSuccess = interactable.TryToDropIntoSlot(_currentPickable);
-            if (dropSuccess)
-            {
-                animator.SetBool(_hasPickupHash, false);
-                // clean pickable references
-                //Debug.Log($"[PlayerController] Successfully dropped {_currentPickable.gameObject.name} into {interactable.gameObject.name}");
-                _currentPickable = null;
-            }
+            if (!dropSuccess) return;
+            
+            animator.SetBool(_hasPickupHash, false);
+            _currentPickable = null;
         }
     
         private void HandleMove(InputAction.CallbackContext context)
@@ -228,17 +263,18 @@ namespace Undercooked
 
         private void HandleInteract(InputAction.CallbackContext context)
         {
-            _interactableController.CurrentInteractable?.Interact();
+            _interactableController.CurrentInteractable?.Interact(this);
         }
 
         private void Update()
         {
+            if (!_isActive) return;
             CalculateInputDirection();
         }
 
         private void FixedUpdate()
         {
-            
+            if (!_isActive) return;
             MoveThePlayer();
             AnimatePlayerMovement();
             TurnThePlayer();

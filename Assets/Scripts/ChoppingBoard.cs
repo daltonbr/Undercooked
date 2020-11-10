@@ -14,7 +14,7 @@ namespace Undercooked
         private Ingredient _ingredient;
         private bool _isChopping;
 
-        public delegate void ChoppingStatus();
+        public delegate void ChoppingStatus(PlayerController playerController);
         public static event ChoppingStatus OnChoppingStart;
         public static event ChoppingStatus OnChoppingStop;
 
@@ -24,9 +24,10 @@ namespace Undercooked
             slider.gameObject.SetActive(false);
         }
 
-        public override void Interact()
+        public override void Interact(PlayerController playerController)
         {
-            base.Interact();
+            LastPlayerControllerInteracting = playerController; 
+            base.Interact(playerController);
             if (CurrentPickable == null ||
                 _ingredient == null ||
                 _ingredient.Status != IngredientStatus.Raw) return;
@@ -49,13 +50,13 @@ namespace Undercooked
 
         private void StartChopCoroutine()
         {
-            OnChoppingStart?.Invoke();
+            OnChoppingStart?.Invoke(LastPlayerControllerInteracting);
             _chopCoroutine = StartCoroutine(Chop());
         }
 
         private void StopChopCoroutine()
         {
-            OnChoppingStop?.Invoke();
+            OnChoppingStop?.Invoke(LastPlayerControllerInteracting);
             _isChopping = false;
             if (_chopCoroutine != null) StopCoroutine(_chopCoroutine);
         }
@@ -81,7 +82,7 @@ namespace Undercooked
             slider.gameObject.SetActive(false);
             _isChopping = false;
             _chopCoroutine = null;
-            OnChoppingStop?.Invoke();
+            OnChoppingStop?.Invoke(LastPlayerControllerInteracting);
         }
         
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)

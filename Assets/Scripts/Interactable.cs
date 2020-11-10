@@ -20,6 +20,7 @@ namespace Undercooked
         private readonly List<MeshRenderer> _meshes = new List<MeshRenderer>();
         private MaterialPropertyBlock _materialBlock;
         private static readonly int Highlight = Shader.PropertyToID("Highlight_");
+        protected PlayerController LastPlayerControllerInteracting;
         
         public virtual bool IsEmpty() => _pickables.Count == 0;
         public Transform Slot => slot;
@@ -76,8 +77,11 @@ namespace Undercooked
                 mesh.SetPropertyBlock(_materialBlock);
             }
         }
-        
-        public virtual void Interact() {}
+
+        public virtual void Interact(PlayerController playerController)
+        {
+            LastPlayerControllerInteracting = playerController;
+        }
         
         public virtual void ToggleHighlightOn()
         {

@@ -26,9 +26,9 @@ namespace Undercooked
             _collider.enabled = false;
         }
         
-        public override void Interact()
+        public override void Interact(PlayerController playerController)
         {
-            base.Interact();
+            base.Interact(playerController);
             //TODO: implement Extinguisher
             Debug.Log("[Extinguisher] Not implemented", this);
         }

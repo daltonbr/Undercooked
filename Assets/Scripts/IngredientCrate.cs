@@ -35,9 +35,9 @@ namespace Undercooked
             }
         }
 
-        public override void Interact()
+        public override void Interact(PlayerController playerController)
         {
-            base.Interact();
+            base.Interact(playerController);
             Debug.Log($"[IngredientCrate] Interact with {gameObject.name}");
         }
     }
