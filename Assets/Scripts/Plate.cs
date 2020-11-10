@@ -206,7 +206,7 @@ namespace Undercooked
                     Debug.Log("[Plate] Trying to dropping Ingredient into Plate! Not implemented yet");
                     break;
                 case Plate plate:
-                    Debug.Log("[Plate] Trying to drop something from a plate into other plate! We basically swap contents");
+                    //Debug.Log("[Plate] Trying to drop something from a plate into other plate! We basically swap contents");
                     if (this.IsEmpty() == false || this.IsClean == false) return false;
                     this.AddIngredients(plate.Ingredients);
                     plate.RemoveAllIngredients();

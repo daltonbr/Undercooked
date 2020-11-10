@@ -18,12 +18,19 @@ namespace Undercooked
         
         private void OnEnable()
         {
-            OrderManager.OnOrderSpawned += HandleOrderSpawned;    
+            OrderManager.OnOrderSpawned += HandleOrderSpawned;
+            OrderManager.OnOrderDelivered += HandleOrderDelivered;
         }
 
         private void OnDisable()
         {
             OrderManager.OnOrderSpawned -= HandleOrderSpawned;
+            OrderManager.OnOrderDelivered -= HandleOrderDelivered;
+        }
+
+        private void HandleOrderDelivered(Order order, int tipCalculated)
+        {
+            
         }
 
         private void HandleOrderSpawned(Order order)

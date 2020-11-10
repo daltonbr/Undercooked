@@ -17,7 +17,7 @@ namespace Undercooked.UI
         private bool _isGeneratorActive;
         
         [SerializeField] private Order orderPrefab;
-        [SerializeField] private float spawnIntervalBetweenOrders = 20f;
+        [SerializeField] private float spawnIntervalBetweenOrders = 15f;
         [SerializeField] private int maxConcurrentOrders = 5;
         [SerializeField] private OrdersPanelUI ordersPanelUI;
         
@@ -97,27 +97,33 @@ namespace Undercooked.UI
             }
         }
 
-        private void SubscribeEvents(Order order)
+        private static void SubscribeEvents(Order order)
         {
             order.OnDelivered += HandleOrderDelivered;
             order.OnExpired += HandleOrderExpired;
         }
         
-        private void UnsubscribeEvents(Order order)
+        private static void UnsubscribeEvents(Order order)
         {
             order.OnDelivered -= HandleOrderDelivered;
             order.OnExpired -= HandleOrderExpired;
         }
 
-        private void HandleOrderDelivered(Order order)
+        private static void HandleOrderDelivered(Order order)
         {
-            DeactivateSendBackToPool(order);
+            // Debug.Log("[OrderManager] HandleOrderDelivered");
+        }
+        
+        private static void HandleOrderExpired(Order order)
+        {
+            // Debug.Log("[OrderManager] HandleOrderExpired");
+            OnOrderExpired?.Invoke(order);
         }
 
         private void DeactivateSendBackToPool(Order order)
         {
-            UnsubscribeEvents(order);
             order.SetOrderDelivered();
+            UnsubscribeEvents(order);
             _orders.RemoveAll(x => x.IsDelivered);
             _poolOrders.Enqueue(order);
         }
@@ -127,12 +133,7 @@ namespace Undercooked.UI
             var randomIndex = Random.Range(0, currentLevel.orders.Count);
             return Instantiate(currentLevel.orders[randomIndex]);
         }
-
-        private static void HandleOrderExpired(Order order)
-        {
-            OnOrderExpired?.Invoke(order);
-        }
-
+        
         public void CheckIngredientsMatchOrder(List<Ingredient> ingredients)
         {
             if (ingredients == null) return;
