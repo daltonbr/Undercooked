@@ -8,8 +8,8 @@ namespace Undercooked
 {
     // -- Particular Features --
     // we can drop a pile of plates into Sink
-    // when player breaks contact cleaning process is paused (it could be resumed)
-    // when one plate  is cleaned the next one starts automatically
+    // when player breaks contact, cleaning process is paused (it could be resumed)
+    // when one plate is cleaned the next one starts automatically
     
     public class Sink : Interactable
     {
@@ -41,21 +41,10 @@ namespace Undercooked
 
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
-            switch (pickableToDrop)
-            {
-                case Plate plate:
-                    if (!plate.IsEmpty() || plate.IsClean)
-                    {
-                        Debug.Log("[Sink] Plate is not empty or clean. Refusing it!");
-                        return false;
-                    }
-                    AddPileDirtyPlatesRecursively(plate);
-                    return true;
-                default:
-                    Debug.Log("[Sink] Only accept dirty empty plates.");
-                    break;
-            }
-            return false;
+            if (!(pickableToDrop is Plate plate)) return false;
+            if (!plate.IsEmpty() || plate.IsClean) return false;
+            AddPileDirtyPlatesRecursively(plate);
+            return true;
         }
 
         /// <summary>
@@ -131,11 +120,13 @@ namespace Undercooked
             _cleanCoroutine = null;
             _currentCleaningTime = 0f;
 
-            // Clean next plate
+            // Chain next plate
             if (_dirtyPlates.Count > 0)
             {
                 StartCleanCoroutine();
+                yield break;
             }
+            
             StopCleanCoroutine();
         }
         
