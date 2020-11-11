@@ -7,6 +7,10 @@ namespace Undercooked
 {
     public class PlayerController : MonoBehaviour
     {
+        [SerializeField] private Color playerColor;
+        [SerializeField] private Transform selector;
+        [SerializeField] private Material playerUniqueColorMaterial;
+        
         [Header("Physics")] [SerializeField] private Rigidbody playerRigidbody;
 
         [Header("Animation")] [SerializeField] private Animator animator;
@@ -51,6 +55,14 @@ namespace Undercooked
         {
             _interactableController = GetComponentInChildren<InteractableController>();
             knife.gameObject.SetActive(false);
+            
+            SetPlayerUniqueColor(playerColor);
+        }
+
+        private void SetPlayerUniqueColor(Color color)
+        {
+            selector.GetComponent<MeshRenderer>().material.color = color;
+            playerUniqueColorMaterial.color = color;
         }
         
         public void EnableController()
@@ -65,6 +77,7 @@ namespace Undercooked
 
             SubscribeControllerEvents();
             _isActive = true;
+            selector.gameObject.SetActive(true);
         }
         
         public void DisableController()
@@ -73,6 +86,7 @@ namespace Undercooked
             playerInput.currentActionMap.Disable();
             UnsubscribeControllerEvents();
             animator.SetFloat(_velocityHash, 0f);
+            selector.gameObject.SetActive(false);
         }
 
         private void OnEnable()

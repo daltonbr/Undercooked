@@ -14,9 +14,8 @@ public class PlayerInputController : MonoBehaviour
 
     private InputAction _switchAvatarAction;
     
-    //TODO: manage the player selector (this could be done in the PlayerController itself)
-    
-    //TODO: change the camera focus (events)
+    public delegate void SwitchPlayerController(PlayerControllerIndex playerControllerIndex);
+    public static SwitchPlayerController OnSwitchPlayerController;
 
     private void EnableFirstPlayerController()
     {
@@ -24,6 +23,7 @@ public class PlayerInputController : MonoBehaviour
         playerController2.DisableController();
         playerController1.EnableController();
         isFirstPlayerControllerActive = true;
+        OnSwitchPlayerController(PlayerControllerIndex.First);
     }
 
     private void TogglePlayerController()
@@ -34,15 +34,17 @@ public class PlayerInputController : MonoBehaviour
             playerController1.DisableController();
             //maybe wait a bit? play effects?
             playerController2.EnableController();
+            OnSwitchPlayerController(PlayerControllerIndex.Second);
         }
         else
         {
             _activePlayerController = playerController1;
             playerController2.DisableController();
             playerController1.EnableController();
+            OnSwitchPlayerController(PlayerControllerIndex.First);
         }
         isFirstPlayerControllerActive = !isFirstPlayerControllerActive;
-        //TODO: Invoke events for the camera
+
     }
 
     private void Awake()
