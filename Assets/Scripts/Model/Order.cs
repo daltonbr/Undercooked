@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Undercooked.Data;
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.Model
 {
     public class Order : MonoBehaviour
     {
         private OrderData _orderData;
-
+        private const float AlertLimitTime = 5f;
+        
         public bool IsDelivered { get; private set; }
-
-        //private float _remainingTime;
-        private readonly float _alertLimitTime = 5f;
-
         public float RemainingTime { get; private set; }
         public float ArrivalTime { get; private set; }
         public float InitialRemainingTime { get; private set; } = 50f;
@@ -81,7 +79,7 @@ namespace Undercooked
 
         private IEnumerator CountdownCoroutine()
         {
-            while (RemainingTime > _alertLimitTime)
+            while (RemainingTime > AlertLimitTime)
             {
                 RemainingTime -= Time.deltaTime;
                 OnUpdatedCountdown?.Invoke(RemainingTime);

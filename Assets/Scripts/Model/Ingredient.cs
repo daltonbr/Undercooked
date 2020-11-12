@@ -1,6 +1,7 @@
+using Undercooked.Data;
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.Model
 {
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(Rigidbody))]
@@ -17,7 +18,7 @@ namespace Undercooked
         public IngredientType Type => data.type;
         public Color BaseColor => data.baseColor;
 
-        [SerializeField] private IngredientStatus _startingStatus = IngredientStatus.Raw; 
+        [SerializeField] private IngredientStatus startingStatus = IngredientStatus.Raw; 
 
         public float ProcessTime => data.processTime;
         public float CookTime => data.cookTime;
@@ -45,7 +46,7 @@ namespace Undercooked
             _meshFilter.mesh = data.rawMesh;
             _meshRenderer.material = data.ingredientMaterial;
 
-            if (_startingStatus == IngredientStatus.Processed)
+            if (startingStatus == IngredientStatus.Processed)
             {
                 ChangeToProcessed();
             }

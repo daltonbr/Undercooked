@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.Model
 {
     /// <summary>
     /// Can be picked/dropped by the player into the floor or into an <see cref="Interactable"/>

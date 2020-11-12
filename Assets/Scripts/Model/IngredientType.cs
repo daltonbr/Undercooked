@@ -1,4 +1,4 @@
-namespace Undercooked
+namespace Undercooked.Model
 {
     public enum IngredientType
     {

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Undercooked.Player;
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.Model
 {
     /// <summary>
     /// Structures that the user can highlight and optionally interact with.
@@ -15,14 +16,11 @@ namespace Undercooked
         [SerializeField] protected Transform slot;
 
         protected IPickable CurrentPickable { get; set; }
-        private readonly List<IPickable> _pickables = new List<IPickable>();
-
+        protected PlayerController LastPlayerControllerInteracting;
         private readonly List<MeshRenderer> _meshes = new List<MeshRenderer>();
         private MaterialPropertyBlock _materialBlock;
         private static readonly int Highlight = Shader.PropertyToID("Highlight_");
-        protected PlayerController LastPlayerControllerInteracting;
         
-        public virtual bool IsEmpty() => _pickables.Count == 0;
         public Transform Slot => slot;
         
         protected virtual void Awake()

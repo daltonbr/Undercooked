@@ -1,6 +1,7 @@
+using Undercooked.Model;
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.Data
 {
     [CreateAssetMenu(fileName = "IngredientData", menuName = "IngredientData", order = 0)]
     public class IngredientData : ScriptableObject
@@ -15,7 +16,7 @@ namespace Undercooked
         public Mesh cookedMesh;
         [Tooltip("We are using the same material for raw and processed meshes")]
         public Material ingredientMaterial;
-        [Tooltip("Used to tint related objects, like the Plate")] // we may put this into the plate itself later
+        [Tooltip("Used to tint related objects, like the Plate")]
         public Color baseColor;
         [Tooltip("UI usage")]
         public Sprite sprite;
