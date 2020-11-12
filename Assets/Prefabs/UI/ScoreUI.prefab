@@ -209,7 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreBaseText: {fileID: 4362533873282585814}
   scoreAnimatedText: {fileID: 661243152}
-  _canvasGroup: {fileID: 661243151}
+  canvasGroup: {fileID: 661243151}
   positiveColorOutline: {r: 0.20392157, g: 0.35686275, b: 0.15294118, a: 1}
   positiveColorBase: {r: 0.36078432, g: 0.627451, b: 0.27058825, a: 1}
   negativeColorOutline: {r: 0.78039217, g: 0.20392157, b: 0.14117648, a: 1}

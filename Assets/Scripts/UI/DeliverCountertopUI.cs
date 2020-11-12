@@ -1,12 +1,17 @@
 using Lean.Transition;
 using UnityEngine;
 using TMPro;
+using Undercooked.Appliances;
+using Undercooked.Managers;
+using Undercooked.Model;
+using UnityEngine.Assertions;
 
 namespace Undercooked.UI
 {
+    [RequireComponent(typeof(CanvasGroup))]
     public class DeliverCountertopUI : MonoBehaviour
     {
-        [SerializeField] private CanvasGroup _canvasGroup;
+        private CanvasGroup _canvasGroup;
         private static TextMeshProUGUI _text;
 
         [Header("notification colors")]
@@ -18,6 +23,12 @@ namespace Undercooked.UI
         private void Awake()
         {
             _text = GetComponentInChildren<TextMeshProUGUI>();
+            _canvasGroup = GetComponent<CanvasGroup>();
+            
+            #if UNITY_EDITOR
+                Assert.IsNotNull(_text);
+                Assert.IsNotNull(_canvasGroup);
+            #endif
         }
         
         private void OnEnable()

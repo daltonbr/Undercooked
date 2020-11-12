@@ -1,16 +1,18 @@
 using Lean.Transition;
-using UnityEngine;
 using TMPro;
+using Undercooked.Managers;
+using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace Undercooked
+namespace Undercooked.UI
 {
     public class ScoreUI : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI scoreBaseText;
         [SerializeField] private TextMeshProUGUI scoreAnimatedText;
-        [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private CanvasGroup canvasGroup;
 
-        [Header("notification colors")]
+        [Header("Notification Colors")]
         [SerializeField] private Color positiveColorOutline;
         [SerializeField] private Color positiveColorBase;
         [SerializeField] private Color negativeColorOutline;
@@ -21,6 +23,12 @@ namespace Undercooked
         private void Awake()
         {
             _initialAnimatedTextLocalPosition = scoreAnimatedText.transform.localPosition;
+            
+            #if UNITY_EDITOR
+                Assert.IsNotNull(scoreBaseText);
+                Assert.IsNotNull(scoreAnimatedText);
+                Assert.IsNotNull(canvasGroup);
+            #endif
         }
 
         private void OnEnable()
@@ -49,7 +57,7 @@ namespace Undercooked
         private void ScrollAndFadeText(string textToDisplay, Color baseColor, Color outlineColor, float timeToDisplayInSeconds = 2f)
         {
             scoreAnimatedText.transform.localPosition = _initialAnimatedTextLocalPosition;
-            _canvasGroup.alpha = 1f;
+            canvasGroup.alpha = 1f;
             scoreAnimatedText.text = textToDisplay;
             scoreAnimatedText.color = baseColor;
             scoreAnimatedText.outlineColor = outlineColor;
@@ -62,7 +70,7 @@ namespace Undercooked
             scoreAnimatedText.rectTransform
                  .localPositionTransition_Y(200f, timeToDisplayInSeconds, LeanEase.Smooth);
             
-            _canvasGroup.alphaTransition(0f, timeToDisplayInSeconds, LeanEase.Smooth);
+            canvasGroup.alphaTransition(0f, timeToDisplayInSeconds, LeanEase.Smooth);
         }
     }
 }

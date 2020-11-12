@@ -1,15 +1,25 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Undercooked.UI;
+using Undercooked.Managers;
+using Undercooked.Model;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace Undercooked
+namespace Undercooked.UI
 {
     public class OrdersPanelUI : MonoBehaviour
     {
         [SerializeField] private OrderUI orderUIPrefab;
         private readonly List<OrderUI> _ordersUI = new List<OrderUI>();
         private readonly Queue<OrderUI> _orderUIPool = new Queue<OrderUI>();
+
+        private void Awake()
+        {
+            #if UNITY_EDITOR
+                Assert.IsNotNull(orderUIPrefab);
+            #endif
+        }
 
         private OrderUI GetOrderUIFromPool()
         {
@@ -19,18 +29,11 @@ namespace Undercooked
         private void OnEnable()
         {
             OrderManager.OnOrderSpawned += HandleOrderSpawned;
-            OrderManager.OnOrderDelivered += HandleOrderDelivered;
         }
 
         private void OnDisable()
         {
             OrderManager.OnOrderSpawned -= HandleOrderSpawned;
-            OrderManager.OnOrderDelivered -= HandleOrderDelivered;
-        }
-
-        private void HandleOrderDelivered(Order order, int tipCalculated)
-        {
-            
         }
 
         private void HandleOrderSpawned(Order order)

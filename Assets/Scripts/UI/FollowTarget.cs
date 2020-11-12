@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Undercooked.UI
 {
@@ -14,7 +15,11 @@ namespace Undercooked.UI
         private void Awake()
         {
             cam = Camera.main;
-            
+
+            #if UNITY_EDITOR
+                Assert.IsNotNull(target);
+                Assert.IsNotNull(cam);
+            #endif
         }
 
         private void LateUpdate()

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lean.Transition;
+using Undercooked.Model;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -23,20 +25,17 @@ namespace Undercooked.UI
 
         [SerializeField] private Image[] images;
         [SerializeField] private Gradient sliderGradient;
-        private Image _sliderFillImage;
-        private const float UIWidth = 190f;
 
+        private const float UIWidth = 190f;
         private const int ShakeIntervalTimeMs = 600;
+        private Image _sliderFillImage;
         private bool _shake;
         private float _initialRemainingTime;
-        
-        public float CurrentAnchorX { get; private set; }
-
         private Material _uiMaterial;
         private Vector2 _bottomPanelInitialAnchoredPosition;
-
+        
+        public float CurrentAnchorX { get; private set; }
         public float SizeDeltaX => rootRectTransform.sizeDelta.x;
-
         public Order Order { get; private set; }
 
         private void Awake()
@@ -45,6 +44,17 @@ namespace Undercooked.UI
             _sliderFillImage = slider.fillRect.GetComponent<Image>();
             _bottomPanelInitialAnchoredPosition = bottomPanel.anchoredPosition;
             DuplicateMaterial();
+            
+            #if UNITY_EDITOR
+                Assert.IsNotNull(rootRectTransform);
+                Assert.IsNotNull(basePanel);
+                Assert.IsNotNull(bottomPanel);
+                Assert.IsNotNull(orderImage);
+                Assert.IsNotNull(slider);
+                Assert.IsNotNull(popAudio);
+                Assert.IsNotNull(notificationAudio);
+                Assert.IsNotNull(buzzerAudio);
+            #endif
         }
 
         private async void HandleExpired(Order order)
