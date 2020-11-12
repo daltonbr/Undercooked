@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Threading.Tasks;
+using Undercooked.Appliances;
+using Undercooked.Data;
+using Undercooked.Model;
 using Undercooked.UI;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Undercooked
+namespace Undercooked.Managers
 {
     [RequireComponent(typeof(OrderManager))]
     public class GameManager : MonoBehaviour
@@ -12,9 +15,10 @@ namespace Undercooked
         [SerializeField] private DishTray dishTray;
         [SerializeField] private OrderManager orderManager;
         [SerializeField] private LevelData level1;
-        [SerializeField] private const int BaseScorePerPlate = 20;
-        [SerializeField] private const int PenaltyExpiredScore = 10;
-        [SerializeField] private const float TimeToReturnPlateSeconds = 3f;
+        
+        private const int BaseScorePerPlate = 20;
+        private const int PenaltyExpiredScore = 10;
+        private const float TimeToReturnPlateSeconds = 3f;
         
         private Coroutine _countdownCoroutine;
         private readonly WaitForSeconds TimeToReturnPlate = new WaitForSeconds(TimeToReturnPlateSeconds);
@@ -57,7 +61,9 @@ namespace Undercooked
         private void Awake()
         {
             #if UNITY_EDITOR
-            Assert.IsNotNull(dishTray);
+                Assert.IsNotNull(dishTray);
+                Assert.IsNotNull(orderManager);
+                Assert.IsNotNull(level1);
             #endif
         }
 
@@ -69,7 +75,7 @@ namespace Undercooked
         private async Task StartLevelAsync(LevelData levelData)
         {
             Score = 0;
-            _timeRemaining = levelData.time;
+            _timeRemaining = levelData.durationTime;
             
             await DisplayInitialNotifications();
             //OnLevelStart?.Invoke();
@@ -179,7 +185,6 @@ namespace Undercooked
             
             // Stop OrderManager
             orderManager.StopAndClear();
-
         }
     }
 }

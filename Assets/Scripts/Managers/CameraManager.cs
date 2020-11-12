@@ -1,32 +1,35 @@
-using System;
 using Cinemachine;
-using ICSharpCode.NRefactory.Ast;
 using Lean.Transition;
+using Undercooked.Player;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Undercooked
+namespace Undercooked.Managers
 {
     public class CameraManager : MonoBehaviour
     {
-        [SerializeField] private CinemachineVirtualCamera _virtualCamera1;
-        [SerializeField] private CinemachineVirtualCamera _virtualCamera2;
-        [SerializeField] private float transitionDelayInSeconds = 0.75f;
-        
+        [SerializeField] private CinemachineVirtualCamera virtualCamera1;
+        [SerializeField] private CinemachineVirtualCamera virtualCamera2;
+        [SerializeField] private const float TransitionDelayInSeconds = 0.75f;
         [SerializeField] private ParticleSystem starGlowParticleSystem;
 
         private Transform _particleSystemTransform;
         private Transform _avatar1;
         private Transform _avatar2;
-
-        private PlayerControllerIndex _lastActivatedPlayerController;
+        private PlayerInputController.PlayerControllerIndex _lastActivatedPlayerController;
         
         private void Awake()
         {
+            #if UNITY_EDITOR
+            Assert.IsNotNull(virtualCamera1);
+            Assert.IsNotNull(virtualCamera2);
+            Assert.IsNotNull(starGlowParticleSystem);
+            #endif
+            
             starGlowParticleSystem.Play();
             _particleSystemTransform = starGlowParticleSystem.transform;
-            _avatar1 = _virtualCamera1.Follow;
-            _avatar2 = _virtualCamera2.Follow;
+            _avatar1 = virtualCamera1.Follow;
+            _avatar2 = virtualCamera2.Follow;
             _particleSystemTransform.position = _avatar1.position;
         }
 
@@ -40,30 +43,30 @@ namespace Undercooked
             PlayerInputController.OnSwitchPlayerController -= HandleSwitchPlayerController;
         }
 
-        private void HandleSwitchPlayerController(PlayerControllerIndex playerControllerIndex)
+        private void HandleSwitchPlayerController(PlayerInputController.PlayerControllerIndex playerControllerIndex)
         {
             SwitchFocus(playerControllerIndex);
         }
 
-        private void SwitchFocus(PlayerControllerIndex playerControllerIndex)
+        private void SwitchFocus(PlayerInputController.PlayerControllerIndex playerControllerIndex)
         {
             switch (playerControllerIndex)
             {
-                case PlayerControllerIndex.First:
-                    if (_lastActivatedPlayerController != PlayerControllerIndex.None)
+                case PlayerInputController.PlayerControllerIndex.First:
+                    if (_lastActivatedPlayerController != PlayerInputController.PlayerControllerIndex.None)
                     {
-                        MoveStarParticle(_avatar2, _avatar1, transitionDelayInSeconds);
+                        MoveStarParticle(_avatar2, _avatar1, TransitionDelayInSeconds);
                     }
-                    _virtualCamera1.gameObject.SetActive(true);
-                    _virtualCamera2.gameObject.SetActive(false);
+                    virtualCamera1.gameObject.SetActive(true);
+                    virtualCamera2.gameObject.SetActive(false);
                     break;
-                case PlayerControllerIndex.Second:
-                    if (_lastActivatedPlayerController != PlayerControllerIndex.None)
+                case PlayerInputController.PlayerControllerIndex.Second:
+                    if (_lastActivatedPlayerController != PlayerInputController.PlayerControllerIndex.None)
                     {
-                        MoveStarParticle(_avatar1, _avatar2, transitionDelayInSeconds);
+                        MoveStarParticle(_avatar1, _avatar2, TransitionDelayInSeconds);
                     }
-                    _virtualCamera1.gameObject.SetActive(false);
-                    _virtualCamera2.gameObject.SetActive(true);
+                    virtualCamera1.gameObject.SetActive(false);
+                    virtualCamera2.gameObject.SetActive(true);
                     break;
                 default:
                     Debug.LogWarning("[CameraManager] Unexpected player controller index", this);

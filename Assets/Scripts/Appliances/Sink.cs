@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Undercooked.Model;
+using Undercooked.Player;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     // -- Particular Features --
     // we can drop a pile of plates into Sink
@@ -32,10 +34,10 @@ namespace Undercooked
             base.Awake();
             
             #if UNITY_EDITOR
-            Assert.IsNotNull(dirtySlots);
-            Assert.IsNotNull(_cleanPlates);
-            Assert.IsNotNull(_dirtyPlates);
-            Assert.IsNotNull(slider);
+                Assert.IsNotNull(dirtySlots);
+                Assert.IsNotNull(_cleanPlates);
+                Assert.IsNotNull(_dirtyPlates);
+                Assert.IsNotNull(slider);
             #endif
         }
 
@@ -60,7 +62,7 @@ namespace Undercooked
             }
             
             _dirtyPlates.Push(plate);
-            var dirtySize = _dirtyPlates.Count;
+            int dirtySize = _dirtyPlates.Count;
             
             Transform dirtySlot = dirtySize <= 2 ? dirtySlots[dirtySize - 1] : dirtySlots[2];
             

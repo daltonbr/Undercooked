@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lean.Transition;
+using Undercooked.Model;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Image = UnityEngine.UI.Image;
 using Slider = UnityEngine.UI.Slider;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
@@ -47,11 +48,8 @@ namespace Undercooked
         private Coroutine _burnCoroutine;
         
         private const int MaxNumberIngredients = 3;
-        private readonly List<Ingredient> _ingredients = new List<Ingredient>(MaxNumberIngredients);
 
         // Flags
-        private bool _isBurned;
-        private bool _isCookFinished;
         private bool _onHob;
         private bool _isCooking;
         private bool _inBurnProcess;
@@ -59,11 +57,10 @@ namespace Undercooked
         private Rigidbody _rigidbody;
         private Collider _collider;
 
-        public bool IsCookFinished => _isCookFinished;
-        public bool IsBurned => _isBurned;
-        public override bool IsEmpty() =>_ingredients.Count == 0;
-
-        public List<Ingredient> Ingredients => _ingredients;
+        public bool IsCookFinished { get; private set; }
+        public bool IsBurned { get; private set; }
+        public bool IsEmpty() =>Ingredients.Count == 0;
+        public List<Ingredient> Ingredients { get; } = new List<Ingredient>(MaxNumberIngredients);
 
         // [GameDesign]
         // if there is a mixed soup (e.g. 2x onions 1x tomato) we can't pickup the soup (it's locked),
@@ -73,8 +70,8 @@ namespace Undercooked
         protected override void Awake()
         {
             #if UNITY_EDITOR
-            Assert.IsNotNull(ingredientUISlots);
-            Assert.IsTrue(ingredientUISlots.Count == MaxNumberIngredients);
+                Assert.IsNotNull(ingredientUISlots);
+                Assert.IsTrue(ingredientUISlots.Count == MaxNumberIngredients);
             #endif
             
             base.Awake();
@@ -115,23 +112,23 @@ namespace Undercooked
                     {
                         if (plate.IsEmpty() == false && Plate.CheckSoupIngredients(plate.Ingredients))
                         {
-                            // Drop soup back into CookingPan
+                            // Drop soup back into CookingPot
                             TryAddIngredients(plate.Ingredients);
                             plate.RemoveAllIngredients();
                             return false;
                         }
                     }
                     
-                    if (_isCookFinished && !_isBurned)
+                    if (IsCookFinished && !IsBurned)
                     {
-                        if (_isBurned) return false;
+                        if (IsBurned) return false;
                         if (plate.IsClean == false) return false;
                         
-                        bool isSoup = Plate.CheckSoupIngredients(this._ingredients);
+                        bool isSoup = Plate.CheckSoupIngredients(this.Ingredients);
 
                         if (!isSoup) return false;
                         
-                        plate.AddIngredients(this._ingredients);
+                        plate.AddIngredients(this.Ingredients);
                         EmptyPan();
                         return false;
                     }
@@ -147,12 +144,12 @@ namespace Undercooked
         public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             // we can only pick a soup when it's ready and Player has a Plate in hands, otherwise refuse
-            if (!_isCookFinished || _isBurned) return null;
+            if (!IsCookFinished || IsBurned) return null;
             
             // we "lock" a soup if there are different ingredients. Player has to trash it away
-            if (_ingredients[0].Type != _ingredients[1].Type ||
-                _ingredients[1].Type != _ingredients[2].Type ||
-                _ingredients[0].Type != _ingredients[2].Type)
+            if (Ingredients[0].Type != Ingredients[1].Type ||
+                Ingredients[1].Type != Ingredients[2].Type ||
+                Ingredients[0].Type != Ingredients[2].Type)
             {
                 // Debug.Log("[CookingPot] Soup with mixed ingredients! You must thrash it away! What a waste!");
                 return null;
@@ -161,7 +158,7 @@ namespace Undercooked
             if (!(playerHoldPickable is Plate plate)) return null;
             if (!plate.IsClean || !plate.IsEmpty()) return null;
             
-            plate.AddIngredients(_ingredients);
+            plate.AddIngredients(Ingredients);
             EmptyPan();
             return null;
         }
@@ -170,9 +167,9 @@ namespace Undercooked
         {
             if (!IsEmpty()) return false;
             if (Plate.CheckSoupIngredients(ingredients) == false) return false;
-            _ingredients.AddRange(ingredients);
+            Ingredients.AddRange(ingredients);
             
-            foreach (var ingredient in _ingredients)
+            foreach (var ingredient in Ingredients)
             {
                 ingredient.transform.SetParent(Slot);
                 ingredient.transform.SetPositionAndRotation(Slot.transform.position, Quaternion.identity);
@@ -180,7 +177,7 @@ namespace Undercooked
             
             SetLiquidLevelAndColor();
             
-            _isCookFinished = true;
+            IsCookFinished = true;
             UpdateIngredientsUI();
             return true;
         }
@@ -191,14 +188,14 @@ namespace Undercooked
             if (_burnCoroutine != null) StopCoroutine(_burnCoroutine);
             
             slider.gameObject.SetActive(false);
-            _ingredients.Clear();
+            Ingredients.Clear();
             
             liquidSurface.localPosition = Vector3.zero;
             _currentCookTime = 0f;
             _currentBurnTime = 0f;
             _totalCookTime = 0f;
-            _isBurned = false;
-            _isCookFinished = false;
+            IsBurned = false;
+            IsCookFinished = false;
             _isCooking = false;
             warningPopup.transform.localScale = Vector3.zero;
             greenCheckPopup.transform.localScale = Vector3.zero;
@@ -215,10 +212,10 @@ namespace Undercooked
             _onHob = true;
             warningPopup.enabled = false;
 
-            if (_ingredients.Count == 0 || _isBurned) return;
+            if (Ingredients.Count == 0 || IsBurned) return;
             
             // after cook, we burn
-            if (_isCookFinished)
+            if (IsCookFinished)
             {
                 _burnCoroutine = StartCoroutine(Burn());
                 return;
@@ -280,7 +277,7 @@ namespace Undercooked
 
             _isCooking = false;
             
-            if (_ingredients.Count == MaxNumberIngredients)
+            if (Ingredients.Count == MaxNumberIngredients)
             {
                 TriggerSuccessfulCook();
                 yield break;
@@ -362,7 +359,7 @@ namespace Undercooked
             
             // FX's
             warningPopup.enabled = false;
-            _isBurned = true;
+            IsBurned = true;
             _inBurnProcess = false;
             _currentBurnTime = 0f;
             
@@ -395,7 +392,7 @@ namespace Undercooked
        
         private void TriggerSuccessfulCook()
         {
-            _isCookFinished = true;
+            IsCookFinished = true;
             _currentCookTime = 0f;
             _burnCoroutine = StartCoroutine(Burn());
         }
@@ -415,10 +412,16 @@ namespace Undercooked
 
         private bool TryDrop(IPickable pickable)
         {
-            if (_ingredients.Count >= MaxNumberIngredients) return false;
+            if (Ingredients.Count >= MaxNumberIngredients) return false;
 
             var ingredient = pickable as Ingredient;
-            _ingredients.Add(ingredient);
+            if (ingredient == null)
+            {
+                Debug.LogWarning("[CookingPot] Can only drop ingredients into CookingPot", this);
+                return false;
+            }
+            
+            Ingredients.Add(ingredient);
             
             _totalCookTime += ingredient.CookTime;
             
@@ -438,7 +441,7 @@ namespace Undercooked
                 return true;
             }
             
-            // (re)start cooking?
+            // (re)start cooking
             if (_onHob && !_isCooking)
             {
                 _cookCoroutine = StartCoroutine(Cook());
@@ -457,9 +460,9 @@ namespace Undercooked
 
         private void UpdateIngredientsUI()
         {
-            ingredientUISlots[1].enabled = !_isBurned;
-            ingredientUISlots[2].enabled = !_isBurned;
-            if (_isBurned)
+            ingredientUISlots[1].enabled = !IsBurned;
+            ingredientUISlots[2].enabled = !IsBurned;
+            if (IsBurned)
             {
                 ingredientUISlots[0].sprite = burnIcon;
                 return;
@@ -467,9 +470,9 @@ namespace Undercooked
 
             for (int i = 0; i < MaxNumberIngredients; i++)
             {
-                if (i < _ingredients.Count)
+                if (i < Ingredients.Count)
                 {
-                    ingredientUISlots[i].sprite = _ingredients[i] == null ? plusIcon : _ingredients[i].SpriteUI;
+                    ingredientUISlots[i].sprite = Ingredients[i] == null ? plusIcon : Ingredients[i].SpriteUI;
                 }
                 else
                 {

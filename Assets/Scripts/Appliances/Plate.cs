@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Undercooked.Model;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(Rigidbody))]
@@ -11,34 +12,61 @@ namespace Undercooked
     public class Plate : Interactable, IPickable
     {
         [SerializeField] private List<Image> ingredientUISlots;
-        
         [SerializeField] private Material cleanMaterial;
         [SerializeField] private Material dirtyMaterial;
-        [SerializeField] private MeshRenderer _meshRenderer;
+        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private Transform soup;
         
-        [SerializeField] private Transform _soup;
+        private const int MaxNumberIngredients = 4;
+        
         private Material _soupMaterial;
-        public bool IsClean { get; private set; }
-
         private Rigidbody _rigidbody;
         private Collider _collider;
+        private readonly List<Ingredient> _ingredients = new List<Ingredient>(MaxNumberIngredients);
 
-        private const int MaxNumberIngredients = 4; 
-        private List<Ingredient> _ingredients = new List<Ingredient>(MaxNumberIngredients);
-
+        public bool IsClean { get; private set; }
         public List<Ingredient> Ingredients => _ingredients;
-        public override bool IsEmpty() =>_ingredients.Count == 0;
+        public bool IsEmpty() =>_ingredients.Count == 0;
 
         protected override void Awake()
         {
-#if UNITY_EDITOR
-            Assert.IsNotNull(ingredientUISlots);
-            Assert.IsTrue(ingredientUISlots.Count == MaxNumberIngredients);
-#endif
             base.Awake();
             _rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
+            
+            #if UNITY_EDITOR
+                Assert.IsNotNull(_rigidbody);
+                Assert.IsNotNull(_collider);
+                Assert.IsNotNull(ingredientUISlots);
+                Assert.IsNotNull(cleanMaterial);
+                Assert.IsNotNull(dirtyMaterial);
+                Assert.IsNotNull(meshRenderer);
+                Assert.IsTrue(ingredientUISlots.Count == MaxNumberIngredients);
+            #endif
+            
             Setup();
+        }
+        
+        private void Setup()
+        {
+            _rigidbody.isKinematic = true;
+            _collider.enabled = false;
+            _soupMaterial = soup.gameObject.GetComponent<MeshRenderer>()?.material;
+            
+            #if UNITY_EDITOR
+                Assert.IsNotNull(_soupMaterial);
+            #endif
+
+            if (IsClean)
+            {
+                SetClean();
+            }
+            else
+            {
+                SetDirty();
+            }
+            
+            DisableSoup();
         }
 
         public bool AddIngredients(List<Ingredient> ingredients)
@@ -58,10 +86,7 @@ namespace Undercooked
             {
                 EnableSoup(ingredients[0]);
             }
-            else
-            {
-                //it's not a soup
-            }
+            // not a soup
             return true;
         }
         
@@ -119,50 +144,26 @@ namespace Undercooked
         
         private void EnableSoup(in Ingredient ingredientSample)
         {
-            _soup.gameObject.SetActive(true); 
+            soup.gameObject.SetActive(true); 
             _soupMaterial.color = ingredientSample.BaseColor;
         }
 
         private void DisableSoup()
         {
-            _soup.gameObject.SetActive(false);
-        }
-
-        private void Setup()
-        {
-            // Rigidbody is kinematic almost all the time, except when we drop it on the floor
-            // re-enabling when picked up.
-            _rigidbody.isKinematic = true;
-            _collider.enabled = false;
-            _soupMaterial = _soup.gameObject.GetComponent<MeshRenderer>()?.material;
-            
-            #if UNITY_EDITOR
-            Assert.IsNotNull(_soupMaterial);
-            #endif
-
-            if (IsClean)
-            {
-                SetClean();
-            }
-            else
-            {
-                SetDirty();
-            }
-            
-            DisableSoup();
+            soup.gameObject.SetActive(false);
         }
 
         [ContextMenu("SetClean")]
         public void SetClean()
         {
-            _meshRenderer.material = cleanMaterial;
+            meshRenderer.material = cleanMaterial;
             IsClean = true;
         }
         
         [ContextMenu("SetDirty")]
         public void SetDirty()
         {
-            _meshRenderer.material = dirtyMaterial;
+            meshRenderer.material = dirtyMaterial;
             IsClean = false;
             DisableSoup();
         }
@@ -182,17 +183,12 @@ namespace Undercooked
         
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
-            // player has empty hands - doesn't make sense
-            if (pickableToDrop == null)
-            {
-                Debug.LogWarning("[Plate] Nothing to drop.", this);
-            }
+            if (pickableToDrop == null) return false;
             
-            //we can drop soup from plate to plate AND from plate to CookingPot (and viceversa)
+            //we can drop soup from plate to plate AND from plate to CookingPot (and vice-versa)
             switch (pickableToDrop)
             {
                 case CookingPot cookingPot:
-                    Debug.Log("[Plate] Dropping CookingPot into Plate");
                     if (cookingPot.IsCookFinished &&
                         cookingPot.IsBurned == false &&
                         CheckSoupIngredients(cookingPot.Ingredients))
@@ -203,7 +199,7 @@ namespace Undercooked
                     }
                     break;
                 case Ingredient ingredient:
-                    Debug.Log("[Plate] Trying to dropping Ingredient into Plate! Not implemented yet");
+                    Debug.Log("[Plate] Trying to dropping Ingredient into Plate! Not implemented");
                     break;
                 case Plate plate:
                     //Debug.Log("[Plate] Trying to drop something from a plate into other plate! We basically swap contents");
@@ -222,13 +218,8 @@ namespace Undercooked
         {
             // We can pickup Ingredients from plates with other plates (effectively swapping content) or from Pans
             
-            // in order to pick from a plate slot, we must have something in hands
-            if (playerHoldPickable == null)
-            {
-                return null;
-            }
+            if (playerHoldPickable == null) return null;
             
-            // can we pick something from the plate slot?
             switch (playerHoldPickable)
             {
                 // we just pick the soup ingredients, not the CookingPot itself
@@ -236,29 +227,17 @@ namespace Undercooked
                     Debug.Log("[Plate] Trying to pick from a plate with a CookingPot", this);
                     break;
                 case Ingredient ingredient:
-                    //TODO: we can pickup some ingredients into plate, not all
+                    //TODO: we can pickup some ingredients into plate, not all of them.
                     break;
-                // we can swap plate ingredients
+                // swap plate ingredients
                 case Plate plate:
-                    Debug.Log("[Plate] Trying to pick from a plate with a plate", this);
                     if (plate.IsEmpty())
                     {
-                        if (this.IsEmpty())
-                        {
-                            Debug.Log("[Plate] Trying to pick something from a empty plate! No effect", this);       
-                            return null;    
-                        }
-                        // swap
+                        if (this.IsEmpty()) return null;
                         plate.AddIngredients(this._ingredients);
-
                     }
                     break;
-                default:
-                    Debug.LogWarning("[Plate] Pickable not recognized", this);
-                    break;
             }
-            
-            //TODO: we can if we implement pick from another plate (see TryToDropIntoSlot above) 
             return null;
         }
     }

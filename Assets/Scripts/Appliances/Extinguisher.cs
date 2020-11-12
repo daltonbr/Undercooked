@@ -1,10 +1,13 @@
+using Undercooked.Model;
+using Undercooked.Player;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
-    public class Extinguisher : Interactable,  IPickable
+    public class Extinguisher : Interactable, IPickable
     {
         [SerializeField] private ParticleSystem smoke;
         [SerializeField] private AudioClip wooshClip;
@@ -15,8 +18,17 @@ namespace Undercooked
         protected override void Awake()
         {
             base.Awake();
+            
             _rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
+            
+            #if UNITY_EDITOR
+                //Assert.IsNotNull(smoke);
+                //Assert.IsNotNull(wooshClip);    
+                Assert.IsNotNull(_rigidbody);
+                Assert.IsNotNull(_collider);
+            #endif
+            
             Setup();
         }
         

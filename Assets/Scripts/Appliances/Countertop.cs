@@ -1,6 +1,7 @@
+using Undercooked.Model;
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     public class Countertop : Interactable
     {

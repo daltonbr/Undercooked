@@ -1,13 +1,17 @@
 using System.Collections;
+using Undercooked.Model;
+using Undercooked.Player;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Slider = UnityEngine.UI.Slider;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     public class ChoppingBoard : Interactable
     {
         [SerializeField] private Transform knife;
         [SerializeField] private Slider slider;
+        
         private float _finalProcessTime;
         private float _currentProcessTime;
         private Coroutine _chopCoroutine;
@@ -20,6 +24,11 @@ namespace Undercooked
 
         protected override void Awake()
         {
+            #if UNITY_EDITOR
+                Assert.IsNotNull(slider);
+                Assert.IsNotNull(slider);
+            #endif
+            
             base.Awake();
             slider.gameObject.SetActive(false);
         }

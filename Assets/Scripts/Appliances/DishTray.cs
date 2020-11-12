@@ -1,30 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
+using Undercooked.Model;
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     public class DishTray : Interactable
     {
         private readonly List<Plate> _dirtyPlates = new List<Plate>();
-        
-        public override bool TryToDropIntoSlot(IPickable pickableToDrop)
-        {
-            // Debug.Log("[DishTray] Can't drop into DishTray");
-            return false;
-        }
+
+        public override bool TryToDropIntoSlot(IPickable pickableToDrop) => false;
 
         public override IPickable TryToPickUpFromSlot(IPickable playerHoldPickable)
         {
             if (playerHoldPickable != null) return null;
+            if (_dirtyPlates.Count == 0) return null;
             
-            if (_dirtyPlates.Count > 0)
-            {
-                var bottomPlate = _dirtyPlates[0];
-                _dirtyPlates.Clear();
-                return bottomPlate;
-            }
-            return null;
+            var bottomPlate = _dirtyPlates[0];
+            _dirtyPlates.Clear();
+            return bottomPlate;
         }
 
         public void AddDirtyPlate(Plate plate)

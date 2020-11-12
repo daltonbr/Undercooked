@@ -1,26 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Undercooked.Data;
+using Undercooked.Model;
+using Undercooked.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Undercooked.UI
+namespace Undercooked.Managers
 {
     public class OrderManager : MonoBehaviour
     {
 
         [SerializeField] private LevelData currentLevel;
-        private readonly List<Order> _orders = new List<Order>();
-        private readonly Queue<Order> _poolOrders = new Queue<Order>();
-        
-        private WaitForSeconds _intervalBetweenDropsWait;
-        private bool _isGeneratorActive;
-        
         [SerializeField] private Order orderPrefab;
         [SerializeField] private float spawnIntervalBetweenOrders = 15f;
         [SerializeField] private int maxConcurrentOrders = 5;
         [SerializeField] private OrdersPanelUI ordersPanelUI;
         
+        private readonly List<Order> _orders = new List<Order>();
+        private readonly Queue<Order> _poolOrders = new Queue<Order>();
+        
+        private WaitForSeconds _intervalBetweenDropsWait;
+        private bool _isGeneratorActive;
         private Coroutine _generatorCoroutine;
         
         public delegate void OrderSpawned(Order order);

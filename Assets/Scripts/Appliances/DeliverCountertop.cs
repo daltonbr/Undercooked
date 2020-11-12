@@ -1,18 +1,31 @@
 using Lean.Transition;
+using Undercooked.Model;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     public class DeliverCountertop : Interactable
     {
 
         [SerializeField] private ParticleSystem starParticle;
         [SerializeField] private AudioClip positiveFeedbackAudio;
+        
         public delegate void PlateDropped(Plate plate);
         public static event PlateDropped OnPlateDropped;
         public delegate void PlateMissing();
         public static event PlateMissing OnPlateMissing;
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            
+            #if UNITY_EDITOR
+                Assert.IsNotNull(starParticle);
+                Assert.IsNotNull(positiveFeedbackAudio);
+            #endif
+        }
+
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
             if (pickableToDrop == null) return false;
@@ -28,7 +41,6 @@ namespace Undercooked
                     plate.transform.position = new Vector3(10000f, 10000f, 10000f);
                     return true;
                 case Ingredient ingredient:
-                    Debug.Log("[DeliverCountertop] Need plate.");
                     OnPlateMissing?.Invoke();
                     return false;
             }

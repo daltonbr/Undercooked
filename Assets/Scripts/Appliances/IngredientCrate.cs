@@ -1,13 +1,26 @@
+using Undercooked.Model;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace Undercooked
+namespace Undercooked.Appliances
 {
     public class IngredientCrate : Interactable
     { 
         [SerializeField] private Ingredient ingredientPrefab;
-        [SerializeField] private Animator animator;
+        private Animator _animator;
         private static readonly int OpenHash = Animator.StringToHash("Open");
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            _animator = GetComponentInChildren<Animator>();
+            
+            #if UNITY_EDITOR
+                Assert.IsNotNull(ingredientPrefab);
+                Assert.IsNotNull(_animator);
+            #endif
+        }
+
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
         {
             if (CurrentPickable != null) return false;
@@ -22,23 +35,16 @@ namespace Undercooked
         {
             if (CurrentPickable == null)
             {
-                animator.SetTrigger(OpenHash);
+                _animator.SetTrigger(OpenHash);
                 return Instantiate(ingredientPrefab, Slot.transform.position, Quaternion.identity);
             }
-            else
-            {
-                var output = CurrentPickable;
-                var interactable = CurrentPickable as Interactable;
-                interactable?.ToggleHighlightOff();
-                CurrentPickable = null;
-                return output;
-            }
-        }
 
-        public override void Interact(PlayerController playerController)
-        {
-            base.Interact(playerController);
-            Debug.Log($"[IngredientCrate] Interact with {gameObject.name}");
+            var output = CurrentPickable;
+            var interactable = CurrentPickable as Interactable;
+            interactable?.ToggleHighlightOff();
+            CurrentPickable = null;
+            return output;
         }
     }
+    
 }

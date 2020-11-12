@@ -653,8 +653,8 @@ MonoBehaviour:
   - {fileID: 7258701446116577152}
   cleanMaterial: {fileID: 2100000, guid: 112c2cf1bc1e64545b11c40249c8cc94, type: 2}
   dirtyMaterial: {fileID: 2100000, guid: a5c5fc3d2c3ba564d8e896f1fa6929bf, type: 2}
-  _meshRenderer: {fileID: 6949742425323005000}
-  _soup: {fileID: 6958659250223945266}
+  meshRenderer: {fileID: 6949742425323005000}
+  soup: {fileID: 6958659250223945266}
 --- !u!1001 &5771257365194652887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -662,6 +662,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5771257367067148210}
     m_Modifications:
+    - target: {fileID: 2319005029740159984, guid: f140936b607cade489b74741f88d0839, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2319005029740159984, guid: f140936b607cade489b74741f88d0839, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -675,6 +679,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2319005029740159984, guid: f140936b607cade489b74741f88d0839, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2319005029740159984, guid: f140936b607cade489b74741f88d0839, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -684,14 +692,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2319005029740159984, guid: f140936b607cade489b74741f88d0839, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2319005029740159984, guid: f140936b607cade489b74741f88d0839, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2319005029740159984, guid: f140936b607cade489b74741f88d0839, type: 3}
-      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2319005029740159984, guid: f140936b607cade489b74741f88d0839, type: 3}

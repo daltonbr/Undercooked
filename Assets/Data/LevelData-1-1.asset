@@ -16,7 +16,7 @@ MonoBehaviour:
   orders:
   - {fileID: 11400000, guid: 199a5c7315df7ec498301906bd4f2c70, type: 2}
   - {fileID: 11400000, guid: c3986e6c172832e4b992028d09c3ec3d, type: 2}
-  time: 180
+  durationTime: 180
   star1Score: 50
   star2Score: 150
   star3Score: 220
