@@ -1,9 +1,11 @@
 using System.Collections;
 using Lean.Transition;
+using Undercooked.Appliances;
+using Undercooked.Model;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Undercooked
+namespace Undercooked.Player
 {
     public class PlayerController : MonoBehaviour
     {
@@ -11,28 +13,32 @@ namespace Undercooked
         [SerializeField] private Transform selector;
         [SerializeField] private Material playerUniqueColorMaterial;
         
-        [Header("Physics")] [SerializeField] private Rigidbody playerRigidbody;
+        [Header("Physics")]
+        [SerializeField] private Rigidbody playerRigidbody;
 
-        [Header("Animation")] [SerializeField] private Animator animator;
+        [Header("Animation")]
+        [SerializeField] private Animator animator;
         private readonly int _isCleaningHash = Animator.StringToHash("isCleaning");
         private readonly int _hasPickupHash = Animator.StringToHash("hasPickup");
         private readonly int _isChoppingHash = Animator.StringToHash("isChopping");
         private readonly int _velocityHash = Animator.StringToHash("velocity");
         
-        [Header("Input")] [SerializeField] private PlayerInput playerInput;
-
-        private const string ActionMapGameplay = "PlayerControls";
-        private const string ActionMapMenu = "MenuControls";
+        [Header("Input")]
+        [SerializeField] private PlayerInput playerInput;
+        private InputAction _moveAction;
+        private InputAction _dashAction;
+        private InputAction _pickUpAction;
+        private InputAction _interactAction;
         
         // Dashing
-        [SerializeField] private float dashForce = 400f;
+        [SerializeField] private float dashForce = 900f;
         private bool _isDashing = false;
         private bool _isDashingPossible = true;
         private readonly WaitForSeconds _dashDuration = new WaitForSeconds(0.17f);
         private readonly WaitForSeconds _dashCooldown = new WaitForSeconds(0.07f);
 
-        [Header("Movement Settings")] [SerializeField]
-        private float movementSpeed = 5f;
+        [Header("Movement Settings")]
+        [SerializeField] private float movementSpeed = 5f;
         
         private InteractableController _interactableController;
         private bool _isActive;
@@ -41,18 +47,17 @@ namespace Undercooked
         private bool _hasSubscribedControllerEvents;
         
         [SerializeField] private Transform slot;
-        
-        private InputAction _moveAction;
-        private InputAction _dashAction;
-        private InputAction _pickUpAction;
-        private InputAction _interactAction;
-
         [SerializeField] private ParticleSystem dashParticle;
         [SerializeField] private AudioClip dashAudio;
         [SerializeField] private Transform knife;
 
         private void Awake()
         {
+            _moveAction = playerInput.currentActionMap["Move"];
+            _dashAction = playerInput.currentActionMap["Dash"];
+            _pickUpAction = playerInput.currentActionMap["PickUp"];
+            _interactAction = playerInput.currentActionMap["Interact"];
+            
             _interactableController = GetComponentInChildren<InteractableController>();
             knife.gameObject.SetActive(false);
             
@@ -65,25 +70,16 @@ namespace Undercooked
             playerUniqueColorMaterial.color = color;
         }
         
-        public void EnableController()
+        public void ActivatePlayer()
         {
-            _moveAction = playerInput.currentActionMap["Move"];
-            _dashAction = playerInput.currentActionMap["Dash"];
-            _pickUpAction = playerInput.currentActionMap["PickUp"];
-            _interactAction = playerInput.currentActionMap["Interact"];
-
-            EnableGameplayControls();
-            playerInput.currentActionMap.Enable();
-
-            SubscribeControllerEvents();
             _isActive = true;
+            SubscribeControllerEvents();
             selector.gameObject.SetActive(true);
         }
         
-        public void DisableController()
+        public void DeactivatePlayer()
         {
             _isActive = false;
-            playerInput.currentActionMap.Disable();
             UnsubscribeControllerEvents();
             animator.SetFloat(_velocityHash, 0f);
             selector.gameObject.SetActive(false);
@@ -357,22 +353,6 @@ namespace Undercooked
         {
             animator.SetFloat(_velocityHash, _inputDirection.sqrMagnitude);
         }
-        
-        //Switching Action Maps ----
 
-        public void EnableGameplayControls()
-        {
-            playerInput.SwitchCurrentActionMap(ActionMapGameplay);  
-        }
-
-        public void EnablePauseMenuControls()
-        {
-            playerInput.SwitchCurrentActionMap(ActionMapMenu);
-        }
-        
-        public PlayerInput GetPlayerInput()
-        {
-            return playerInput;
-        } 
     }
 }

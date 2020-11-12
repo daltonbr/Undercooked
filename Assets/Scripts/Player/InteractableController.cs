@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Undercooked.Model;
 using UnityEngine;
 
-namespace Undercooked
+namespace Undercooked.Player
 {
     public class InteractableController : MonoBehaviour
     {
