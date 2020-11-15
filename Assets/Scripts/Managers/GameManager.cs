@@ -83,6 +83,11 @@ namespace Undercooked.Managers
             await GameLoop();
         }
 
+        private void OnDestroy()
+        {
+            _userPressedStart = true;
+        }
+
         private async Task GameLoop()
         {
             await StartMainMenuAsync();  // maybe move this out to Start()
@@ -103,8 +108,7 @@ namespace Undercooked.Managers
             
             while (_userPressedStart == false)
             {
-                Debug.Log("[GameManager] Wait for start...");
-                await Task.Delay(2000);
+                await Task.Delay(1000);
             }
             MenuPanelUI.InitialMenuSetActive(false);
             inputController.OnStartPressedAtMenu -= HandleStartAtMenu;

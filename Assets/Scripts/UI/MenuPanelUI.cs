@@ -32,6 +32,7 @@ namespace Undercooked.UI
         [SerializeField] private GameObject gameOverMenu;
         private CanvasGroup _gameOverMenuCanvasGroup;
         [SerializeField] private GameObject firstSelectedGameOverMenu;
+        [SerializeField] private AudioClip successClip;
         
         [Header("Buttons")]
         [SerializeField] private Button restartButton_GameOver;
@@ -204,29 +205,35 @@ namespace Undercooked.UI
             Instance.scoreStar3Text.text = star3Score.ToString();
             Instance.scoreText.text = $"Score {score.ToString()}";
             
-            if (score < star1Score)
+            Instance.star1.gameObject.transform.localScale = Vector3.zero;
+            Instance.star2.gameObject.transform.localScale = Vector3.zero;
+            Instance.star3.gameObject.transform.localScale = Vector3.zero;
+            
+            if (score < star1Score) return;
+            
+            if (score < star2Score)
             {
-                Instance.star1.gameObject.SetActive(false);
-                Instance.star2.gameObject.SetActive(false);
-                Instance.star3.gameObject.SetActive(false);
-            }
-            else if (score < star2Score)
-            {
-                Instance.star1.gameObject.SetActive(true);
-                Instance.star2.gameObject.SetActive(false);
-                Instance.star3.gameObject.SetActive(false);
+                Instance.star1.gameObject.transform
+                    .localScaleTransition(Vector3.one, 1f, LeanEase.Bounce);
             }
             else if (score < star3Score)
             {
-                Instance.star1.gameObject.SetActive(true);
-                Instance.star2.gameObject.SetActive(true);
-                Instance.star3.gameObject.SetActive(false);
+                Instance.star1.gameObject.transform
+                    .localScaleTransition(Vector3.one, 1f, LeanEase.Bounce)
+                    .JoinTransition();
+                Instance.star2.gameObject.transform
+                    .localScaleTransition(Vector3.one, 1f, LeanEase.Bounce);
             }
             else
             {
-                Instance.star1.gameObject.SetActive(true);
-                Instance.star2.gameObject.SetActive(true);
-                Instance.star3.gameObject.SetActive(true);
+                Instance.star1.gameObject.transform
+                    .localScaleTransition(Vector3.one, 1f, LeanEase.Bounce)
+                    .JoinTransition();
+                Instance.star2.gameObject.transform
+                    .localScaleTransition(Vector3.one, 1f, LeanEase.Bounce)
+                    .JoinTransition();
+                Instance.star3.gameObject.transform
+                    .localScaleTransition(Vector3.one, 1f, LeanEase.Bounce);
             }
         }
     }

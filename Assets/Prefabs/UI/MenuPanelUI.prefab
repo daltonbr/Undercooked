@@ -1709,7 +1709,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6990405455845820720
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1753,7 +1753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.69803923}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1778,7 +1778,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6990405455845820727}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -2950,6 +2950,7 @@ MonoBehaviour:
   quitButton_Pause: {fileID: 6990405455485672485}
   gameOverMenu: {fileID: 6990405455845820727}
   firstSelectedGameOverMenu: {fileID: 6990405456686410145}
+  successClip: {fileID: 8300000, guid: 001fc1ed9d85a704786c3ff4cb7ad81b, type: 3}
   restartButton_GameOver: {fileID: 6990405456686410147}
   quitButton_GameOver: {fileID: 6990405455142294674}
   star1: {fileID: 6273082817175551463}
@@ -3168,7 +3169,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6990405457037456969}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0

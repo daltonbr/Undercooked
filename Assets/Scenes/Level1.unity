@@ -4225,10 +4225,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 960822191}
     m_Modifications:
-    - target: {fileID: 39081114, guid: db2719eead6c12048948b81be3c2b482, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 39081118, guid: db2719eead6c12048948b81be3c2b482, type: 3}
       propertyPath: m_Camera
       value: 
@@ -15361,26 +15357,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2483447947175660685, guid: 625566f9546d8d14ba7783bb883f92fe, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2483447947175660685, guid: 625566f9546d8d14ba7783bb883f92fe, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3533150515062602799, guid: 625566f9546d8d14ba7783bb883f92fe, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4801542836308362259, guid: 625566f9546d8d14ba7783bb883f92fe, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4801542836308362259, guid: 625566f9546d8d14ba7783bb883f92fe, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 625566f9546d8d14ba7783bb883f92fe, type: 3}
 --- !u!1001 &1185851039299684865
@@ -16064,18 +16040,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 952190990}
     m_Modifications:
-    - target: {fileID: 6990405455845820721, guid: af82868860f0ab941a01ac1d2209301c, type: 3}
-      propertyPath: m_Color.a
-      value: 0.69803923
-      objectReference: {fileID: 0}
-    - target: {fileID: 6990405455845820723, guid: af82868860f0ab941a01ac1d2209301c, type: 3}
-      propertyPath: m_Alpha
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6990405455845820727, guid: af82868860f0ab941a01ac1d2209301c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6990405457030738068, guid: af82868860f0ab941a01ac1d2209301c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -16163,10 +16127,6 @@ PrefabInstance:
     - target: {fileID: 6990405457030738075, guid: af82868860f0ab941a01ac1d2209301c, type: 3}
       propertyPath: m_Name
       value: MenuPanelUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 6990405457037456969, guid: af82868860f0ab941a01ac1d2209301c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af82868860f0ab941a01ac1d2209301c, type: 3}

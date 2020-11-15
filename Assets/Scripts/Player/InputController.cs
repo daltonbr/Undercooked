@@ -147,13 +147,11 @@ namespace Undercooked.Player
         private void HandleStartAtPLayer(InputAction.CallbackContext context)
         {
             OnStartPressedAtPlayer?.Invoke();
-            Debug.Log("[InputController] Start was pressed at Player");
         }
         
         private void HandleStartAtMenu(InputAction.CallbackContext context)
         {
             OnStartPressedAtMenu?.Invoke();
-            Debug.Log("[InputController] Start was pressed at Menu");
         }
 
         private void HandleSwitchAvatar(InputAction.CallbackContext context)
