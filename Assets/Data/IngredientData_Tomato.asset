@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IngredientData_Tomato
   m_EditorClassIdentifier: 
   type: 1
-  processTime: 7
+  processTime: 4.5
   cookTime: 6
   rawMesh: {fileID: -290952911854113247, guid: 95e5955088f55744f87278a97d0c5507, type: 3}
   processedMesh: {fileID: -2702014982666381604, guid: 058ed46e7d2f23e4cbe411aa6d129fa7, type: 3}

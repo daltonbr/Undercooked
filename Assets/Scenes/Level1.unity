@@ -1999,7 +1999,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: {fileID: 0}
   orderPrefab: {fileID: 3549545836017584286, guid: bd6f0200ee3ac704887707b256c6f63f, type: 3}
-  spawnIntervalBetweenOrders: 20
+  spawnIntervalBetweenOrders: 15
+  extraTimePerOrder: 20
   maxConcurrentOrders: 5
   ordersPanelUI: {fileID: 1698801476}
 --- !u!43 &319006095
@@ -16162,6 +16163,10 @@ PrefabInstance:
     - target: {fileID: 6990405457030738075, guid: af82868860f0ab941a01ac1d2209301c, type: 3}
       propertyPath: m_Name
       value: MenuPanelUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6990405457037456969, guid: af82868860f0ab941a01ac1d2209301c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af82868860f0ab941a01ac1d2209301c, type: 3}

@@ -13,7 +13,9 @@ namespace Undercooked.Model
         public bool IsDelivered { get; private set; }
         public float RemainingTime { get; private set; }
         public float ArrivalTime { get; private set; }
-        public float InitialRemainingTime { get; private set; } = 80f;
+        
+        private const float BaseInitialTime = 60f;
+        public float InitialRemainingTime { get; private set; } = BaseInitialTime;
 
         public OrderData OrderData => _orderData;
         public List<IngredientData> Ingredients => _orderData.ingredients;
@@ -33,11 +35,12 @@ namespace Undercooked.Model
         public delegate void UpdatedCountdown(float remainingTime);
         public event UpdatedCountdown OnUpdatedCountdown;
 
-        public void Setup(OrderData orderData)
+        public void Setup(OrderData orderData, float additionalTime)
         {
             IsDelivered = false;
             _orderData = orderData;
             ArrivalTime = Time.time;
+            InitialRemainingTime += BaseInitialTime + additionalTime;
             SetCountdownTime(InitialRemainingTime);
             StartCountdown();
         }
@@ -72,7 +75,7 @@ namespace Undercooked.Model
         private void ResetCountdown()
         {
             ArrivalTime = Time.time;
-            RemainingTime = InitialRemainingTime;
+            RemainingTime = BaseInitialTime;
             StopCoroutine(CountdownCoroutine());
             StartCountdown();
         }

@@ -203,32 +203,27 @@ namespace Undercooked.UI
             Instance.scoreStar2Text.text = star2Score.ToString();
             Instance.scoreStar3Text.text = star3Score.ToString();
             Instance.scoreText.text = $"Score {score.ToString()}";
-
-            int starGained;
+            
             if (score < star1Score)
             {
-                starGained = 0;
                 Instance.star1.gameObject.SetActive(false);
                 Instance.star2.gameObject.SetActive(false);
                 Instance.star3.gameObject.SetActive(false);
             }
             else if (score < star2Score)
             {
-                starGained = 1;
                 Instance.star1.gameObject.SetActive(true);
                 Instance.star2.gameObject.SetActive(false);
                 Instance.star3.gameObject.SetActive(false);
             }
             else if (score < star3Score)
             {
-                starGained = 2;
                 Instance.star1.gameObject.SetActive(true);
                 Instance.star2.gameObject.SetActive(true);
                 Instance.star3.gameObject.SetActive(false);
             }
             else
             {
-                starGained = 3;
                 Instance.star1.gameObject.SetActive(true);
                 Instance.star2.gameObject.SetActive(true);
                 Instance.star3.gameObject.SetActive(true);

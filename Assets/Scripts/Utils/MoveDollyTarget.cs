@@ -27,7 +27,7 @@ namespace Undercooked.Utils
             _oscillate = false;
         }
 
-        private async Task StartLerp()
+        private async void StartLerp()
         {
             while (_oscillate)
             {
