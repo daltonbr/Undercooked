@@ -24,7 +24,7 @@ namespace Undercooked.Appliances
         private Collider _collider;
         private readonly List<Ingredient> _ingredients = new List<Ingredient>(MaxNumberIngredients);
 
-        public bool IsClean { get; private set; }
+        public bool IsClean { get; private set; } = true;
         public List<Ingredient> Ingredients => _ingredients;
         public bool IsEmpty() =>_ingredients.Count == 0;
 

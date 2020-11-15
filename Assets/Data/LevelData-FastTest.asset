@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a75966e6a6f440d8b8b2a54767a23f40, type: 3}
-  m_Name: LevelData-1-1
+  m_Name: LevelData-FastTest
   m_EditorClassIdentifier: 
   levelName: 1-1
   orders:
   - {fileID: 11400000, guid: 199a5c7315df7ec498301906bd4f2c70, type: 2}
   - {fileID: 11400000, guid: c3986e6c172832e4b992028d09c3ec3d, type: 2}
-  durationTime: 150
-  star1Score: 30
-  star2Score: 50
-  star3Score: 70
+  durationTime: 5
+  star1Score: 50
+  star2Score: 150
+  star3Score: 220

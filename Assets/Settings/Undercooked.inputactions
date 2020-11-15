@@ -52,6 +52,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Start@Player",
+                    "type": "Button",
+                    "id": "f2030eab-c181-4e9d-8dda-caa1eb564bd2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -307,6 +315,28 @@
                     "action": "SwitchAvatar",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a77a4cf-ff67-4595-a9f7-f5f287f975b9",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Start@Player",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bf8a3383-6401-4ac7-9e7c-806c11d2a0c2",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Start@Player",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -379,18 +409,10 @@
                     "interactions": ""
                 },
                 {
-                    "name": "TrackedDevicePosition",
-                    "type": "PassThrough",
-                    "id": "65048df6-7586-49b7-88e5-6d69aaf9c088",
-                    "expectedControlType": "Vector3",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "TrackedDeviceOrientation",
-                    "type": "PassThrough",
-                    "id": "0e3eced0-393b-4426-b45b-b4b2a170c587",
-                    "expectedControlType": "Quaternion",
+                    "name": "Start@Menu",
+                    "type": "Button",
+                    "id": "81bc6851-132a-4fdd-b708-db9f7d40f9ec",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -712,6 +734,28 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "RightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7853fee-da9e-4808-ba71-d4f260ac79ac",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Start@Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7043adfe-8440-4087-b75b-528126a97523",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Start@Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

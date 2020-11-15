@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lean.Transition;
+using Undercooked.Managers;
 using Undercooked.Model;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -56,6 +57,7 @@ namespace Undercooked.Appliances
         
         private Rigidbody _rigidbody;
         private Collider _collider;
+        private CanvasGroup _canvasGroup;
 
         public bool IsCookFinished { get; private set; }
         public bool IsBurned { get; private set; }
@@ -69,14 +71,17 @@ namespace Undercooked.Appliances
         
         protected override void Awake()
         {
+            base.Awake();
+            _rigidbody = GetComponent<Rigidbody>();
+            _collider = GetComponent<Collider>();
+            _canvasGroup = GetComponent<CanvasGroup>();
+            
             #if UNITY_EDITOR
+                Assert.IsNotNull(_canvasGroup);
                 Assert.IsNotNull(ingredientUISlots);
                 Assert.IsTrue(ingredientUISlots.Count == MaxNumberIngredients);
             #endif
             
-            base.Awake();
-            _rigidbody = GetComponent<Rigidbody>();
-            _collider = GetComponent<Collider>();
             Setup();
         }
         
@@ -86,6 +91,19 @@ namespace Undercooked.Appliances
             // re-enabling when picked up.
             _rigidbody.isKinematic = true;
             _collider.enabled = false;
+            _canvasGroup.alpha = 0f;
+        }
+        
+        private void OnEnable()
+        {
+            GameManager.OnLevelStart += HandleLevelStart;
+            GameManager.OnTimeIsOver += HandleTimeOver;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.OnLevelStart -= HandleLevelStart;
+            GameManager.OnTimeIsOver -= HandleTimeOver;
         }
         
         public override bool TryToDropIntoSlot(IPickable pickableToDrop)
@@ -479,6 +497,16 @@ namespace Undercooked.Appliances
                     ingredientUISlots[i].sprite = plusIcon;
                 }
             }
+        }
+        
+        private void HandleLevelStart()
+        {
+            _canvasGroup.alphaTransition(1f, 1f);
+        }
+
+        private void HandleTimeOver()
+        {
+            _canvasGroup.alphaTransition(0f, 1f);
         }
         
     } 

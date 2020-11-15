@@ -2,6 +2,7 @@ using System.Collections;
 using Lean.Transition;
 using Undercooked.Appliances;
 using Undercooked.Model;
+using Undercooked.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,6 +30,7 @@ namespace Undercooked.Player
         private InputAction _dashAction;
         private InputAction _pickUpAction;
         private InputAction _interactAction;
+        private InputAction _startAtPlayerAction;
         
         // Dashing
         [SerializeField] private float dashForce = 900f;
@@ -57,6 +59,7 @@ namespace Undercooked.Player
             _dashAction = playerInput.currentActionMap["Dash"];
             _pickUpAction = playerInput.currentActionMap["PickUp"];
             _interactAction = playerInput.currentActionMap["Interact"];
+            _startAtPlayerAction = playerInput.currentActionMap["Start@Player"];
             
             _interactableController = GetComponentInChildren<InteractableController>();
             knife.gameObject.SetActive(false);
@@ -274,6 +277,11 @@ namespace Undercooked.Player
         private void HandleInteract(InputAction.CallbackContext context)
         {
             _interactableController.CurrentInteractable?.Interact(this);
+        }
+
+        private void HandleStart(InputAction.CallbackContext context)
+        {
+            MenuPanelUI.PauseUnpause();
         }
 
         private void Update()

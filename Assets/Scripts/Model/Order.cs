@@ -8,12 +8,12 @@ namespace Undercooked.Model
     public class Order : MonoBehaviour
     {
         private OrderData _orderData;
-        private const float AlertLimitTime = 5f;
+        private const float AlertLimitTime = 10f;
         
         public bool IsDelivered { get; private set; }
         public float RemainingTime { get; private set; }
         public float ArrivalTime { get; private set; }
-        public float InitialRemainingTime { get; private set; } = 50f;
+        public float InitialRemainingTime { get; private set; } = 80f;
 
         public OrderData OrderData => _orderData;
         public List<IngredientData> Ingredients => _orderData.ingredients;

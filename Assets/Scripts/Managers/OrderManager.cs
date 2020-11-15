@@ -14,10 +14,10 @@ namespace Undercooked.Managers
 
         [SerializeField] private LevelData currentLevel;
         [SerializeField] private Order orderPrefab;
-        [SerializeField] private float spawnIntervalBetweenOrders = 15f;
+        [SerializeField] private float spawnIntervalBetweenOrders = 35f;
         [SerializeField] private int maxConcurrentOrders = 5;
         [SerializeField] private OrdersPanelUI ordersPanelUI;
-        
+
         private readonly List<Order> _orders = new List<Order>();
         private readonly Queue<Order> _poolOrders = new Queue<Order>();
         
