@@ -13,7 +13,7 @@ namespace Undercooked.Player
         [SerializeField] private Color playerColor;
         [SerializeField] private Transform selector;
         [SerializeField] private Material playerUniqueColorMaterial;
-        
+
         [Header("Physics")]
         [SerializeField] private Rigidbody playerRigidbody;
 
@@ -23,7 +23,7 @@ namespace Undercooked.Player
         private readonly int _hasPickupHash = Animator.StringToHash("hasPickup");
         private readonly int _isChoppingHash = Animator.StringToHash("isChopping");
         private readonly int _velocityHash = Animator.StringToHash("velocity");
-        
+
         [Header("Input")]
         [SerializeField] private PlayerInput playerInput;
         private InputAction _moveAction;
@@ -31,7 +31,7 @@ namespace Undercooked.Player
         private InputAction _pickUpAction;
         private InputAction _interactAction;
         private InputAction _startAtPlayerAction;
-        
+
         // Dashing
         [SerializeField] private float dashForce = 900f;
         private bool _isDashing = false;
@@ -41,17 +41,21 @@ namespace Undercooked.Player
 
         [Header("Movement Settings")]
         [SerializeField] private float movementSpeed = 5f;
-        
+
         private InteractableController _interactableController;
         private bool _isActive;
         private IPickable _currentPickable;
         private Vector3 _inputDirection;
         private bool _hasSubscribedControllerEvents;
-        
+
         [SerializeField] private Transform slot;
         [SerializeField] private ParticleSystem dashParticle;
-        [SerializeField] private AudioClip dashAudio;
         [SerializeField] private Transform knife;
+
+        [Header("Audio")]
+        [SerializeField] private AudioClip dashAudio;
+        [SerializeField] private AudioClip pickupAudio;
+        [SerializeField] private AudioClip dropAudio;
 
         private void Awake()
         {
@@ -60,10 +64,10 @@ namespace Undercooked.Player
             _pickUpAction = playerInput.currentActionMap["PickUp"];
             _interactAction = playerInput.currentActionMap["Interact"];
             _startAtPlayerAction = playerInput.currentActionMap["Start@Player"];
-            
+
             _interactableController = GetComponentInChildren<InteractableController>();
             knife.gameObject.SetActive(false);
-            
+
             SetPlayerUniqueColor(playerColor);
         }
 
@@ -72,14 +76,14 @@ namespace Undercooked.Player
             selector.GetComponent<MeshRenderer>().material.color = color;
             playerUniqueColorMaterial.color = color;
         }
-        
+
         public void ActivatePlayer()
         {
             _isActive = true;
             SubscribeControllerEvents();
             selector.gameObject.SetActive(true);
         }
-        
+
         public void DeactivatePlayer()
         {
             _isActive = false;
@@ -107,11 +111,11 @@ namespace Undercooked.Player
             _pickUpAction.performed += HandlePickUp;
             _interactAction.performed += HandleInteract;
         }
-        
+
         private void UnsubscribeControllerEvents()
         {
             if (_hasSubscribedControllerEvents == false) return;
-            
+
             _hasSubscribedControllerEvents = false;
             _moveAction.performed -= HandleMove;
             _dashAction.performed -= HandleDash;
@@ -126,7 +130,7 @@ namespace Undercooked.Player
             Sink.OnCleanStart += HandleCleanStart;
             Sink.OnCleanStop += HandleCleanStop;
         }
-        
+
         private void UnsubscribeInteractableEvents()
         {
             ChoppingBoard.OnChoppingStart -= HandleChoppingStart;
@@ -138,21 +142,21 @@ namespace Undercooked.Player
         private void HandleCleanStart(PlayerController playerController)
         {
             if (Equals(playerController) == false) return;
-            
+
             animator.SetBool(_isCleaningHash, true);
         }
 
         private void HandleCleanStop(PlayerController playerController)
         {
             if (Equals(playerController) == false) return;
-            
+
             animator.SetBool(_isCleaningHash, false);
         }
 
         private void HandleChoppingStart(PlayerController playerController)
         {
             if (Equals(playerController) == false) return;
-            
+
             animator.SetBool(_isChoppingHash, true);
             knife.gameObject.SetActive(true);
         }
@@ -160,7 +164,7 @@ namespace Undercooked.Player
         private void HandleChoppingStop(PlayerController playerController)
         {
             if (Equals(playerController) == false) return;
-            
+
             animator.SetBool(_isChoppingHash, false);
             knife.gameObject.SetActive(false);
         }
@@ -177,7 +181,7 @@ namespace Undercooked.Player
             playerRigidbody.AddRelativeForce(dashForce * Vector3.forward);
             dashParticle.Play();
             dashParticle.PlaySoundTransition(dashAudio);
-            
+
             yield return new WaitForFixedUpdate();
             _isDashing = true;
             yield return _dashDuration;
@@ -189,7 +193,7 @@ namespace Undercooked.Player
         private void HandlePickUp(InputAction.CallbackContext context)
         {
             var interactable = _interactableController.CurrentInteractable;
-            
+
             // empty hands, try to pick
             if (_currentPickable == null)
             {
@@ -197,9 +201,11 @@ namespace Undercooked.Player
                 if (_currentPickable != null)
                 {
                     animator.SetBool(_hasPickupHash, true);
+                    this.PlaySoundTransition(pickupAudio);
                     _currentPickable.Pick();
                     _interactableController.Remove(_currentPickable as Interactable);
-                    _currentPickable.gameObject.transform.SetPositionAndRotation(slot.transform.position, Quaternion.identity);
+                    _currentPickable.gameObject.transform.SetPositionAndRotation(slot.transform.position,
+                        Quaternion.identity);
                     _currentPickable.gameObject.transform.SetParent(slot);
                     return;
                 }
@@ -209,38 +215,42 @@ namespace Undercooked.Player
                 if (_currentPickable != null)
                 {
                     animator.SetBool(_hasPickupHash, true);
+                    this.PlaySoundTransition(pickupAudio);
                 }
+
                 _currentPickable?.gameObject.transform.SetPositionAndRotation(
                     slot.position, Quaternion.identity);
                 _currentPickable?.gameObject.transform.SetParent(slot);
                 return;
             }
-            
+
             // we carry a pickable, let's try to drop it (we may fail)
-            
+
             // no interactable in range or at most a Pickable in range (we ignore it)
             if (interactable == null || interactable is IPickable)
             {
                 animator.SetBool(_hasPickupHash, false);
+                this.PlaySoundTransition(dropAudio);
                 _currentPickable.Drop();
                 _currentPickable = null;
                 return;
             }
-            
+
             // we carry a pickable and we have an interactable in range
             // we may drop into the interactable
-            
+
             // Try to drop on the interactable. It may refuse it, e.g. dropping a plate into the CuttingBoard,
             // or simply it already have something on it
             //Debug.Log($"[PlayerController] {_currentPickable.gameObject.name} trying to drop into {interactable.gameObject.name} ");
 
             bool dropSuccess = interactable.TryToDropIntoSlot(_currentPickable);
             if (!dropSuccess) return;
-            
+
             animator.SetBool(_hasPickupHash, false);
+            this.PlaySoundTransition(dropAudio);
             _currentPickable = null;
         }
-    
+
         private void HandleMove(InputAction.CallbackContext context)
         {
             // TODO: Processors on input binding not working for analogical stick. Investigate it.
@@ -270,7 +280,7 @@ namespace Undercooked.Player
             {
                 inputMovement.y = 0f;
             }
-            
+
             _inputDirection = new Vector3(inputMovement.x, 0, inputMovement.y);
         }
 
@@ -297,7 +307,7 @@ namespace Undercooked.Player
             AnimatePlayerMovement();
             TurnThePlayer();
         }
-        
+
         private void MoveThePlayer()
         {
             if (_isDashing)
@@ -309,6 +319,7 @@ namespace Undercooked.Player
                 {
                     inputNormalized = transform.forward;
                 }
+
                 playerRigidbody.velocity = inputNormalized * currentVelocity;
             }
             else
@@ -352,15 +363,14 @@ namespace Undercooked.Player
         private void TurnThePlayer()
         {
             if (!(playerRigidbody.velocity.magnitude > 0.1f) || _inputDirection == Vector3.zero) return;
-            
+
             Quaternion newRotation = Quaternion.LookRotation(_inputDirection);
-            transform.rotation = Quaternion.Slerp (transform.rotation, newRotation, Time.deltaTime * 15f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 15f);
         }
 
         private void AnimatePlayerMovement()
         {
             animator.SetFloat(_velocityHash, _inputDirection.sqrMagnitude);
         }
-
     }
 }

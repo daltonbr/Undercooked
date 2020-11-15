@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Lean.Transition;
 using UnityEngine;
 
-namespace Undercooked.Managers
+namespace Undercooked.Utils
 {
     public class MoveDollyTarget : MonoBehaviour
     {
@@ -19,7 +19,7 @@ namespace Undercooked.Managers
         private void OnEnable()
         {
             _oscillate = true;
-            StartLerping();
+            StartLerp();
         }
 
         private void OnDisable()
@@ -27,7 +27,7 @@ namespace Undercooked.Managers
             _oscillate = false;
         }
 
-        private async Task StartLerping()
+        private async Task StartLerp()
         {
             while (_oscillate)
             {

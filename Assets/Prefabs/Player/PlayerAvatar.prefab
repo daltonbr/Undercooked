@@ -9739,6 +9739,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &567636651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2953515127537919732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8848d78cc7e4af9b3cae6510b030a53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClips:
+  - {fileID: 8300000, guid: a9760757cc6999b4aa4f1328d4af3955, type: 3}
+  - {fileID: 8300000, guid: a8ceef259221764428f8018161404e63, type: 3}
+  - {fileID: 8300000, guid: 075e1c1fab037b840894d1a508da69d0, type: 3}
+  - {fileID: 8300000, guid: 5d9fc16aea111f9449570d6528a174ee, type: 3}
 --- !u!1 &5773149400219999459
 GameObject:
   m_ObjectHideFlags: 0
@@ -9938,8 +9955,10 @@ MonoBehaviour:
   movementSpeed: 5.5
   slot: {fileID: 1661294295472546154}
   dashParticle: {fileID: 1247608749}
-  dashAudio: {fileID: 8300000, guid: e209557e7335be64993857cecdca6200, type: 3}
   knife: {fileID: 4964845640939026712}
+  dashAudio: {fileID: 8300000, guid: e209557e7335be64993857cecdca6200, type: 3}
+  pickupAudio: {fileID: 8300000, guid: a5882b7195755a34c87cdb6fb7122ee1, type: 3}
+  dropAudio: {fileID: 8300000, guid: d2728590cbe38cd41922364847aaf6b2, type: 3}
 --- !u!54 &914413276456776427
 Rigidbody:
   m_ObjectHideFlags: 0

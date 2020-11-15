@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 namespace Undercooked.Player
@@ -36,6 +38,15 @@ namespace Undercooked.Player
         public StartPressed OnStartPressedAtMenu;
         public StartPressed OnStartPressedAtPlayer;
 
+        private void Awake()
+        {
+            #if UNITY_EDITOR
+            Assert.IsNotNull(playerInput);
+            Assert.IsNotNull(playerController1);
+            Assert.IsNotNull(playerController2);
+            #endif
+        }
+
         internal void EnableFirstPlayerController()
         {
             playerController2.DeactivatePlayer();
@@ -71,20 +82,7 @@ namespace Undercooked.Player
                 EnableFirstPlayerController();
             }
         }
-
-        private void Awake()
-        {
-            // _switchAvatarAction = playerInput.currentActionMap["SwitchAvatar"];
-            // _startAtMenuAction = playerInput.currentActionMap["Start@Menu"];
-            // _startAtPlayerAction = playerInput.currentActionMap["Start@Player"];
-        }
-
-        private void Start()
-        {
-            // EnableFirstPlayerController();
-            // EnableGameplayControls();
-        }
-
+        
         private void OnEnable()
         {
             SubscribeInputEvents();
