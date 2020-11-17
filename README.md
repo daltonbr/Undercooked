@@ -2,10 +2,13 @@
 
 _A fan-made vertical slice_
 
-_Disclaimer: This is a fan-made game, inspired by one of my favorite franchise: Overcooked, an amazing couch-coop game. All assets were created from scratch. This project doesn't have any commercial goals or any legal affiliation with the original game or company; my sole intention for developing this project was to have fun and challenge myself by recreating a proven game without worrying about game design, focusing on programming and art creation, forcing myself out of "tutorial-hell"._
-
 _**Youtube Video**_
 [![Undercooked](https://img.youtube.com/vi/oFFEIDPF9XE/0.jpg)](https://www.youtube.com/watch?v=oFFEIDPF9XE)
+
+_**Disclaimer:** Undercooked is a fan-made game, inspired by one of my favorite franchises: Overcooked, an amazing couch-coop game.
+All assets were created from scratch by me. This project doesn’t have any commercial goals or any legal affiliation with the original game or company.
+This project is meant only as a fun and challenging exercise of recreating a proven game without worrying about game design, focusing on programming and art creation, forcing myself out of “tutorial-hell”._
+{: .notice--info}
 
 ## Game concept
 
