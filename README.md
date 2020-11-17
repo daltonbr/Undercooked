@@ -7,14 +7,12 @@ _Disclaimer: This is a fan-made game, inspired by one of my favorite franchise: 
 _**Youtube Video**_
 [![Undercooked](https://img.youtube.com/vi/oFFEIDPF9XE/0.jpg)](https://www.youtube.com/watch?v=oFFEIDPF9XE)
 
-
 ## Game concept
 
-The basic concept of the game is to process ingredients (chop & cook), mounted into plates, and finally serving them as the orders pop out as fast as you can, thus earning more points.
-Ideally you want to avoid burning your dishes (the fire mechanic is the only one that wasn't implemented, since I personally consider this one a bit of a gimmick, still fun).
+In Undercooked, we have to process ingredients (chop & cook), mount them into plates, and finally serve the orders as they pop out as fast as you can, thus earning more points.
 
-More complexity arises from twists on the levels, like physically separating parts of the kitchen or adding obstacles. Also adding different recipes, with different processes.
-Still, for this project I set a clear goal to keep the scope small by building all the core mechanics to have a tight gameloop using just one level.
+More complexity arises from twists on the levels, like physically separating parts of the kitchen or adding obstacles, different recipes, and processes.
+Still, for this project, I set a clear goal to keep the scope small by building all the core mechanics to have a tight game loop using just one level.
 
 ## Core mechanics
 
@@ -34,7 +32,7 @@ Still, for this project I set a clear goal to keep the scope small by building a
 
 * **Asynchronous programming** in conjunction with Coroutines.
 * `IPickable` interface and `Interactable` Abstract class
-* Extensive use of [Pattern Matching](https://docs.microsoft.com/en-us/dotnet/csharp/pattern-matching) to handle interaction between items.
+* Extensive use of [Pattern Matching](https://docs.microsoft.com/en-us/dotnet/csharp/pattern-matching) to handle the interaction between items.
 * Use of the new (event-based) Unity Input System, allowing a seamless change between the keyboard and different brands of controllers.
 * Several Particle Systems: smoke, steam, dust, stars.
 * Use of a personal Unity Package
