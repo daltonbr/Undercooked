@@ -8,7 +8,6 @@ _**Youtube Video**_
 _**Disclaimer:** Undercooked is a fan-made game, inspired by one of my favorite franchises: Overcooked, an amazing couch-coop game.
 All assets were created from scratch by me. This project doesn’t have any commercial goals or any legal affiliation with the original game or company.
 This project is meant only as a fun and challenging exercise of recreating a proven game without worrying about game design, focusing on programming and art creation, forcing myself out of “tutorial-hell”._
-{: .notice--info}
 
 ## Game concept
 
