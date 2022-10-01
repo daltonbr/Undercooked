@@ -42,7 +42,7 @@ Still, for this project, I set a clear goal to keep the scope small by building 
 
 ## Tools
 
-* **Unity** 2020.3.40f1 LTS
+* **Unity** 2021.3.11f1 LTS
 * Autodesk **Maya**, Adobe **Photoshop** and **Illustrator**.
 
 ## Auxiliary tools
