@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.daltonlima.core": "https://github.com/daltonbr/com.daltonlima.core.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.cinemachine": "2.9.7",
