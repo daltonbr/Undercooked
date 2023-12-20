@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Lean.Transition;
 using Undercooked.Model;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Undercooked.Appliances
         [SerializeField] private ParticleSystem starParticle;
         [SerializeField] private AudioClip positiveFeedbackAudio;
         
-        public delegate void PlateDropped(Plate plate);
+        public delegate Task PlateDropped(Plate plate);
         public static event PlateDropped OnPlateDropped;
         public delegate void PlateMissing();
         public static event PlateMissing OnPlateMissing;
