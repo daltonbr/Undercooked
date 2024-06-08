@@ -1,7 +1,8 @@
 # Undercooked
 
-_A fan-made vertical slice_
+A fan-made vertical slice.
 
+[//]: # (styles: for-the-badge, flat-square, social)
 <div align="center">
   <a href="https://www.linkedin.com/in/daltonlima/">
     <img src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"  alt="https://www.linkedin.com/in/daltonlima"/>
@@ -11,15 +12,16 @@ _A fan-made vertical slice_
     <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white"  alt="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1"/>
   </a>&nbsp;&nbsp;
 
-  <a href="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1">
-    <img src="https://img.shields.io/youtube/channel/subscribers/UCTk4hR5N9e_Rmixdp4lEPNw?style=social"  alt="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1"/>
-  </a>&nbsp;&nbsp;
-
   <a href="https://x.com/daltonbr">
     <img src="https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white"  alt="https://x.com/daltonbr"/>
   </a>&nbsp;&nbsp;
 
   [![Undercooked](https://img.youtube.com/vi/oFFEIDPF9XE/0.jpg)](https://www.youtube.com/watch?v=oFFEIDPF9XE)
+  <br>
+  <a href="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1">
+  <img src="https://img.shields.io/youtube/channel/subscribers/UCTk4hR5N9e_Rmixdp4lEPNw?style=social"  alt="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1"/>
+  </a>&nbsp;&nbsp;
+
 </div>
 
 ## Game concept
@@ -30,9 +32,17 @@ More complexity arises from twists on the levels, like physically separating par
 Still, for this project, I set a clear goal to keep the scope small by building all the core mechanics to have a tight game loop using just one level.
 
 ## Tools
+[![Made with Unity](https://img.shields.io/badge/UNITY-2022.3.32f1-FFFFFF.svg?style=flat-square&logo=unity)](https://unity3d.com)
 
-* **Unity** 2022.3.32f1 LTS
-* Autodesk **Maya**, Adobe **Photoshop** and **Illustrator**.
+Started with
+![AutodeskMaya](https://img.shields.io/badge/AutoDesk-Maya-37A5CC.svg?style=flat-square&logo=AutodeskMaya)
+![AdobePhotoshop](https://img.shields.io/badge/Adobe-Photoshop-31A8FF.svg?style=flat-square&logo=AdobePhotoshop)
+![AdobeIllustrator](https://img.shields.io/badge/Adobe-Illustrator-FF9A00.svg?style=flat-square&logo=AdobeIllustrator)
+
+Switched to
+[![Blender](https://img.shields.io/badge/Blender-🎨-E87D0D.svg?style=flat-square&logo=Blender)](https://www.blender.org/download/)
+[![AffinityDesigner](https://img.shields.io/badge/Affinity-Designer-134881.svg?style=flat-square&logo=AffinityDesigner)](https://affinity.serif.com/)
+[![AffinityPhoto](https://img.shields.io/badge/Affinity-Photo-4E3188.svg?style=flat-square&logo=AffinityPhoto)](https://affinity.serif.com/)
 
 ## Core mechanics
 
