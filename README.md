@@ -2,12 +2,25 @@
 
 _A fan-made vertical slice_
 
-_**Youtube Video**_
-[![Undercooked](https://img.youtube.com/vi/oFFEIDPF9XE/0.jpg)](https://www.youtube.com/watch?v=oFFEIDPF9XE)
+<div align="center">
+  <a href="https://www.linkedin.com/in/daltonlima/">
+    <img src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"  alt="https://www.linkedin.com/in/daltonlima"/>
+  </a>&nbsp;&nbsp;
 
-_**Disclaimer:** Undercooked is a fan-made game, inspired by one of my favorite franchises: Overcooked, an amazing couch-coop game.
-All assets were created from scratch by me. This project doesn’t have any commercial goals or any legal affiliation with the original game or company.
-This project is meant only as a fun and challenging exercise of recreating a proven game without worrying about game design, focusing on programming and art creation, forcing myself out of “tutorial-hell”._
+  <a href="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1">
+    <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white"  alt="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1"/>
+  </a>&nbsp;&nbsp;
+
+  <a href="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1">
+    <img src="https://img.shields.io/youtube/channel/subscribers/UCTk4hR5N9e_Rmixdp4lEPNw?style=social"  alt="https://www.youtube.com/channel/UCTk4hR5N9e_Rmixdp4lEPNw?sub_confirmation=1"/>
+  </a>&nbsp;&nbsp;
+
+  <a href="https://x.com/daltonbr">
+    <img src="https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white"  alt="https://x.com/daltonbr"/>
+  </a>&nbsp;&nbsp;
+
+  [![Undercooked](https://img.youtube.com/vi/oFFEIDPF9XE/0.jpg)](https://www.youtube.com/watch?v=oFFEIDPF9XE)
+</div>
 
 ## Game concept
 
@@ -15,6 +28,11 @@ In Undercooked, we have to process ingredients (chop & cook), mount them into pl
 
 More complexity arises from twists on the levels, like physically separating parts of the kitchen or adding obstacles, different recipes, and processes.
 Still, for this project, I set a clear goal to keep the scope small by building all the core mechanics to have a tight game loop using just one level.
+
+## Tools
+
+* **Unity** 2022.3.32f1 LTS
+* Autodesk **Maya**, Adobe **Photoshop** and **Illustrator**.
 
 ## Core mechanics
 
@@ -40,13 +58,12 @@ Still, for this project, I set a clear goal to keep the scope small by building 
 * Use of a personal Unity Package
 * Some shaders in Shader Graph
 
-## Tools
-
-* **Unity** 2022.3.16f1 LTS
-* Autodesk **Maya**, Adobe **Photoshop** and **Illustrator**.
-
 ## Auxiliary tools
 
 * Cameras powered by [CineMachine](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.6/manual/index.html)
 * UI animation using [LeanGUI](http://carloswilkes.com/Documentation/LeanGUI) and [LeanTransition](http://carloswilkes.com/Documentation/LeanTransition)
 * [FBX Exporter](https://docs.unity3d.com/Packages/com.unity.formats.fbx@2.0/manual/index.html) - makes it easy to send geometry and animation to any application that supports FBX and back again with minimal effort.
+
+_**Disclaimer:** Undercooked is a fan-made game, inspired by one of my favorite franchises: Overcooked, an amazing couch-coop game.
+All assets were created from scratch by me. This project doesn’t have any commercial goals or any legal affiliation with the original game or company.
+This project is meant only as a fun and challenging exercise of recreating a proven game without worrying about game design, focusing on programming and art creation, forcing myself out of “tutorial-hell”._
