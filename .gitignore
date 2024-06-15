@@ -34,3 +34,6 @@ sysinfo.txt
 # IDE
 .idea/
 
+# MacOS files
+**/.DS_Store
+

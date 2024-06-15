@@ -114,7 +114,7 @@ namespace Undercooked.Appliances
         }
         
         /// <summary>
-        /// Check for exactly 3 equals ingredients, being onions, tomatos or mushrooms.
+        /// Check for exactly 3 equals ingredients, being onions, tomatoes or mushrooms.
         /// </summary>
         public static bool CheckSoupIngredients(IReadOnlyList<Ingredient> ingredients)
         {

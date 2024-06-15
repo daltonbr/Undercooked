@@ -3,6 +3,7 @@
 A fan-made vertical slice.
 
 [//]: # (styles: for-the-badge, flat-square, social)
+[//]: # (https://shields.io/badges/static-badge)
 <div align="center">
   <a href="https://www.linkedin.com/in/daltonlima/">
     <img src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"  alt="https://www.linkedin.com/in/daltonlima"/>
