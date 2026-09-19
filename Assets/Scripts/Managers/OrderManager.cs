@@ -40,6 +40,10 @@ namespace Undercooked.Managers
             return _poolOrders.Count > 0 ? _poolOrders.Dequeue() : Instantiate(orderPrefab, transform);
         }
         
+        /// <summary>
+        /// Initializes order generation for the supplied level.
+        /// </summary>
+        /// <param name="levelData">The level whose orders will be generated.</param>
         public void Init(LevelData levelData)
         {
             currentLevel = levelData;
@@ -64,6 +68,9 @@ namespace Undercooked.Managers
             _generatorCoroutine ??= StartCoroutine(OrderGeneratorCoroutine());
         }
         
+        /// <summary>
+        /// Stops order generation and clears active orders.
+        /// </summary>
         public void StopAndClear()
         {
             PauseOrderGenerator();
@@ -135,6 +142,10 @@ namespace Undercooked.Managers
             return Instantiate(currentLevel.orders[randomIndex]);
         }
         
+        /// <summary>
+        /// Delivers the oldest matching active order for the supplied plate ingredients.
+        /// </summary>
+        /// <param name="ingredients">Ingredients currently on the delivered plate.</param>
         public void CheckIngredientsMatchOrder(List<Ingredient> ingredients)
         {
             if (ingredients == null) return;
