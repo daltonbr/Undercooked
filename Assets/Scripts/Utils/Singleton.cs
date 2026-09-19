@@ -12,7 +12,7 @@ namespace Undercooked.Utils
             {
                 if (_instance != null) return _instance;
                 
-                var objects = FindObjectsOfType(typeof(T)) as T[];
+                var objects = FindObjectsByType<T>(FindObjectsSortMode.None);
                 if (objects?.Length > 0)
                     _instance = objects[0];
                 if (objects?.Length > 1)

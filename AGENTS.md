@@ -6,7 +6,7 @@
 
 ## Technical Details
 
-- **Engine:** Unity 6000.3.3f1
+- **Engine:** Unity 6000.3.24f1
 - **Language:** C#
 - **Render Pipeline:** Universal Render Pipeline (URP)
 - **Input:** Unity Input System (Supports Keyboard & Gamepads)
@@ -44,7 +44,7 @@ The main game logic resides in `Assets/Scripts` and is wrapped in the `Undercook
 
 ## Building and Running
 
-1.  **Open Project:** Open the root directory in Unity 6000.3.3f1.
+1.  **Open Project:** Open the root directory in Unity 6000.3.24f1.
 2.  **Scene:** The main gameplay scene is likely located in `Assets/Scenes` (e.g., related to `LevelData-1-1`).
 3.  **Play:** Enter Play Mode in the Editor to test.
 4.  **Build:** Standard Unity Build Settings (File > Build Settings) for the target platform.

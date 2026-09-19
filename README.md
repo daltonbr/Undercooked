@@ -34,7 +34,7 @@ Still, for this project, I set a clear goal to keep the scope small by building 
 
 ## Tools
 
-[![Made with Unity](https://img.shields.io/badge/UNITY-6000.3.3f1-FFFFFF.svg?style=flat-square&logo=unity)](https://unity3d.com)
+[![Made with Unity](https://img.shields.io/badge/UNITY-6000.3.24f1-FFFFFF.svg?style=flat-square&logo=unity)](https://unity3d.com)
 
 Started with
 ![AutodeskMaya](https://img.shields.io/badge/AutoDesk-Maya-37A5CC.svg?style=flat-square&logo=AutodeskMaya)
