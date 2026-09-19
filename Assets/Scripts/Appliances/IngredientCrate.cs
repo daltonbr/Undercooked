@@ -6,9 +6,11 @@ namespace Undercooked.Appliances
 {
     public class IngredientCrate : Interactable
     { 
+        private const string OpenParameter = "Open";
+
         [SerializeField] private Ingredient ingredientPrefab;
         private Animator _animator;
-        private static readonly int OpenHash = Animator.StringToHash("Open");
+        private static readonly int OpenHash = Animator.StringToHash(OpenParameter);
 
         protected override void Awake()
         {
