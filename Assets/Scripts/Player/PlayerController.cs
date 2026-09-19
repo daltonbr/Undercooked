@@ -253,34 +253,7 @@ namespace Undercooked.Player
         private void HandleMove(InputAction.CallbackContext context)
         {
             // TODO: Processors on input binding not working for analogical stick. Investigate it.
-            Vector2 inputMovement = context.ReadValue<Vector2>();
-            if (inputMovement.x > 0.3f)
-            {
-                inputMovement.x = 1f;
-            }
-            else if (inputMovement.x < -0.3)
-            {
-                inputMovement.x = -1f;
-            }
-            else
-            {
-                inputMovement.x = 0f;
-            }
-
-            if (inputMovement.y > 0.3f)
-            {
-                inputMovement.y = 1f;
-            }
-            else if (inputMovement.y < -0.3f)
-            {
-                inputMovement.y = -1f;
-            }
-            else
-            {
-                inputMovement.y = 0f;
-            }
-
-            _inputDirection = new Vector3(inputMovement.x, 0, inputMovement.y);
+            _inputDirection = GetInputDirection(context.ReadValue<Vector2>());
         }
 
         private void HandleInteract(InputAction.CallbackContext context)
@@ -329,34 +302,14 @@ namespace Undercooked.Player
 
         private void CalculateInputDirection()
         {
-            var inputMovement = _moveAction.ReadValue<Vector2>();
-            if (inputMovement.x > 0.3f)
-            {
-                inputMovement.x = 1f;
-            }
-            else if (inputMovement.x < -0.3)
-            {
-                inputMovement.x = -1f;
-            }
-            else
-            {
-                inputMovement.x = 0f;
-            }
+            _inputDirection = GetInputDirection(_moveAction.ReadValue<Vector2>());
+        }
 
-            if (inputMovement.y > 0.3f)
-            {
-                inputMovement.y = 1f;
-            }
-            else if (inputMovement.y < -0.3f)
-            {
-                inputMovement.y = -1f;
-            }
-            else
-            {
-                inputMovement.y = 0f;
-            }
-
-            _inputDirection = new Vector3(inputMovement.x, 0f, inputMovement.y);
+        private static Vector3 GetInputDirection(Vector2 inputMovement)
+        {
+            var horizontal = Mathf.Abs(inputMovement.x) > 0.3f ? Mathf.Sign(inputMovement.x) : 0f;
+            var vertical = Mathf.Abs(inputMovement.y) > 0.3f ? Mathf.Sign(inputMovement.y) : 0f;
+            return new Vector3(horizontal, 0f, vertical);
         }
 
         private void TurnThePlayer()
