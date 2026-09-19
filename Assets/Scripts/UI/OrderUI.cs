@@ -180,7 +180,7 @@ namespace Undercooked.UI
         private void StartShake()
         {
             _shake = true;
-            ShakeAsync();
+            _ = ShakeAsync();
         }
         
         private async Task ShakeAsync()
