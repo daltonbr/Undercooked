@@ -62,8 +62,6 @@ namespace Undercooked.Managers
         public static event CountdownTick OnCountdownTick;
         public delegate void ScoreUpdate(int score, int delta);
         public static event ScoreUpdate OnScoreUpdate;
-        public delegate void DisplayNotification(string textToDisplay, Color color, float timeToDisplay);
-        public static event DisplayNotification OnDisplayNotification;
         public delegate void TimeIsOver();
         public static event TimeIsOver OnTimeIsOver;
         public delegate void LevelStart();
