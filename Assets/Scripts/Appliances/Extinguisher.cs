@@ -9,8 +9,9 @@ namespace Undercooked.Appliances
     [RequireComponent(typeof(Collider))]
     public class Extinguisher : Interactable, IPickable
     {
-        [SerializeField] private ParticleSystem smoke;
-        [SerializeField] private AudioClip wooshClip;
+        // TODO: some ideas for the implementation
+        // [SerializeField] private ParticleSystem smoke;
+        // [SerializeField] private AudioClip wooshClip;
         
         private Rigidbody _rigidbody;
         private Collider _collider;
@@ -23,8 +24,6 @@ namespace Undercooked.Appliances
             _collider = GetComponent<Collider>();
             
             #if UNITY_EDITOR
-                //Assert.IsNotNull(smoke);
-                //Assert.IsNotNull(wooshClip);    
                 Assert.IsNotNull(_rigidbody);
                 Assert.IsNotNull(_collider);
             #endif

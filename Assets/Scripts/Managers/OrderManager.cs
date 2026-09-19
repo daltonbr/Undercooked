@@ -114,12 +114,10 @@ namespace Undercooked.Managers
 
         private static void HandleOrderDelivered(Order order)
         {
-            // Debug.Log("[OrderManager] HandleOrderDelivered");
         }
         
         private static void HandleOrderExpired(Order order)
         {
-            // Debug.Log("[OrderManager] HandleOrderExpired");
             OnOrderExpired?.Invoke(order);
         }
 
