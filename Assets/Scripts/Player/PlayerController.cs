@@ -10,6 +10,16 @@ namespace Undercooked.Player
 {
     public class PlayerController : MonoBehaviour
     {
+        private const string IsCleaningParameter = "isCleaning";
+        private const string HasPickupParameter = "hasPickup";
+        private const string IsChoppingParameter = "isChopping";
+        private const string VelocityParameter = "velocity";
+        private const string MoveAction = "Move";
+        private const string DashAction = "Dash";
+        private const string PickUpAction = "PickUp";
+        private const string InteractAction = "Interact";
+        private const string StartAtPlayerAction = "Start@Player";
+
         [SerializeField] private Color playerColor;
         [SerializeField] private Transform selector;
         [SerializeField] private Material playerUniqueColorMaterial;
@@ -19,10 +29,10 @@ namespace Undercooked.Player
 
         [Header("Animation")]
         [SerializeField] private Animator animator;
-        private readonly int _isCleaningHash = Animator.StringToHash("isCleaning");
-        private readonly int _hasPickupHash = Animator.StringToHash("hasPickup");
-        private readonly int _isChoppingHash = Animator.StringToHash("isChopping");
-        private readonly int _velocityHash = Animator.StringToHash("velocity");
+        private readonly int _isCleaningHash = Animator.StringToHash(IsCleaningParameter);
+        private readonly int _hasPickupHash = Animator.StringToHash(HasPickupParameter);
+        private readonly int _isChoppingHash = Animator.StringToHash(IsChoppingParameter);
+        private readonly int _velocityHash = Animator.StringToHash(VelocityParameter);
 
         [Header("Input")]
         [SerializeField] private PlayerInput playerInput;
@@ -59,11 +69,11 @@ namespace Undercooked.Player
 
         private void Awake()
         {
-            _moveAction = playerInput.currentActionMap["Move"];
-            _dashAction = playerInput.currentActionMap["Dash"];
-            _pickUpAction = playerInput.currentActionMap["PickUp"];
-            _interactAction = playerInput.currentActionMap["Interact"];
-            _startAtPlayerAction = playerInput.currentActionMap["Start@Player"];
+            _moveAction = playerInput.currentActionMap[MoveAction];
+            _dashAction = playerInput.currentActionMap[DashAction];
+            _pickUpAction = playerInput.currentActionMap[PickUpAction];
+            _interactAction = playerInput.currentActionMap[InteractAction];
+            _startAtPlayerAction = playerInput.currentActionMap[StartAtPlayerAction];
 
             _interactableController = GetComponentInChildren<InteractableController>();
             knife.gameObject.SetActive(false);

@@ -32,6 +32,9 @@ namespace Undercooked.Player
 
         private const string ActionMapGameplay = "PlayerControls";
         private const string ActionMapMenu = "MenuControls";
+        private const string SwitchAvatarAction = "SwitchAvatar";
+        private const string StartAtPlayerAction = "Start@Player";
+        private const string StartAtMenuAction = "Start@Menu";
 
         public delegate void StartPressed();
         public StartPressed OnStartPressedAtMenu;
@@ -113,8 +116,8 @@ namespace Undercooked.Player
             if (_hasSubscribedPlayerActions) return;
             _hasSubscribedPlayerActions = true;
             
-            _switchAvatarAction = playerInput.currentActionMap["SwitchAvatar"];
-            _startAtPlayerAction = playerInput.currentActionMap["Start@Player"];
+            _switchAvatarAction = playerInput.currentActionMap[SwitchAvatarAction];
+            _startAtPlayerAction = playerInput.currentActionMap[StartAtPlayerAction];
             _startAtPlayerAction.performed += HandleStartAtPLayer;
             _switchAvatarAction.performed += HandleSwitchAvatar; 
         }
@@ -132,7 +135,7 @@ namespace Undercooked.Player
             if (_hasSubscribedMenuActions) return;
             _hasSubscribedMenuActions = true;
             
-            _startAtMenuAction = playerInput.currentActionMap["Start@Menu"];
+            _startAtMenuAction = playerInput.currentActionMap[StartAtMenuAction];
             _startAtMenuAction.performed += HandleStartAtMenu;
         }
         
