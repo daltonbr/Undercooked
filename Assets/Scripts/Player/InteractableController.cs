@@ -53,6 +53,8 @@ namespace Undercooked.Player
 
         private void FixedUpdate()
         {
+            if (_interactables.Count == 0 && CurrentInteractable == null) return;
+
             Interactable closest = TryGetClosestInteractable();
 
             // nothing has changed
