@@ -82,7 +82,14 @@ namespace Undercooked.Managers
 
         private async void Start()
         {
-            await GameLoop();
+            try
+            {
+                await GameLoop();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+            }
         }
 
         private void OnDestroy()
