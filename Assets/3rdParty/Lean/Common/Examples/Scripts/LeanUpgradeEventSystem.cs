@@ -13,7 +13,7 @@ namespace Lean.Common.Examples
 #if UNITY_EDITOR && ENABLE_INPUT_SYSTEM
 		protected virtual void Awake()
 		{
-			var module = FindObjectOfType<UnityEngine.EventSystems.StandaloneInputModule>();
+			var module = FindFirstObjectByType<UnityEngine.EventSystems.StandaloneInputModule>();
 
 			if (module != null)
 			{
